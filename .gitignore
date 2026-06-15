@@ -45,5 +45,6 @@ __pycache__/
 *.pyc
 
 # claude config
-.claude/
+# .claude/
+
 
