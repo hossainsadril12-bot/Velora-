@@ -2,30 +2,39 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Reveal from "./Reveal";
+import { RevealText, ButtonReveal } from "./anim";
 
 export default function DiscoverPanel() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <section className="bg-dark-green px-5 py-20 text-center relative overflow-hidden">
-      <Reveal className="flex flex-col items-center">
-        <h2 className="font-serif uppercase tracking-wide text-light-blue text-[28.8px] leading-tight">
-          Discover
-        </h2>
-        <h2 className="font-serif uppercase tracking-wide text-light-blue text-[28.8px] leading-tight">
-          &ldquo;Star Bene&rdquo;
-        </h2>
-        
-        <div className="mt-10">
+    <section className="bg-tan px-5 py-20 text-center relative overflow-hidden">
+      <div className="flex flex-col items-center">
+        <RevealText
+          as="h2"
+          dir="fromBottom"
+          className="font-serif uppercase tracking-wide text-white text-[28.8px] leading-tight"
+        >
+          Where Design Excellence
+        </RevealText>
+        <RevealText
+          as="h2"
+          dir="fromBottom"
+          delay={0.2}
+          className="font-serif uppercase tracking-wide text-white text-[28.8px] leading-tight"
+        >
+          Meet trusted Leadership.
+        </RevealText>
+
+        <ButtonReveal className="mt-10" delay={0.4}>
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="inline-block uppercase font-sans font-bold text-[10px] tracking-[2.5px] px-[35px] py-[18px] border transition-all duration-300 cursor-pointer bg-cream text-dark-green border-cream hover:bg-transparent hover:text-cream"
+            className="inline-block uppercase font-sans font-bold text-[10px] tracking-[2.5px] px-[35px] py-[18px] border transition-all duration-300 cursor-pointer bg-cream text-dark-text border-cream hover:bg-transparent hover:text-white hover:border-white"
           >
             {isOpen ? "Close Philosophy" : "About Us"}
           </button>
-        </div>
-      </Reveal>
+        </ButtonReveal>
+      </div>
 
       {/* Expandable Philosophy Panel */}
       <AnimatePresence>
@@ -38,8 +47,8 @@ export default function DiscoverPanel() {
             className="w-full max-w-2xl mx-auto overflow-hidden"
           >
             <div className="pt-12 pb-6 px-4 md:px-8 text-cream/90 flex flex-col items-center">
-              <div className="w-16 h-px bg-light-blue/30 mb-8" />
-              <p className="font-serif italic text-xl md:text-2xl text-light-blue mb-6 max-w-xl leading-relaxed">
+              <div className="w-16 h-px bg-white/30 mb-8" />
+              <p className="font-serif italic text-xl md:text-2xl text-white mb-6 max-w-xl leading-relaxed">
                 &ldquo;Star Bene&rdquo; is the art of feeling good, an authentic Italian way of living centered around harmony, nature, and the celebration of life&apos;s finest details.
               </p>
               <p className="font-sans text-sm md:text-base leading-relaxed text-cream/70 max-w-lg mb-8">
@@ -47,15 +56,15 @@ export default function DiscoverPanel() {
               </p>
               <div className="grid grid-cols-3 gap-4 w-full max-w-md border-t border-cream/10 pt-8 mt-2">
                 <div className="text-center">
-                  <span className="block font-serif text-2xl text-light-blue">714</span>
+                  <span className="block font-serif text-2xl text-white">714</span>
                   <span className="font-sans text-[9px] uppercase tracking-wider text-cream/50">Founded</span>
                 </div>
                 <div className="text-center border-x border-cream/10">
-                  <span className="block font-serif text-2xl text-light-blue">685 ha</span>
+                  <span className="block font-serif text-2xl text-white">685 ha</span>
                   <span className="font-sans text-[9px] uppercase tracking-wider text-cream/50">Total Area</span>
                 </div>
                 <div className="text-center">
-                  <span className="block font-serif text-2xl text-light-blue">1992</span>
+                  <span className="block font-serif text-2xl text-white">1992</span>
                   <span className="font-sans text-[9px] uppercase tracking-wider text-cream/50">Relais affiliation</span>
                 </div>
               </div>

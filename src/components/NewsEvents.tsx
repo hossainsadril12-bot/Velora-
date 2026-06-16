@@ -1,6 +1,6 @@
 import Image from "next/image";
 import CtaButton from "./CtaButton";
-import Reveal from "./Reveal";
+import { RevealText, ImageReveal, ButtonReveal, DividerLine, FadeUp } from "./anim";
 
 type News = {
   src: string;
@@ -40,10 +40,10 @@ function Card({ n }: { n: News }) {
   return (
     <a
       href={n.href}
-      className="group block h-[520px] bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(0,0,0,0.1)]"
+      className="group block h-[520px] bg-white shadow-[0_10px_30px_rgba(0,0,0,0.03)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_45px_rgba(0,0,0,0.06)]"
     >
-      {/* IMAGE AREA */}
-      <div className="relative h-[285px] w-full overflow-hidden bg-cream">
+      {/* IMAGE AREA — clip wipe + Ken Burns */}
+      <ImageReveal scaleFrom={1.4} className="h-[285px] w-full bg-cream">
         <Image
           src={n.src}
           alt={n.alt}
@@ -55,17 +55,21 @@ function Card({ n }: { n: News }) {
               : "object-cover transition-transform duration-700 group-hover:scale-105"
           }
         />
-      </div>
+      </ImageReveal>
 
       {/* CONTENT AREA */}
       <div className="flex h-[235px] flex-col justify-between bg-white px-6 pb-7 pt-7">
-        <h3 className="font-serif text-[30px] uppercase leading-[0.95] text-dark-green">
-          {n.title}
-        </h3>
+        <FadeUp y={10}>
+          <h3 className="font-serif text-[30px] uppercase leading-[0.95] text-dark-text">
+            {n.title}
+          </h3>
+        </FadeUp>
 
-        <p className="font-sans text-sm font-bold tracking-wide text-black">
-          {n.date}
-        </p>
+        <FadeUp y={0} delay={0.3} duration={0.5}>
+          <p className="font-sans text-sm font-bold tracking-wide text-dark-text/70">
+            {n.date}
+          </p>
+        </FadeUp>
       </div>
     </a>
   );
@@ -76,32 +80,38 @@ export default function NewsEvents() {
     <section className="bg-cream px-6 py-24 lg:px-10">
       <div className="grid grid-cols-1 gap-12 lg:grid-cols-[30fr_70fr] lg:gap-16">
         {/* LEFT LABEL */}
-        <Reveal className="lg:sticky lg:top-28 lg:self-start">
-          <h2 className="font-serif text-[48px] uppercase leading-none text-dark-green lg:text-[56px]">
-            News &amp; Events
+        <div className="lg:sticky lg:top-28 lg:self-start">
+          <h2 className="font-serif text-[48px] uppercase leading-none text-dark-text lg:text-[56px]">
+            <RevealText as="span" dir="fromTopRotated" origin="right bottom">
+              News &amp;
+            </RevealText>
+            <RevealText
+              as="span"
+              dir="fromBottomRotated"
+              delay={0.1}
+              origin="right bottom"
+            >
+              Events
+            </RevealText>
           </h2>
 
-          <div className="mt-20">
-            <CtaButton variant="dark-filled" href="#">
+          <DividerLine className="mt-10 text-dark-text/30" />
+
+          <ButtonReveal className="mt-20" delay={0.8}>
+            <CtaButton variant="tan" href="#">
               View All
             </CtaButton>
-          </div>
-        </Reveal>
+          </ButtonReveal>
+        </div>
 
         {/* RIGHT CARDS */}
         <div className="grid grid-cols-1 gap-x-10 gap-y-20 sm:grid-cols-2">
-          <Reveal>
-            <Card n={CARDS[0]} />
-          </Reveal>
-
-          <Reveal delay={0.1}>
-            <Card n={CARDS[1]} />
-          </Reveal>
-
+          <Card n={CARDS[0]} />
+          <Card n={CARDS[1]} />
           {/* THIRD CARD BELOW FIRST CARD */}
-          <Reveal delay={0.15} className="sm:col-start-1">
+          <div className="sm:col-start-1">
             <Card n={CARDS[2]} />
-          </Reveal>
+          </div>
         </div>
       </div>
     </section>

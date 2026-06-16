@@ -1,15 +1,26 @@
 @import "tailwindcss";
 
 :root {
-  /* San Felice palette */
-  --cream: #f5f1e9;
-  --dark-green: #183029;
-  --deep-green: #182c25;
-  --light-blue: #b6cfd0;
-  --wine-red: #912f46;
+  /* Updated San Felice palette */
+  --cream: #ffffff;
+  /* White Background */
+  --tan: #b09b78;
+  /* Beige/Tan */
+  --dark-green: #01563f;
+  /* Dark Forest Green */
+  --deep-green: #014331;
+  /* Darker variant */
+  --light-blue: #5baca3;
+  /* Teal/Aqua */
+  --wine-red: #6e1b1e;
+  /* Deep Red/Burgundy */
+  --mustard: #b89d38;
+  /* Mustard/Gold */
   --blush-pink: #e4d5d3;
   --white: #ffffff;
-  --dark-text: #141414;
+  --dark-text: #050505;
+  --secondary-background: #A4926E;
+  /* Black */
 
   --background: var(--cream);
   --foreground: var(--dark-green);
@@ -17,11 +28,15 @@
 
 @theme inline {
   --color-cream: var(--cream);
+  --color-tan: var(--tan);
   --color-dark-green: var(--dark-green);
   --color-deep-green: var(--deep-green);
   --color-light-blue: var(--light-blue);
   --color-wine-red: var(--wine-red);
+  --color-mustard: var(--mustard);
   --color-blush-pink: var(--blush-pink);
+  --color-dark-text: var(--dark-text);
+  --color-secondary-background: var(--secondary-background);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
@@ -56,9 +71,11 @@ body {
 ::-webkit-scrollbar {
   width: 8px;
 }
+
 ::-webkit-scrollbar-track {
   background: var(--cream);
 }
+
 ::-webkit-scrollbar-thumb {
   background: var(--dark-green);
   border-radius: 0;
@@ -66,14 +83,17 @@ body {
 
 /* Floating bottle animation */
 @keyframes float {
+
   0%,
   100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-8px);
   }
 }
+
 .animate-float {
   animation: float 3s ease-in-out infinite;
 }
@@ -82,6 +102,7 @@ body {
   .animate-float {
     animation: none;
   }
+
   *,
   *::before,
   *::after {
@@ -90,69 +111,8 @@ body {
   }
 }
 
-/* ── Wine Estates hover states ────────────────────────────────────────── */
-.we-img-inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  will-change: transform;
-  transition: transform 0.8s cubic-bezier(0.25, 0.1, 0.25, 1);
-}
-.estate-card:hover .we-img-inner {
-  transform: scale(1.2) translateZ(0);
-}
-
-.we-overlay {
-  opacity: 0.6;
-  transition: opacity 0.6s ease;
-}
-.estate-card:hover .we-overlay {
-  opacity: 0.4;
-}
-
-.we-logo-wrap {
-  opacity: 1;
-  transition: opacity 0.4s ease;
-}
-.estate-card:hover .we-logo-wrap {
-  opacity: 0;
-}
-
-.we-title-overlay {
-  opacity: 0;
-  transform: translateY(15px) scale(0.95) translateZ(0);
-  transition: opacity 0.5s ease,
-    transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
-}
-.estate-card:hover .we-title-overlay {
-  opacity: 1;
-  transform: translateY(0) scale(1) translateZ(0);
-}
-
-.we-estate-label {
-  transform: translateY(120%);
-  transition: transform 0.5s ease;
-}
-.estate-card:hover .we-estate-label {
-  transform: translateY(0%);
-}
-
-.we-estate-name {
-  transform: translateY(120%);
-  transition: transform 0.6s ease 0.05s;
-}
-.estate-card:hover .we-estate-name {
-  transform: translateY(0%);
-}
-
-.we-discover-btn {
-  background: #f5f1e9;
-  clip-path: inset(100% 0% 0%);
-  transition: clip-path 0.5s ease 0.1s;
-}
-.estate-card:hover .we-discover-btn {
-  clip-path: inset(0%);
-}
+/* ── Wine Estates: hover interaction now fully Framer-Motion driven
+   (flex-expand + state-controlled inner layers in WineEstates.tsx) ──── */
 
 /* ── Food Experience Image Layouts ────────────────────────────────────── */
 .fe-center-image {
@@ -162,5 +122,3 @@ body {
 .fe-right-image {
   @apply relative h-[300px] w-full self-start lg:-mt-[9px] lg:ml-auto lg:w-[279px];
 }
-
-

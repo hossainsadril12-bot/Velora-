@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { DM_Sans, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
+import SmoothScroll from "@/components/SmoothScroll";
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
@@ -31,7 +32,9 @@ export default function RootLayout({
       lang="en"
       className={`${dmSans.variable} ${cormorant.variable} h-full antialiased`}
     >
-      <body className="min-h-full bg-cream text-dark-green">{children}</body>
+      <body className="min-h-full bg-cream text-dark-green">
+        <SmoothScroll>{children}</SmoothScroll>
+      </body>
     </html>
   );
 }

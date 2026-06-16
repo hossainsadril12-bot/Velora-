@@ -1,110 +1,197 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import {
+  AnimatePresence,
+  motion,
+  useInView,
+  useScroll,
+  useSpring,
+  useTransform,
+} from "framer-motion";
 import CtaButton from "./CtaButton";
+import { easeJ } from "@/lib/motion";
 
 const SLIDES = [
   {
-    src: "https://admin.sanfelice.com/app/uploads/2023/02/slider1.jpg",
-    alt: "Borgo San Felice hamlet exterior with tower and gardens",
+    src: "/photo-1554213808-9c5bab0f624e.jpg",
+    alt: "Borgo San Felice interior/exterior layout view",
   },
   {
-    src: "https://admin.sanfelice.com/app/uploads/2023/02/fe7.jpg",
-    alt: "Borgo San Felice pool or courtyard",
-  },
-  {
-    src: "https://admin.sanfelice.com/app/uploads/2023/04/DSC_6934-scaled.jpg",
-    alt: "Borgo San Felice vineyard and garden view",
+    src: "/Red_Ghost_Crab.jpg",
+    alt: "Red Ghost Crab color reference view",
   },
 ];
 
 export default function BorgoResort() {
-  const [i, setI] = useState(0);
-  const go = (d: number) => setI((p) => (p + d + SLIDES.length) % SLIDES.length);
+  const [[i, dir], setI] = useState<[number, number]>([0, 1]);
+  const [mounted, setMounted] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
 
-  return (
-    <section className="grid grid-cols-1 bg-cream lg:grid-cols-2 lg:min-h-screen">
-      {/* LEFT */}
-      <div className="flex flex-col items-center justify-center bg-cream px-8 py-20 text-center sm:px-12 lg:px-20 lg:py-32">
+  useEffect(() => {
+    setMounted(true);
+    const checkSize = () => setIsDesktop(window.innerWidth >= 1024);
+    checkSize();
+    window.addEventListener("resize", checkSize);
+    return () => window.removeEventListener("resize", checkSize);
+  }, []);
+
+  const sectionRef = useRef<HTMLElement>(null);
+
+  // Natural Scroll Progress for the right panel
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start 90%", "center center"],
+  });
+
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 46,
+    damping: 26,
+    mass: 0.9,
+  });
+
+  const rightPanelWidth = useTransform(smoothProgress, [0, 0.6], ["100%", "50%"]);
+  const imageScale = useTransform(smoothProgress, [0, 0.6], [1.1, 1]);
+
+  const inView = useInView(sectionRef, { once: true, amount: 0.15 });
+
+  const go = (d: number) => {
+    setI(([p]) => [(p + d + SLIDES.length) % SLIDES.length, d]);
+  };
+
+  // Animation Variants for the Left Content
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.1,
+      },
+    },
+  };
+
+  // Dedicated variant for the Header to create a masked slide-up effect
+  const headerLineVariants = {
+    hidden: { y: "100%", opacity: 0 },
+    visible: {
+      y: "0%",
+      opacity: 1,
+      transition: { duration: 0.85, ease: easeJ }
+    },
+  };
+
+  // Standard fade-up for button and paragraph
+  const fadeUpVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.85, ease: easeJ }
+    },
+  };
+
+  const renderLeftContent = () => (
+    <motion.div
+      className="flex flex-1 flex-col items-center justify-center py-10 w-full max-w-[640px] mx-auto"
+      variants={containerVariants}
+      initial="hidden"
+      animate={inView ? "visible" : "hidden"}
+    >
+      {/* HEADING: Velora Enani on one line */}
+      <div className="overflow-hidden pb-1 w-full flex justify-center">
         <motion.h1
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="font-serif uppercase leading-[0.95] text-dark-green text-[48px] sm:text-[72px] lg:text-[96px]"
+          variants={headerLineVariants}
+          className="m-0 font-serif text-[42px] sm:text-[56px] lg:text-[76px] uppercase leading-[0.95] text-[#183029] text-center tracking-tight"
         >
-          Borgo
-          <br />
-          San Felice
-          <br />
-          Resort
+          Velora Enani
         </motion.h1>
-
-        {/* CTA Button placed below title */}
-        <div className="mt-10 lg:mt-12">
-          <CtaButton variant="dark-filled" href="#">
-            Discover More
-          </CtaButton>
-        </div>
-
-        {/* Paragraph placed below button with more breathing room */}
-        <p className="mt-16 lg:mt-24 max-w-[420px] font-sans text-base leading-[1.3] text-dark-green font-medium">
-          Surrounded by vineyards, in the heart of our estate in the Chianti Classico region, lies
-          our ancient hamlet, currently a luxury resort and part of the Relais &amp; Châteaux
-          collection since 1992.
-        </p>
       </div>
 
-      {/* RIGHT — slider */}
-      <div className="relative min-h-[400px] overflow-hidden bg-dark-green lg:min-h-screen lg:h-full">
-        <AnimatePresence mode="sync">
-          <motion.div
-            key={i}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.6 }}
-            className="absolute inset-0"
-          >
+      {/* CTA BUTTON */}
+      <motion.div variants={fadeUpVariants} className="mt-10 lg:mt-12">
+        <CtaButton variant="tan" href="#" className="rounded-[2.5px] min-w-[183px]">
+          Learn More
+        </CtaButton>
+      </motion.div>
+
+      {/* PARAGRAPH */}
+      <motion.p
+        variants={fadeUpVariants}
+        className="m-0 mt-12 max-w-[580px] font-sans text-base leading-relaxed text-[#000000] text-center lg:mt-16 font-medium"
+      >
+        Welcome to Velora Inani, the first of its kind &lsquo;Lifestyle Hotel&rsquo; in Cox&rsquo;s Bazar with world-class features and amenities for International &amp; Local tourists. Designed by HuaDu Architecture &amp; Urban Design, a Shanghai-based architecture firm that operates across three continents and holds a first-rate qualification from China&rsquo;s State Construction Ministry.
+        <br />
+        <br />
+        <strong>Location:</strong> Nestled in the pristine land of Inani, Velora Inani will be an escape from the daily hustle and bustle of the beach town. A 5-minute ride along the Marine Drive will take you there &ndash; where the roar of the waves meets the murmur of the hills.
+      </motion.p>
+    </motion.div>
+  );
+
+  const renderRightSlider = () => (
+    <>
+      <AnimatePresence initial={false} custom={dir}>
+        <motion.div
+          key={i}
+          custom={dir}
+          variants={{
+            enter: (d: number) => ({ x: d > 0 ? "100%" : "-70%" }),
+            center: { x: "0%", transition: { duration: 1.1, ease: easeJ } },
+            exit: (d: number) => ({ x: d > 0 ? "-70%" : "70%", transition: { duration: 1.1, ease: easeJ } }),
+          }}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          className="absolute inset-0 overflow-hidden"
+        >
+          <motion.div style={{ scale: isDesktop ? imageScale : 1 }} className="relative h-full w-full">
             <Image
               src={SLIDES[i].src}
               alt={SLIDES[i].alt}
               fill
               sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-cover"
+              priority={i === 0}
             />
           </motion.div>
-        </AnimatePresence>
+        </motion.div>
+      </AnimatePresence>
 
-        {/* counter */}
-        <div className="absolute bottom-6 left-6 z-10 font-sans text-[11px] font-bold tracking-[1.5px] text-white/90">
-          {String(i + 1).padStart(2, "0")} / {String(SLIDES.length).padStart(2, "0")}
-        </div>
-
-        {/* controls */}
-        <div className="absolute bottom-6 right-6 z-10 flex gap-4">
-          <button
-            aria-label="Previous slide"
-            onClick={() => go(-1)}
-            className="flex h-12 w-12 lg:h-16 lg:w-16 items-center justify-center rounded-full bg-white text-dark-green shadow-md transition-all duration-300 hover:bg-cream cursor-pointer"
-          >
-            <svg className="w-3.5 h-3.5 lg:w-4 lg:h-4" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <path d="M10 2L4 8l6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </button>
-          <button
-            aria-label="Next slide"
-            onClick={() => go(1)}
-            className="flex h-12 w-12 lg:h-16 lg:w-16 items-center justify-center rounded-full bg-white text-dark-green shadow-md transition-all duration-300 hover:bg-cream cursor-pointer"
-          >
-            <svg className="w-3.5 h-3.5 lg:w-4 lg:h-4" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <path d="M6 2l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </button>
-        </div>
+      {/* COUNTER */}
+      <div className="absolute bottom-6 left-6 z-10 font-sans text-[11px] font-bold tracking-[1.5px] text-white mix-blend-difference">
+        {String(i + 1).padStart(2, "0")} / {String(SLIDES.length).padStart(2, "0")}
       </div>
+
+      {/* CONTROLS */}
+      <div className="absolute bottom-6 right-6 z-10 flex gap-4">
+        <button type="button" aria-label="Previous slide" onClick={() => go(-1)} className="flex h-[60px] w-[60px] cursor-pointer items-center justify-center rounded-full bg-[#F5F1E9] border border-[#183029] text-[#183029] shadow-md transition-opacity duration-300 hover:opacity-80">
+          <svg className="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M10 2L4 8l6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+        </button>
+        <button type="button" aria-label="Next slide" onClick={() => go(1)} className="flex h-[60px] w-[60px] cursor-pointer items-center justify-center rounded-full bg-[#F5F1E9] border border-[#183029] text-[#183029] shadow-md transition-opacity duration-300 hover:opacity-80">
+          <svg className="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M6 2l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+        </button>
+      </div>
+    </>
+  );
+
+  return (
+    <section
+      ref={sectionRef}
+      className="relative w-full overflow-hidden bg-[#F5F1E9] flex flex-col lg:flex-row lg:h-[calc(100vh-70px)] lg:min-h-[640px] lg:max-h-[940px]"
+    >
+      {/* LEFT CONTENT */}
+      <div className="w-full flex flex-col justify-center items-center px-8 py-20 sm:px-12 lg:absolute lg:left-0 lg:top-0 lg:bottom-0 lg:w-1/2 lg:h-full lg:px-20 lg:py-32 lg:z-0">
+        {renderLeftContent()}
+      </div>
+
+      {/* RIGHT SLIDER */}
+      <motion.div
+        style={{ width: isDesktop ? rightPanelWidth : "100%" }}
+        className="relative min-h-[400px] overflow-hidden bg-dark-green lg:absolute lg:right-0 lg:top-0 lg:bottom-0 lg:h-full lg:z-10"
+      >
+        {renderRightSlider()}
+      </motion.div>
     </section>
   );
 }

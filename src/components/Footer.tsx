@@ -1,4 +1,9 @@
+"use client";
+
 import Link from "next/link";
+import { motion, useReducedMotion, Variants } from "framer-motion";
+import type React from "react";
+import TextLogo from "./TextLogo";
 
 function CircleIcon({ children }: { children: React.ReactNode }) {
   return (
@@ -7,6 +12,8 @@ function CircleIcon({ children }: { children: React.ReactNode }) {
     </span>
   );
 }
+
+const EMBLEM_LINES = Array.from({ length: 16 });
 
 function Emblem() {
   return (
@@ -17,7 +24,7 @@ function Emblem() {
       aria-hidden="true"
     >
       <g stroke="currentColor" strokeWidth="1" strokeLinecap="round">
-        {Array.from({ length: 16 }).map((_, i) => (
+        {EMBLEM_LINES.map((_, i) => (
           <line
             key={i}
             x1="12"
@@ -66,6 +73,79 @@ const GROUPS = {
   },
 };
 
+const footerReveal: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 80,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.9,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
+
+const containerStagger: Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.12,
+      delayChildren: 0.18,
+    },
+  },
+};
+
+const softReveal: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 34,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.75,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
+
+const logoReveal: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 24,
+    scale: 0.96,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.9,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
+
+const lineReveal: Variants = {
+  hidden: {
+    scaleX: 0,
+    opacity: 0,
+    transformOrigin: "left center",
+  },
+  visible: {
+    scaleX: 1,
+    opacity: 1,
+    transition: {
+      duration: 0.8,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
+
 function FooterGroup({
   heading,
   links,
@@ -74,41 +154,79 @@ function FooterGroup({
   links: { text: string; href: string }[];
 }) {
   return (
-    <div>
-      <h4 className="m-0 border-b border-cream pb-4 font-serif text-[18px] font-normal uppercase leading-none text-cream">
+    <motion.div variants={softReveal}>
+      <h4 className="m-0 font-serif text-[18px] font-normal uppercase leading-none text-cream">
         {heading}
       </h4>
 
-      <ul className="mt-6 flex flex-col gap-[14px]">
+      <motion.div
+        variants={lineReveal}
+        className="mt-4 h-px w-full bg-cream"
+      />
+
+      <motion.ul
+        variants={containerStagger}
+        className="mt-6 flex flex-col gap-[14px]"
+      >
         {links.map((link) => (
-          <li key={link.text}>
+          <motion.li key={link.text} variants={softReveal}>
             <Link
               href={link.href}
-              className="font-sans text-[15px] font-bold leading-none text-cream transition-opacity hover:opacity-70"
+              className="font-sans text-[15px] font-bold leading-none text-cream transition-opacity duration-300 hover:opacity-70"
             >
               {link.text}
             </Link>
-          </li>
+          </motion.li>
         ))}
-      </ul>
-    </div>
+      </motion.ul>
+    </motion.div>
   );
 }
 
 export default function Footer() {
+  const shouldReduceMotion = useReducedMotion();
+
+  const motionProps = shouldReduceMotion
+    ? {
+      initial: false as const,
+      whileInView: undefined,
+    }
+    : {
+      initial: "hidden" as const,
+      whileInView: "visible" as const,
+      viewport: {
+        once: true,
+        amount: 0.18,
+      },
+    };
+
   return (
-    <footer className="bg-dark-green text-cream">
-      <div className="mx-auto flex min-h-[760px] max-w-[1780px] flex-col px-6 pb-8 pt-[86px] lg:px-[78px]">
+    <motion.footer
+      className="overflow-hidden bg-tan text-cream"
+      variants={footerReveal}
+      {...motionProps}
+    >
+      <motion.div
+        className="mx-auto flex min-h-[760px] max-w-[1780px] flex-col px-6 pb-8 pt-[86px] lg:px-[78px]"
+        variants={containerStagger}
+      >
         {/* TOP AREA */}
         <div className="grid grid-cols-1 gap-16 lg:grid-cols-[48fr_52fr]">
           {/* LEFT CONTACT AREA */}
-          <div className="pt-[110px]">
-            <div className="grid grid-cols-1 gap-6 lg:grid-cols-[220px_1fr] lg:gap-10">
+          <motion.div className="pt-[110px]" variants={softReveal}>
+            <motion.div
+              className="grid grid-cols-1 gap-6 lg:grid-cols-[220px_1fr] lg:gap-10"
+              variants={containerStagger}
+            >
               {/* Phone + Email */}
-              <div className="flex flex-col gap-[22px]">
-                <a
+              <motion.div
+                className="flex flex-col gap-[22px]"
+                variants={containerStagger}
+              >
+                <motion.a
+                  variants={softReveal}
                   href="tel:+390577399111"
-                  className="flex items-center gap-3 transition-opacity hover:opacity-80"
+                  className="flex items-center gap-3 transition-opacity duration-300 hover:opacity-80"
                 >
                   <CircleIcon>
                     <svg
@@ -126,13 +244,14 @@ export default function Footer() {
                   </CircleIcon>
 
                   <span className="font-sans text-[16px] font-bold leading-none text-cream">
-                    +39 0577 39911
+                    +880 1335 086800
                   </span>
-                </a>
+                </motion.a>
 
-                <a
+                <motion.a
+                  variants={softReveal}
                   href="mailto:info@sanfelice.com"
-                  className="flex items-center gap-3 transition-opacity hover:opacity-80"
+                  className="flex items-center gap-3 transition-opacity duration-300 hover:opacity-80"
                 >
                   <CircleIcon>
                     <svg
@@ -160,13 +279,13 @@ export default function Footer() {
                   </CircleIcon>
 
                   <span className="font-sans text-[16px] font-bold leading-none text-cream">
-                    info@sanfelice.com
+                    info@eimanestates.com
                   </span>
-                </a>
-              </div>
+                </motion.a>
+              </motion.div>
 
               {/* Location */}
-              <div className="flex items-start gap-3">
+              <motion.div className="flex items-start gap-3" variants={softReveal}>
                 <CircleIcon>
                   <svg
                     width="15"
@@ -185,37 +304,26 @@ export default function Footer() {
                 </CircleIcon>
 
                 <span className="max-w-[330px] font-sans text-[16px] font-bold leading-[1.25] text-cream">
-                  Località San Felice
+                  Rupsha Tower, Flat 10/B
                   <br />
-                  53019 Castelnuovo Berardenga (Siena)
+                  Plot 7, Road 17, Banani, Dhaka 1213
                 </span>
-              </div>
-            </div>
-          </div>
+              </motion.div>
+            </motion.div>
+          </motion.div>
 
           {/* RIGHT CONTENT AREA */}
-          <div>
+          <motion.div variants={containerStagger}>
             {/* LOGO */}
-            <div className="flex flex-col items-center">
-              <div className="flex items-center gap-4 leading-none">
-                <span className="font-serif text-[48px] font-normal uppercase tracking-[0.12em] text-cream">
-                  San
-                </span>
-
-                <Emblem />
-
-                <span className="font-serif text-[48px] font-normal uppercase tracking-[0.12em] text-cream">
-                  Felice
-                </span>
-              </div>
-
-              <span className="mt-3 font-sans text-[8px] font-bold uppercase tracking-[4px] text-cream">
-                Toscana A.D. 714
-              </span>
-            </div>
+            <motion.div className="flex flex-col items-center" variants={logoReveal}>
+              <TextLogo className="h-[120px] w-auto text-cream" />
+            </motion.div>
 
             {/* LINKS */}
-            <div className="mt-[72px] grid grid-cols-1 gap-x-10 gap-y-12 sm:grid-cols-2">
+            <motion.div
+              className="mt-[72px] grid grid-cols-1 gap-x-10 gap-y-12 sm:grid-cols-2"
+              variants={containerStagger}
+            >
               <FooterGroup
                 heading={GROUPS.wine.heading}
                 links={GROUPS.wine.links}
@@ -232,12 +340,12 @@ export default function Footer() {
                   links={GROUPS.allianz.links}
                 />
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
 
         {/* BOTTOM LEGAL TEXT */}
-        <div className="mt-auto pt-20">
+        <motion.div className="mt-auto pt-20" variants={softReveal}>
           <p className="mx-auto max-w-[1680px] text-center font-sans text-[15px] font-bold leading-[1.35] text-cream/35">
             Società Agricola San Felice S.p.a. Piazza Tre Torri 3, 20145 Milan
             Cod. Fisc. Partiva Iva e Registro Imprese di Siena N. 04116430150 -
@@ -247,8 +355,8 @@ export default function Footer() {
             iscritto all&apos;albo GRUPPI ASSICURATIVI N 018 soggetta alla
             direzione e coordinamento di ALLIANZ S.p.A
           </p>
-        </div>
-      </div>
-    </footer>
+        </motion.div>
+      </motion.div>
+    </motion.footer>
   );
 }
