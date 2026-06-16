@@ -198,16 +198,15 @@ export default function HeroSection() {
             onAnimationComplete={() => setShowIntro(false)}
           >
             <motion.div
-              className="absolute z-10 top-8 sm:top-12 flex flex-col items-center text-dark-text"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+              className="absolute z-10 top-8 sm:top-12 flex flex-col items-center"
+              initial={{ opacity: 0, color: "#050505" }}
+              animate={{ opacity: 1, color: "#ffffff" }}
               transition={{
-                duration: 0.8,
-                ease: "easeInOut",
-                delay: 0.2, // Starts fading in at 0.2s and stays visible
+                opacity: { duration: 0.8, delay: 0.2 },
+                color: { duration: 0.8, delay: 1.2, ease: "easeInOut" },
               }}
             >
-              <HeroLogo className="h-12 sm:h-16 w-auto text-dark-text" />
+              <HeroLogo className="h-12 sm:h-16 w-auto" />
             </motion.div>
 
             <motion.div
