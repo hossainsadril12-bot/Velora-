@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { DM_Sans, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
+import FloatingSocial from "@/components/FloatingSocial";
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
@@ -34,6 +35,7 @@ export default function RootLayout({
     >
       <body className="min-h-full bg-cream text-dark-green">
         <SmoothScroll>{children}</SmoothScroll>
+        <FloatingSocial />
       </body>
     </html>
   );

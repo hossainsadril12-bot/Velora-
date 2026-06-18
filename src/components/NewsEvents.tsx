@@ -13,26 +13,25 @@ type News = {
 
 const CARDS: News[] = [
   {
-    src: "https://admin.sanfelice.com/app/uploads/2023/04/DSC_6934-scaled.jpg",
-    alt: "25 Chianti Classico Producers you should know",
-    title: "25 CHIANTI CLASSICO PRODUCERS YOU SHOULD KNOW",
+    src: "/thisisengineering-jy2q5tz7JUI-unsplash.jpg",
+    alt: "Lorem Ipsum 1",
+    title: "Lorem Ipsum",
     date: "09/03/2023",
     href: "#",
   },
   {
-    src: "https://admin.sanfelice.com/app/uploads/2023/04/CAMPOGIOVANNI_hero-2040x1120-1.jpg",
-    alt: "What to drink on National Wine Day",
-    title: "WHAT TO DRINK ON NATIONAL WINE DAY",
+    src: "/stem-list-EVgsAbL51Rk-unsplash.jpg",
+    alt: "Lorem Ipsum 2",
+    title: "Lorem Ipsum",
     date: "25/05/2022",
     href: "#",
   },
   {
-    src: "https://admin.sanfelice.com/app/uploads/2023/05/Logo_Wine-gouture.png",
-    alt: "Wine Couture — 50 volte Vigorello",
-    title: "50 VOLTE VIGORELLO, PRIMO SUPERTUSCAN DEL CHIANTI CLASSICO",
+    src: "/you-le-hRWsD2ti-os-unsplash.jpg",
+    alt: "Lorem Ipsum 3",
+    title: "Lorem Ipsum",
     date: "23/03/2022",
     href: "#",
-    contain: true,
   },
 ];
 
@@ -60,7 +59,7 @@ function Card({ n }: { n: News }) {
       {/* CONTENT AREA */}
       <div className="flex h-[235px] flex-col justify-between bg-white px-6 pb-7 pt-7">
         <FadeUp y={10}>
-          <h3 className="font-serif text-[30px] uppercase leading-[0.95] text-dark-text">
+          <h3 className="font-serif text-[30px] uppercase leading-[0.95] text-dark-text font-thin">
             {n.title}
           </h3>
         </FadeUp>
@@ -81,7 +80,7 @@ export default function NewsEvents() {
       <div className="grid grid-cols-1 gap-12 lg:grid-cols-[30fr_70fr] lg:gap-16">
         {/* LEFT LABEL */}
         <div className="lg:sticky lg:top-28 lg:self-start">
-          <h2 className="font-serif text-[48px] uppercase leading-none text-dark-text lg:text-[56px]">
+          <h2 className="font-serif text-[48px] uppercase leading-none text-dark-text lg:text-[56px] font-thin">
             <RevealText as="span" dir="fromTopRotated" origin="right bottom">
               News &amp;
             </RevealText>

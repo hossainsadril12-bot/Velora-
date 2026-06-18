@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion, useReducedMotion, Variants } from "framer-motion";
+import { motion, useReducedMotion, type Variants } from "framer-motion";
 import type React from "react";
 import TextLogo from "./TextLogo";
 
@@ -13,41 +13,16 @@ function CircleIcon({ children }: { children: React.ReactNode }) {
   );
 }
 
-const EMBLEM_LINES = Array.from({ length: 16 });
-
-function Emblem() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      className="h-10 w-10 text-cream"
-      fill="none"
-      aria-hidden="true"
-    >
-      <g stroke="currentColor" strokeWidth="1" strokeLinecap="round">
-        {EMBLEM_LINES.map((_, i) => (
-          <line
-            key={i}
-            x1="12"
-            y1="12"
-            x2="12"
-            y2="2"
-            transform={`rotate(${i * 22.5} 12 12)`}
-          />
-        ))}
-      </g>
-      <circle cx="12" cy="12" r="1.6" fill="currentColor" />
-    </svg>
-  );
-}
-
 const GROUPS = {
-  wine: {
-    heading: "Wine & Estates",
+  resources: {
+    heading: "Resources",
     links: [
-      { text: "San Felice Chianti Classico", href: "#" },
-      { text: "Campogiovanni Montalcino", href: "#" },
-      { text: "Bell'Aja Bolgheri", href: "#" },
-      { text: "Our Wines", href: "#" },
+      { text: "Download", href: "#" },
+      { text: "Newsletter", href: "#" },
+      { text: "Gallery", href: "#" },
+      { text: "Video", href: "#" },
+      { text: "Career", href: "#" },
+      { text: "Privacy policy", href: "#" },
     ],
   },
   info: {
@@ -55,20 +30,9 @@ const GROUPS = {
     links: [
       { text: "About Us", href: "#" },
       { text: "News & Events", href: "#" },
+      { text: "FAQ", href: "#" },
+      { text: "Equity Partners", href: "https://riservata.agricolasanfelice.it" },
       { text: "Contact Us", href: "#" },
-      { text: "Agents Area", href: "https://riservata.agricolasanfelice.it" },
-    ],
-  },
-  allianz: {
-    heading: "Allianz",
-    links: [
-      { text: "Code of Contact", href: "#" },
-      { text: "Binding Corporate", href: "#" },
-      { text: "Cookie Policy", href: "#" },
-      { text: "Privacy Policy", href: "#" },
-      { text: "Code of Ethics", href: "#" },
-      { text: "Organization, Management and Control Model", href: "#" },
-      { text: "Vendor Code of Conduct", href: "#" },
     ],
   },
 };
@@ -155,7 +119,7 @@ function FooterGroup({
 }) {
   return (
     <motion.div variants={softReveal}>
-      <h4 className="m-0 font-serif text-[18px] font-normal uppercase leading-none text-cream">
+      <h4 className="m-0 font-serif text-[18px] font-light uppercase leading-[1.1] text-cream">
         {heading}
       </h4>
 
@@ -166,13 +130,13 @@ function FooterGroup({
 
       <motion.ul
         variants={containerStagger}
-        className="mt-6 flex flex-col gap-[14px]"
+        className="m-0 mt-6 flex list-none flex-col gap-[14px] p-0"
       >
-        {links.map((link) => (
-          <motion.li key={link.text} variants={softReveal}>
+        {links.map((link, index) => (
+          <motion.li key={`${link.text}-${index}`} variants={softReveal}>
             <Link
               href={link.href}
-              className="font-sans text-[15px] font-bold leading-none text-cream transition-opacity duration-300 hover:opacity-70"
+              className="block font-sans text-[15px] font-light leading-[1.2] text-cream transition-opacity duration-300 hover:opacity-70"
             >
               {link.text}
             </Link>
@@ -225,7 +189,7 @@ export default function Footer() {
               >
                 <motion.a
                   variants={softReveal}
-                  href="tel:+390577399111"
+                  href="tel:+8801335086800"
                   className="flex items-center gap-3 transition-opacity duration-300 hover:opacity-80"
                 >
                   <CircleIcon>
@@ -243,14 +207,14 @@ export default function Footer() {
                     </svg>
                   </CircleIcon>
 
-                  <span className="font-sans text-[16px] font-bold leading-none text-cream">
+                  <span className="font-sans text-[16px] font-light leading-[1.2] text-cream">
                     +880 1335 086800
                   </span>
                 </motion.a>
 
                 <motion.a
                   variants={softReveal}
-                  href="mailto:info@sanfelice.com"
+                  href="mailto:info@eimanestates.com"
                   className="flex items-center gap-3 transition-opacity duration-300 hover:opacity-80"
                 >
                   <CircleIcon>
@@ -278,7 +242,7 @@ export default function Footer() {
                     </svg>
                   </CircleIcon>
 
-                  <span className="font-sans text-[16px] font-bold leading-none text-cream">
+                  <span className="font-sans text-[16px] font-light leading-[1.2] text-cream">
                     info@eimanestates.com
                   </span>
                 </motion.a>
@@ -303,10 +267,10 @@ export default function Footer() {
                   </svg>
                 </CircleIcon>
 
-                <span className="max-w-[330px] font-sans text-[16px] font-bold leading-[1.25] text-cream">
+                <span className="max-w-[330px] font-sans text-[16px] font-light leading-[1.25] text-cream">
                   Rupsha Tower, Flat 10/B
                   <br />
-                  Plot 7, Road 17, Banani, Dhaka 1213
+                  Plot 7, Road 17, Banani, Dhaka 1213, Bangladesh
                 </span>
               </motion.div>
             </motion.div>
@@ -325,36 +289,42 @@ export default function Footer() {
               variants={containerStagger}
             >
               <FooterGroup
-                heading={GROUPS.wine.heading}
-                links={GROUPS.wine.links}
+                heading={GROUPS.resources.heading}
+                links={GROUPS.resources.links}
               />
 
               <FooterGroup
                 heading={GROUPS.info.heading}
                 links={GROUPS.info.links}
               />
-
-              <div className="sm:col-start-1">
-                <FooterGroup
-                  heading={GROUPS.allianz.heading}
-                  links={GROUPS.allianz.links}
-                />
-              </div>
             </motion.div>
           </motion.div>
         </div>
 
         {/* BOTTOM LEGAL TEXT */}
-        <motion.div className="mt-auto pt-20" variants={softReveal}>
-          <p className="mx-auto max-w-[1680px] text-center font-sans text-[15px] font-bold leading-[1.35] text-cream/35">
-            Società Agricola San Felice S.p.a. Piazza Tre Torri 3, 20145 Milan
-            Cod. Fisc. Partiva Iva e Registro Imprese di Siena N. 04116430150 -
-            Capitale Sociale euro 21.052.800,00 I.V. - Società con Unico Socio,
-            appartenente al Gruppo Assicurativo ALLIANZ,
-            <br />
-            iscritto all&apos;albo GRUPPI ASSICURATIVI N 018 soggetta alla
-            direzione e coordinamento di ALLIANZ S.p.A
-          </p>
+        <motion.div
+          className="mt-auto flex flex-col items-center justify-between gap-4 pt-20 font-sans text-[14px] font-light text-cream/40 sm:flex-row"
+          variants={softReveal}
+        >
+          <span>
+            © {new Date().getFullYear()} Eiman Estates Ltd. All rights reserved.
+          </span>
+
+          <div className="flex gap-6">
+            <Link
+              href="#"
+              className="transition-colors duration-300 hover:text-cream"
+            >
+              Terms & Conditions
+            </Link>
+
+            <Link
+              href="#"
+              className="transition-colors duration-300 hover:text-cream"
+            >
+              Privacy Policy
+            </Link>
+          </div>
         </motion.div>
       </motion.div>
     </motion.footer>

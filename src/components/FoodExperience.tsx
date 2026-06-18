@@ -3,10 +3,10 @@ import CtaButton from "./CtaButton";
 import { RevealText, ImageReveal, ButtonReveal, DividerLine } from "./anim";
 
 const IMG_LEFT =
-  "https://admin.sanfelice.com/app/uploads/2023/02/Sakalis-1144x652-1.png";
+  "/diane-picchiottino-noiua71q1Sc-unsplash.jpg";
 
 const IMG_RIGHT =
-  "https://admin.sanfelice.com/app/uploads/2023/02/Sakalis-548x738-1.png";
+  "/ethan-hansen-yiTJx4XCcFY-unsplash.jpg";
 
 const IMG_BOTTOM =
   "https://admin.sanfelice.com/app/uploads/2023/04/Olio-horizontal-gallery.jpg";
@@ -22,7 +22,7 @@ export default function FoodExperience() {
         <RevealText
           as="h1"
           dir="fromBottom"
-          className="relative m-0 select-none whitespace-nowrap text-center font-serif text-[64px] uppercase leading-none text-dark-text sm:text-[120px] lg:text-[192px] lg:leading-[192px]"
+          className="relative m-0 select-none whitespace-nowrap text-center font-serif text-[64px] uppercase leading-none text-dark-text sm:text-[120px] lg:text-[192px] lg:leading-[192px] font-thin"
         >
           Velora Emporio
         </RevealText>
@@ -51,17 +51,17 @@ export default function FoodExperience() {
           <div className="lg:pt-[55px]">
 
 
-            <h2 className="m-0 mt-[35px] font-serif text-[32px] font-normal uppercase leading-[35.2px] text-dark-text">
+            <h2 className="m-0 mt-[35px] font-serif text-[32px] font-thin uppercase leading-[35.2px] text-dark-text">
               <RevealText as="span" dir="fromBottom">
-                A Life time
+                Lorem Ipsum
               </RevealText>
               <RevealText as="span" dir="fromBottom" delay={0.2}>
-                Shoping mall
+                Lorem Ipsum
               </RevealText>
             </h2>
 
             <p className="m-0 mt-[34px] max-w-[650px] font-sans text-[16px] leading-[1.5] text-dark-text/75">
-              Welcome to Velora Inani, the first of its kind ‘Lifestyle Hotel’ in Cox’s Bazar with world-class features and amenities for International & Local tourists. Designed by HuaDu Architecture & Urban Design, a Shanghai-based architecture firm that operates across three continents and holds a first-rate qualification from China’s State Construction Ministry.
+              Lorem IpsumLorem IpsumLorem Lorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem Ipsum
 
 
             </p>

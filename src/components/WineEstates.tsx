@@ -21,7 +21,7 @@ type Estate = {
 
 const ESTATES: Estate[] = [
   {
-    name: "Velora Enani",
+    name: "Velora Inani",
     bg: "https://admin.sanfelice.com/app/uploads/2023/04/DSC_6934-scaled.jpg",
     bgAlt: "San Felice vineyard rows",
     logo: "https://admin.sanfelice.com/app/uploads/2023/04/SF-CHIANTICLASSICO-logo-WHITE.png",
@@ -133,7 +133,7 @@ function EstateCard({
         }}
       />
 
-      {/* Center text heading (default state) */}
+      {/* Center text heading default state */}
       <motion.div
         className="absolute inset-0 flex items-center justify-center px-4 text-center"
         style={{
@@ -148,7 +148,7 @@ function EstateCard({
           duration: 0.6,
         }}
       >
-        <h2 className="m-0 font-serif uppercase text-cream text-[32px] sm:text-[40px] leading-tight font-normal">
+        <h2 className="m-0 font-serif uppercase text-cream text-[32px] sm:text-[40px] leading-tight font-thin tracking-[-0.03em]">
           {estate.name}
         </h2>
       </motion.div>
@@ -174,11 +174,11 @@ function EstateCard({
       >
         <span className="block h-[44px] overflow-hidden">
           <motion.h2
-            className="m-0 font-serif uppercase text-cream"
+            className="m-0 font-serif uppercase text-cream font-thin tracking-[-0.03em]"
             style={{
               fontSize: "40px",
               lineHeight: "44px",
-              fontWeight: 400,
+              fontWeight: 100,
             }}
             variants={{
               hidden: {
@@ -298,11 +298,7 @@ export default function WineEstates() {
     [-4.5, -2, 0]
   );
 
-  const headingSkew = useTransform(
-    smoothProgress,
-    [0, 0.68],
-    [-5, 0]
-  );
+  const headingSkew = useTransform(smoothProgress, [0, 0.68], [-5, 0]);
 
   const headingClip = useTransform(
     smoothProgress,
@@ -325,11 +321,7 @@ export default function WineEstates() {
     ["190px", "0px"]
   );
 
-  const cardsOpacity = useTransform(
-    smoothProgress,
-    [0.28, 0.44],
-    [0, 1]
-  );
+  const cardsOpacity = useTransform(smoothProgress, [0.28, 0.44], [0, 1]);
 
   const cardOneY = useTransform(
     smoothProgress,
@@ -350,12 +342,9 @@ export default function WineEstates() {
   );
 
   return (
-    <section
-      ref={sectionRef}
-      className="overflow-hidden bg-tan pt-4 pb-8"
-    >
+    <section ref={sectionRef} className="overflow-hidden bg-tan pt-4 pb-8">
       {/* Heading */}
-      <div className="relative w-full overflow-hidden px-[10vw] sm:px-[10vw] lg:px-[10.8vw] pb-6">
+      <div className="relative w-full overflow-hidden px-[10vw] sm:px-[10vw] lg:px-[10.8vw] pb-0 -mb-[12px]">
         <motion.h2
           style={{
             y: headingY,
@@ -366,7 +355,7 @@ export default function WineEstates() {
             transformOrigin: "left top",
             willChange: "transform, clip-path",
           }}
-          className="relative m-0 block select-none whitespace-nowrap text-center font-serif text-[clamp(84px,11.4vw,225px)] uppercase leading-[1.0] pb-6 tracking-[-0.045em] text-white"
+          className="relative m-0 block select-none whitespace-nowrap text-center font-serif text-[clamp(84px,11.4vw,225px)] uppercase leading-[1.0] tracking-[-0.045em] text-white font-thin"
         >
           Projects
         </motion.h2>
@@ -379,7 +368,7 @@ export default function WineEstates() {
           opacity: cardsOpacity,
           willChange: "transform, opacity",
         }}
-        className="mt-1 flex w-full flex-col gap-6 px-6 sm:px-10 lg:mt-1.5 lg:flex-row lg:px-[30px]"
+        className="-mt-6 flex w-full flex-col gap-6 px-6 sm:px-10 lg:flex-row lg:px-[30px]"
       >
         {ESTATES.map((estate, i) => {
           const revealY =

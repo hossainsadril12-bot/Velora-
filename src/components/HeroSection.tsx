@@ -119,7 +119,7 @@ export default function HeroSection() {
               animate="visible"
               variants={wordMask}
               style={{ transformOrigin: "left bottom", display: "block" }}
-              className="font-serif uppercase leading-[0.86] text-[16vw] sm:text-[15vw] lg:text-[128px]"
+              className="font-serif uppercase leading-[0.86] text-[16vw] sm:text-[15vw] lg:text-[128px] font-thin"
             >
               OWN
             </motion.h1>
@@ -132,7 +132,7 @@ export default function HeroSection() {
               animate="visible"
               variants={wordMask}
               style={{ transformOrigin: "left bottom", display: "block" }}
-              className="font-serif uppercase leading-[0.86] text-[19vw] sm:text-[18vw] lg:text-[150px]"
+              className="font-serif uppercase leading-[0.86] text-[19vw] sm:text-[18vw] lg:text-[150px] font-thin"
             >
               WHAT
             </motion.h1>
@@ -145,7 +145,7 @@ export default function HeroSection() {
               animate="visible"
               variants={wordMask}
               style={{ transformOrigin: "left bottom", display: "block" }}
-              className="font-serif uppercase leading-[0.86] text-[19vw] sm:text-[18vw] lg:text-[150px]"
+              className="font-serif uppercase leading-[0.86] text-[19vw] sm:text-[18vw] lg:text-[150px] font-thin"
             >
               MATTERS
             </motion.h1>

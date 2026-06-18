@@ -12,38 +12,30 @@ const CUSTOM_EASE = [0.68, 0.09, 0, 0.97] as const;
 const PRIMARY_NAV = [
   {
     index: "01",
-    before: "Wine",
-    after: "Estates",
+    label: "Eiman Estates Ltd.",
     href: "#estates",
-    img: "https://admin.sanfelice.com/app/uploads/2023/04/DSC_6934-scaled.jpg",
   },
   {
     index: "02",
-    before: "Our",
-    after: "Wines",
+    label: "Our People",
     href: "#wines",
-    img: "https://admin.sanfelice.com/app/uploads/2023/05/Foglia-rossa-uva-nera-orizz-scaled.jpg",
   },
   {
     index: "03",
-    before: "BSF",
-    after: "Resort",
+    label: "Honourable Adviser",
     href: "#borgo",
-    img: "https://admin.sanfelice.com/app/uploads/2023/02/borgo1.jpg",
   },
   {
     index: "04",
-    before: "About",
-    after: "Us",
+    label: "Equity Partners",
     href: "#about",
-    img: "https://admin.sanfelice.com/app/uploads/2023/02/hands.jpg",
   },
 ];
 
 const SECONDARY_NAV = [
-  { index: "05", label: "Sustainability", href: "#sustainability" },
-  { index: "06", label: "Olive Oil", href: "#olive-oil" },
-  { index: "07", label: "Orto and Aia Felice", href: "#orto" },
+  { index: "05", label: "Compliance", href: "#Compliance" },
+  { index: "06", label: "Environment", href: "#Environment" },
+  { index: "07", label: "Collaborations ", href: "#Collaborations" },
   { index: "08", label: "Projects", href: "#projects" },
   { index: "09", label: "News & Events", href: "#news" },
   { index: "10", label: "Contact Us", href: "#contact" },
@@ -153,12 +145,15 @@ function MailIcon() {
   );
 }
 
-function InstagramIcon() {
+function XIcon() {
   return (
     <svg width="15" height="15" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-      <rect x="2.5" y="2.5" width="13" height="13" rx="4" stroke="currentColor" strokeWidth="1.1" />
-      <circle cx="9" cy="9" r="3.2" stroke="currentColor" strokeWidth="1.1" />
-      <circle cx="12.6" cy="5.4" r="0.9" fill="currentColor" />
+      <path
+        d="M3.5 3.5L14.5 14.5M14.5 3.5L3.5 14.5"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
@@ -170,6 +165,24 @@ function FacebookIcon() {
         d="M11 5.5h-1.3c-.6 0-.95.4-.95 1V8H11l-.3 2H8.75v5.5h-2V10H5V8h1.75V6.2C6.75 4.6 7.7 3.5 9.4 3.5H11v2z"
         fill="currentColor"
       />
+    </svg>
+  );
+}
+
+function WhatsAppIcon() {
+  return (
+    <svg
+      width="15"
+      height="15"
+      viewBox="0 0 48 48"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="3.2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M24,2.5A21.52,21.52,0,0,0,5.15,34.36L2.5,45.5l11.14-2.65A21.5,21.5,0,1,0,24,2.5ZM13.25,12.27h5.86a1,1,0,0,1,1,1,10.4,10.4,0,0,0,.66,3.91,1.93,1.93,0,0,1-.66,2.44l-2.05,2a18.6,18.6,0,0,0,3.52,4.79A18.6,18.6,0,0,0,26.35,30l2-2.05c1-1,1.46-1,2.44-.66a10.4,10.4,0,0,0,3.91.66,1.05,1.05,0,0,1,1,1v5.86a1.05,1.05,0,0,1-1,1,23.68,23.68,0,0,1-15.64-6.84,23.6,23.6,0,0,1-6.84-15.64A1.07,1.07,0,0,1,13.25,12.27Z" />
     </svg>
   );
 }
@@ -204,6 +217,10 @@ export default function Header() {
   const [hovered, setHovered] = useState<number | null>(null);
   const panelRef = useRef<HTMLDivElement>(null);
 
+  const [selectedLang, setSelectedLang] = useState("En");
+  const [langDropdownOpen, setLangDropdownOpen] = useState(false);
+  const langDropdownRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
 
@@ -233,6 +250,23 @@ export default function Header() {
       window.removeEventListener("keydown", onKey);
     };
   }, [menuOpen]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        langDropdownRef.current &&
+        !langDropdownRef.current.contains(event.target as Node)
+      ) {
+        setLangDropdownOpen(false);
+      }
+    };
+    if (langDropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [langDropdownOpen]);
 
   const onDark = !scrolled;
   const navColor = onDark ? "text-cream" : "text-dark-text";
@@ -313,32 +347,10 @@ export default function Header() {
             >
               {/* TOP BAR */}
               <div className="relative flex h-[112px] shrink-0 items-center justify-between px-[70px]">
-                <motion.div
-                  className="hidden items-center gap-[22px] lg:flex"
-                  initial={{ opacity: 0, y: -12 }}
-                  animate={{
-                    opacity: 1,
-                    y: 0,
-                    transition: { ease: EASE, duration: 0.5, delay: 0.45 },
-                  }}
-                  exit={{ opacity: 0, transition: { duration: 0.2 } }}
-                >
-                  <Link
-                    href="#"
-                    className="flex h-[52px] w-[178px] items-center justify-center gap-[42px] border border-cream/65 font-sans text-[16px] font-bold text-cream transition-colors duration-300 hover:bg-cream hover:text-dark-green"
-                  >
-                    <span>E-shop</span>
-                    <ArrowUpRight />
-                  </Link>
-
-                  <button className="flex h-[52px] w-[215px] cursor-pointer items-center justify-center gap-[12px] border border-cream/65 font-sans text-[16px] font-bold text-cream transition-colors duration-300 hover:bg-cream hover:text-dark-green">
-                    <span>Book A Tasting</span>
-                    <Chevron />
-                  </button>
-                </motion.div>
+                <div /> {/* Left placeholder for alignment */}
 
                 <motion.div
-                  className="absolute left-1/2 top-[51px] flex -translate-x-1/2 -translate-y-1/2 flex-col items-center text-cream"
+                  className="absolute left-1/2 top-[51px] flex -translate-x-1/2 -translate-y-1/2 flex-col items-center text-white"
                   initial={{ opacity: 0, y: -8 }}
                   animate={{
                     opacity: 1,
@@ -348,12 +360,12 @@ export default function Header() {
                   exit={{ opacity: 0, transition: { duration: 0.2 } }}
                 >
                   <Link href="/">
-                    <Logo className="h-10 w-auto" />
+                    <HeroLogo className="h-12 w-auto text-white" />
                   </Link>
                 </motion.div>
 
                 <motion.div
-                  className="ml-auto flex items-center gap-[46px]"
+                  className="ml-auto flex items-center"
                   initial={{ opacity: 0, y: -12 }}
                   animate={{
                     opacity: 1,
@@ -362,14 +374,6 @@ export default function Header() {
                   }}
                   exit={{ opacity: 0, transition: { duration: 0.2 } }}
                 >
-                  <Link
-                    href="#"
-                    className="hidden h-[52px] w-[205px] items-center justify-center gap-[38px] bg-cream font-sans text-[16px] font-bold text-black transition-opacity duration-300 hover:opacity-80 lg:flex"
-                  >
-                    <span>Book Now</span>
-                    <CalendarIcon />
-                  </Link>
-
                   <button
                     onClick={() => setMenuOpen(false)}
                     aria-label="Close menu"
@@ -406,8 +410,6 @@ export default function Header() {
               >
                 {PRIMARY_NAV.map((item, i) => {
                   const layout = [
-                    // FIXED: first item text now starts further right,
-                    // so number 01 has proper breathing space.
                     { numberLeft: "52px", textMargin: "88px" },
                     { numberLeft: "468px", textMargin: "505px" },
                     { numberLeft: "254px", textMargin: "291px" },
@@ -462,40 +464,12 @@ export default function Header() {
                           initial={false}
                           animate={{
                             opacity: dim ? 0.45 : 1,
-                            scale: dim ? 1.06 : 1,
+                            x: active ? 16 : 0,
                           }}
                           transition={{ ease: EASE, duration: 0.45 }}
                         >
-                          <span className="block font-serif text-[132px] uppercase leading-[0.82] tracking-[-0.035em] xl:text-[142px]">
-                            {item.before}
-                          </span>
-
-                          <motion.span
-                            className="relative mx-[28px] mb-[14px] block shrink-0 overflow-hidden"
-                            initial={false}
-                            animate={{
-                              width: active ? "255px" : "0px",
-                              height: active ? "86px" : "0px",
-                              opacity: active ? 1 : 0,
-                            }}
-                            transition={{ ease: CUSTOM_EASE, duration: 0.8 }}
-                          >
-                            <motion.span
-                              className="block h-full w-[255px] bg-cover bg-center"
-                              style={{
-                                backgroundImage: `url(${item.img})`,
-                                transformOrigin: "center center",
-                              }}
-                              initial={false}
-                              animate={{
-                                scale: active ? 1 : 1.65,
-                              }}
-                              transition={{ ease: CUSTOM_EASE, duration: 0.8 }}
-                            />
-                          </motion.span>
-
-                          <span className="block font-serif text-[132px] uppercase leading-[0.82] tracking-[-0.035em] xl:text-[142px]">
-                            {item.after}
+                          <span className="block font-serif font-thin text-[38px] leading-none tracking-tight sm:text-[48px] md:text-[60px] lg:text-[72px] transition-colors duration-300">
+                            {item.label}
                           </span>
                         </motion.div>
                       </Link>
@@ -521,11 +495,11 @@ export default function Header() {
                       onClick={() => setMenuOpen(false)}
                       className="group flex flex-col items-center text-center font-sans"
                     >
-                      <span className="text-[18px] font-semibold leading-none text-cream/35 transition-colors duration-300 group-hover:text-cream/70">
+                      <span className="text-[18px] font-thin leading-none text-cream/35 transition-colors duration-300 group-hover:text-cream/70">
                         {item.index}
                       </span>
 
-                      <span className="mt-[7px] whitespace-nowrap text-[15px] font-semibold leading-[1.15] text-cream transition-opacity duration-300 group-hover:opacity-70">
+                      <span className="mt-[7px] whitespace-nowrap text-[15px] font-thin leading-[1.15] text-cream transition-opacity duration-300 group-hover:opacity-70">
                         {item.label}
                       </span>
                     </Link>
@@ -550,11 +524,11 @@ export default function Header() {
                       onClick={() => setMenuOpen(false)}
                       className="group flex flex-col items-center text-center font-sans"
                     >
-                      <span className="text-[16px] font-semibold leading-none text-cream/35">
+                      <span className="text-[16px] font-thin leading-none text-cream/35">
                         {item.index}
                       </span>
 
-                      <span className="mt-1 text-[14px] font-semibold leading-tight text-cream">
+                      <span className="mt-1 text-[14px] font-thin leading-tight text-cream">
                         {item.label}
                       </span>
                     </Link>
@@ -586,7 +560,7 @@ export default function Header() {
                     <span className="flex h-[34px] w-[34px] items-center justify-center rounded-full border border-cream text-cream">
                       <PhoneIcon />
                     </span>
-                    <span>+39 0577 39911</span>
+                    <span>+880 1335 086800</span>
                   </a>
 
                   <a
@@ -596,23 +570,30 @@ export default function Header() {
                     <span className="flex h-[34px] w-[34px] items-center justify-center rounded-full border border-cream text-cream">
                       <MailIcon />
                     </span>
-                    <span>info@sanfelice.com</span>
+                    <span>info@eimanestates.com</span>
                   </a>
                 </div>
 
                 <div className="justify-self-center text-center font-sans text-[14px] font-normal leading-[1.25] text-cream/45">
-                  Società Agricola San Felice S.p.A.
+                  Rupsha Tower, Flat 10/B, Plot 7
                   <br />
-                  Loc. San Felice, 53019 Castelnuovo Berardenga (Siena)
+                  Road 17, Banani, Dhaka 1213, Bangladesh
                 </div>
 
                 <div className="flex items-center gap-[16px] justify-self-end">
                   <a
                     href="#"
-                    aria-label="Instagram"
+                    aria-label="WhatsApp"
+                    className="flex h-[38px] w-[38px] items-center justify-center rounded-full border border-cream text-white transition-colors duration-300 hover:bg-cream hover:text-dark-green"
+                  >
+                    <WhatsAppIcon />
+                  </a>
+                  <a
+                    href="#"
+                    aria-label="X"
                     className="flex h-[38px] w-[38px] items-center justify-center rounded-full border border-cream text-cream transition-colors duration-300 hover:bg-cream hover:text-dark-green"
                   >
-                    <InstagramIcon />
+                    <XIcon />
                   </a>
 
                   <a
@@ -636,8 +617,8 @@ export default function Header() {
           animate="show"
           variants={headerInit}
           className={`fixed left-0 top-0 w-full border-b transition-colors duration-[400ms] ${scrolled
-              ? "border-dark-green/10 bg-cream/95 backdrop-blur-sm"
-              : "border-cream/15 bg-transparent"
+            ? "border-dark-green/10 bg-cream/95 backdrop-blur-sm"
+            : "border-cream/15 bg-transparent"
             }`}
           style={{
             zIndex: 1001,
@@ -650,10 +631,58 @@ export default function Header() {
                 variants={fadeSlide}
                 className={`hidden items-center gap-6 lg:flex ${navColor}`}
               >
-                <button className="group relative flex cursor-pointer items-center gap-1 font-sans text-[15px] font-bold">
-                  En <Chevron />
-                  <span className="absolute -bottom-1 left-0 h-[1.5px] w-full origin-left scale-x-0 bg-current transition-transform duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:scale-x-100" />
-                </button>
+                <div className="relative" ref={langDropdownRef}>
+                  <button
+                    onClick={() => setLangDropdownOpen(!langDropdownOpen)}
+                    className="group relative flex cursor-pointer items-center gap-1 font-sans text-[15px] font-bold focus:outline-none"
+                    aria-haspopup="listbox"
+                    aria-expanded={langDropdownOpen}
+                  >
+                    <span>{selectedLang}</span>
+                    <motion.span
+                      animate={{ rotate: langDropdownOpen ? 180 : 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="inline-flex items-center"
+                    >
+                      <Chevron />
+                    </motion.span>
+                    <span
+                      className={`absolute -bottom-1 left-0 h-[1.5px] w-full origin-left bg-current transition-transform duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:scale-x-100 ${langDropdownOpen ? "scale-x-100" : "scale-x-0"
+                        }`}
+                    />
+                  </button>
+
+                  <AnimatePresence>
+                    {langDropdownOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                        transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                        className="absolute left-0 mt-3 py-1.5 w-24 overflow-hidden rounded-lg border border-white/10 bg-black/45 text-white shadow-xl backdrop-blur-md z-50 flex flex-col"
+                        role="listbox"
+                      >
+                        {["En", "Bn", "Ar", "Ch"].map((lang) => (
+                          <button
+                            key={lang}
+                            role="option"
+                            aria-selected={selectedLang === lang}
+                            onClick={() => {
+                              setSelectedLang(lang);
+                              setLangDropdownOpen(false);
+                            }}
+                            className={`w-full px-4 py-2 text-left font-sans text-[14px] font-bold transition-colors duration-200 cursor-pointer block ${selectedLang === lang
+                              ? "text-tan"
+                              : "text-white/90 hover:text-white hover:bg-white/10"
+                              }`}
+                          >
+                            {lang}
+                          </button>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
 
                 <button className="group relative flex cursor-pointer items-center gap-1.5 font-sans text-[15px] font-bold">
                   <SearchIcon /> Search
@@ -675,7 +704,7 @@ export default function Header() {
             <motion.div variants={fadeSlide} className="flex flex-1 items-center justify-end gap-6">
               <nav className={`hidden items-center gap-6 lg:flex ${navColor}`}>
                 <Link href="#" className="group relative font-sans text-[15px] font-bold">
-                  Book an appointment
+                  Book an Appointment
                   <span className="absolute -bottom-1 left-0 h-[1.5px] w-full origin-left scale-x-0 bg-current transition-transform duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:scale-x-100" />
                 </Link>
               </nav>

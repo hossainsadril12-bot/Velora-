@@ -8,22 +8,14 @@ export default function DiscoverPanel() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <section className="bg-tan px-5 py-20 text-center relative overflow-hidden">
+    <section className="bg-deep-green px-5 py-20 text-center relative overflow-hidden">
       <div className="flex flex-col items-center">
         <RevealText
           as="h2"
           dir="fromBottom"
-          className="font-serif uppercase tracking-wide text-white text-[28.8px] leading-tight"
+          className="font-serif tracking-wide text-white text-[28.8px] leading-tight"
         >
-          Where Design Excellence
-        </RevealText>
-        <RevealText
-          as="h2"
-          dir="fromBottom"
-          delay={0.2}
-          className="font-serif uppercase tracking-wide text-white text-[28.8px] leading-tight"
-        >
-          Meet trusted Leadership.
+          Where Design Excellence Meets Trusted Leadership
         </RevealText>
 
         <ButtonReveal className="mt-10" delay={0.4}>
