@@ -13,7 +13,7 @@ const IMG_BOTTOM =
 
 export default function FoodExperience() {
   return (
-    <section className="overflow-hidden bg-cream">
+    <section className="overflow-hidden bg-velora-cream">
       {/* TOP SPACE */}
       <div className="h-[35px]" />
 

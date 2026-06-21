@@ -38,75 +38,46 @@ const GROUPS = {
 };
 
 const footerReveal: Variants = {
-  hidden: {
-    opacity: 0,
-    y: 80,
-  },
+  hidden: { opacity: 0, y: 80 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: {
-      duration: 0.9,
-      ease: [0.22, 1, 0.36, 1],
-    },
+    transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] },
   },
 };
 
 const containerStagger: Variants = {
   hidden: {},
   visible: {
-    transition: {
-      staggerChildren: 0.12,
-      delayChildren: 0.18,
-    },
+    transition: { staggerChildren: 0.12, delayChildren: 0.18 },
   },
 };
 
 const softReveal: Variants = {
-  hidden: {
-    opacity: 0,
-    y: 34,
-  },
+  hidden: { opacity: 0, y: 34 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: {
-      duration: 0.75,
-      ease: [0.22, 1, 0.36, 1],
-    },
+    transition: { duration: 0.75, ease: [0.22, 1, 0.36, 1] },
   },
 };
 
 const logoReveal: Variants = {
-  hidden: {
-    opacity: 0,
-    y: 24,
-    scale: 0.96,
-  },
+  hidden: { opacity: 0, y: 24, scale: 0.96 },
   visible: {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: {
-      duration: 0.9,
-      ease: [0.22, 1, 0.36, 1],
-    },
+    transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] },
   },
 };
 
 const lineReveal: Variants = {
-  hidden: {
-    scaleX: 0,
-    opacity: 0,
-    transformOrigin: "left center",
-  },
+  hidden: { scaleX: 0, opacity: 0, transformOrigin: "left center" },
   visible: {
     scaleX: 1,
     opacity: 1,
-    transition: {
-      duration: 0.8,
-      ease: [0.22, 1, 0.36, 1],
-    },
+    transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
   },
 };
 
@@ -119,24 +90,24 @@ function FooterGroup({
 }) {
   return (
     <motion.div variants={softReveal}>
-      <h4 className="m-0 font-serif text-[18px] font-light uppercase leading-[1.1] text-cream">
+      <h4 className="m-0 font-sans text-[13px] font-normal uppercase tracking-wider text-cream">
         {heading}
       </h4>
 
       <motion.div
         variants={lineReveal}
-        className="mt-4 h-px w-full bg-cream"
+        className="mt-4 h-[1px] w-full bg-cream/40"
       />
 
       <motion.ul
         variants={containerStagger}
-        className="m-0 mt-6 flex list-none flex-col gap-[14px] p-0"
+        className="m-0 mt-5 flex list-none flex-col gap-[12px] p-0"
       >
         {links.map((link, index) => (
           <motion.li key={`${link.text}-${index}`} variants={softReveal}>
             <Link
               href={link.href}
-              className="block font-sans text-[15px] font-light leading-[1.2] text-cream transition-opacity duration-300 hover:opacity-70"
+              className="block font-sans text-[14px] font-light leading-[1.2] text-cream transition-opacity duration-300 hover:opacity-70"
             >
               {link.text}
             </Link>
@@ -152,34 +123,40 @@ export default function Footer() {
 
   const motionProps = shouldReduceMotion
     ? {
-      initial: false as const,
-      whileInView: undefined,
-    }
+        initial: false as const,
+        whileInView: undefined,
+      }
     : {
-      initial: "hidden" as const,
-      whileInView: "visible" as const,
-      viewport: {
-        once: true,
-        amount: 0.18,
-      },
-    };
+        initial: "hidden" as const,
+        whileInView: "visible" as const,
+        viewport: {
+          once: true,
+          amount: 0.18,
+        },
+      };
 
   return (
     <motion.footer
-      className="overflow-hidden bg-tan text-cream"
+      className="relative overflow-hidden bg-tan text-cream"
       variants={footerReveal}
       {...motionProps}
     >
       <motion.div
-        className="mx-auto flex min-h-[760px] max-w-[1780px] flex-col px-6 pb-8 pt-[86px] lg:px-[78px]"
+        className="mx-auto flex min-h-[500px] max-w-[1780px] flex-col px-6 pb-12 pt-[100px] lg:px-[78px]"
         variants={containerStagger}
       >
         {/* TOP AREA */}
-        <div className="grid grid-cols-1 gap-16 lg:grid-cols-[48fr_52fr]">
-          {/* LEFT CONTACT AREA */}
-          <motion.div className="pt-[110px]" variants={softReveal}>
+        <motion.div className="grid grid-cols-1 gap-20 lg:grid-cols-2" variants={containerStagger}>
+          {/* LEFT AREA: LOGO & CONTACT */}
+          <motion.div className="flex flex-col" variants={containerStagger}>
+            {/* LOGO */}
+            <motion.div className="mb-16 flex justify-start" variants={logoReveal}>
+              <TextLogo className="h-[60px] w-auto text-cream lg:h-[80px]" />
+            </motion.div>
+
+            {/* CONTACT AREA */}
             <motion.div
-              className="grid grid-cols-1 gap-6 lg:grid-cols-[220px_1fr] lg:gap-10"
+              className="grid grid-cols-1 gap-8 sm:grid-cols-[auto_1fr] sm:gap-16"
               variants={containerStagger}
             >
               {/* Phone + Email */}
@@ -193,21 +170,11 @@ export default function Footer() {
                   className="flex items-center gap-3 transition-opacity duration-300 hover:opacity-80"
                 >
                   <CircleIcon>
-                    <svg
-                      width="15"
-                      height="15"
-                      viewBox="0 0 16 16"
-                      fill="none"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M3 3.5c0 5 4.5 9.5 9.5 9.5l1.5-2-3-1.5-1 1.2A8 8 0 014.8 5.5L6 4.5 4.5 1.5 3 3.5z"
-                        fill="currentColor"
-                      />
+                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                      <path d="M3 3.5c0 5 4.5 9.5 9.5 9.5l1.5-2-3-1.5-1 1.2A8 8 0 014.8 5.5L6 4.5 4.5 1.5 3 3.5z" fill="currentColor"/>
                     </svg>
                   </CircleIcon>
-
-                  <span className="font-sans text-[16px] font-light leading-[1.2] text-cream">
+                  <span className="font-sans text-[14px] font-light leading-[1.2] text-cream">
                     +880 1335 086800
                   </span>
                 </motion.a>
@@ -218,31 +185,12 @@ export default function Footer() {
                   className="flex items-center gap-3 transition-opacity duration-300 hover:opacity-80"
                 >
                   <CircleIcon>
-                    <svg
-                      width="15"
-                      height="15"
-                      viewBox="0 0 16 16"
-                      fill="none"
-                      aria-hidden="true"
-                    >
-                      <rect
-                        x="2"
-                        y="4"
-                        width="12"
-                        height="8"
-                        rx="1"
-                        stroke="currentColor"
-                        strokeWidth="1.2"
-                      />
-                      <path
-                        d="M2.5 4.5L8 9l5.5-4.5"
-                        stroke="currentColor"
-                        strokeWidth="1.2"
-                      />
+                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                      <rect x="2" y="4" width="12" height="8" rx="1" stroke="currentColor" strokeWidth="1.2"/>
+                      <path d="M2.5 4.5L8 9l5.5-4.5" stroke="currentColor" strokeWidth="1.2"/>
                     </svg>
                   </CircleIcon>
-
-                  <span className="font-sans text-[16px] font-light leading-[1.2] text-cream">
+                  <span className="font-sans text-[14px] font-light leading-[1.2] text-cream">
                     info@eimanestates.com
                   </span>
                 </motion.a>
@@ -251,82 +199,67 @@ export default function Footer() {
               {/* Location */}
               <motion.div className="flex items-start gap-3" variants={softReveal}>
                 <CircleIcon>
-                  <svg
-                    width="15"
-                    height="15"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    aria-hidden="true"
-                  >
-                    <path
-                      d="M8 1.5a4.5 4.5 0 00-4.5 4.5c0 3.3 4.5 8.5 4.5 8.5s4.5-5.2 4.5-8.5A4.5 4.5 0 008 1.5z"
-                      stroke="currentColor"
-                      strokeWidth="1.2"
-                    />
+                  <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path d="M8 1.5a4.5 4.5 0 00-4.5 4.5c0 3.3 4.5 8.5 4.5 8.5s4.5-5.2 4.5-8.5A4.5 4.5 0 008 1.5z" stroke="currentColor" strokeWidth="1.2"/>
                     <circle cx="8" cy="6" r="1.6" fill="currentColor" />
                   </svg>
                 </CircleIcon>
-
-                <span className="max-w-[330px] font-sans text-[16px] font-light leading-[1.25] text-cream">
-                  Rupsha Tower, Flat 10/B
-                  <br />
-                  Plot 7, Road 17, Banani, Dhaka 1213, Bangladesh
+                <span className="max-w-[280px] font-sans text-[14px] font-light leading-[1.4] text-cream">
+                  Rupsha Tower, Flat 10/B<br />
+                  Plot 7, Road 17, Banani, Dhaka 1213,<br />
+                  Bangladesh
                 </span>
               </motion.div>
             </motion.div>
           </motion.div>
 
-          {/* RIGHT CONTENT AREA */}
-          <motion.div variants={containerStagger}>
-            {/* LOGO */}
-            <motion.div className="flex flex-col items-center" variants={logoReveal}>
-              <TextLogo className="h-[120px] w-auto text-cream" />
-            </motion.div>
-
-            {/* LINKS */}
-            <motion.div
-              className="mt-[72px] grid grid-cols-1 gap-x-10 gap-y-12 sm:grid-cols-2"
-              variants={containerStagger}
-            >
-              <FooterGroup
-                heading={GROUPS.resources.heading}
-                links={GROUPS.resources.links}
-              />
-
-              <FooterGroup
-                heading={GROUPS.info.heading}
-                links={GROUPS.info.links}
-              />
-            </motion.div>
+          {/* RIGHT AREA: LINKS */}
+          <motion.div
+            className="grid grid-cols-1 gap-x-12 gap-y-12 sm:grid-cols-2 lg:pt-[24px]"
+            variants={containerStagger}
+          >
+            <FooterGroup
+              heading={GROUPS.resources.heading}
+              links={GROUPS.resources.links}
+            />
+            <FooterGroup
+              heading={GROUPS.info.heading}
+              links={GROUPS.info.links}
+            />
           </motion.div>
-        </div>
+        </motion.div>
 
         {/* BOTTOM LEGAL TEXT */}
         <motion.div
-          className="mt-auto flex flex-col items-center justify-between gap-4 pt-20 font-sans text-[14px] font-light text-cream/40 sm:flex-row"
+          className="mt-[120px] flex flex-col items-start justify-between gap-6 pr-20 font-sans text-[12px] font-light text-cream/60 sm:flex-row sm:items-center"
           variants={softReveal}
         >
           <span>
             © {new Date().getFullYear()} Eiman Estates Ltd. All rights reserved.
           </span>
 
-          <div className="flex gap-6">
-            <Link
-              href="#"
-              className="transition-colors duration-300 hover:text-cream"
-            >
+          <div className="flex gap-8">
+            <Link href="#" className="transition-colors duration-300 hover:text-cream">
               Terms & Conditions
             </Link>
-
-            <Link
-              href="#"
-              className="transition-colors duration-300 hover:text-cream"
-            >
+            <Link href="#" className="transition-colors duration-300 hover:text-cream">
               Privacy Policy
             </Link>
           </div>
         </motion.div>
       </motion.div>
+
+      {/* FLOATING ACTION BUTTON */}
+      <motion.button
+        variants={softReveal}
+        className="absolute bottom-8 right-8 flex h-[50px] w-[50px] cursor-pointer items-center justify-center rounded-full border border-cream/30 bg-cream/20 text-cream backdrop-blur-sm transition-colors duration-300 hover:bg-cream/30 lg:bottom-12 lg:right-12"
+        aria-label="Scroll to top"
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <path d="M12 5v14m-7-7h14" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      </motion.button>
     </motion.footer>
   );
 }

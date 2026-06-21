@@ -5,6 +5,8 @@
   /* Updated San Felice palette */
   --cream: #ffffff;
   /* White Background */
+  --velora-cream: #F5F1E9;
+  /* Cream Background for Velora Emporio & Borgo Resort */
   --tan: #b09b78;
   /* Beige/Tan */
   --dark-green: #01563f;
@@ -29,6 +31,7 @@
 
 @theme inline {
   --color-cream: var(--cream);
+  --color-velora-cream: var(--velora-cream);
   --color-tan: var(--tan);
   --color-dark-green: var(--dark-green);
   --color-deep-green: var(--deep-green);
