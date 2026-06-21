@@ -249,17 +249,6 @@ export default function Footer() {
         </motion.div>
       </motion.div>
 
-      {/* FLOATING ACTION BUTTON */}
-      <motion.button
-        variants={softReveal}
-        className="absolute bottom-8 right-8 flex h-[50px] w-[50px] cursor-pointer items-center justify-center rounded-full border border-cream/30 bg-cream/20 text-cream backdrop-blur-sm transition-colors duration-300 hover:bg-cream/30 lg:bottom-12 lg:right-12"
-        aria-label="Scroll to top"
-        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-      >
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-          <path d="M12 5v14m-7-7h14" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-      </motion.button>
     </motion.footer>
   );
 }
