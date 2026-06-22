@@ -8,7 +8,7 @@ export async function createClient() {
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
   if (!supabaseUrl || !supabaseAnonKey) {
-    return null as any
+    return null as unknown as ReturnType<typeof createServerClient>
   }
 
   return createServerClient(

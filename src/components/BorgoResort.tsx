@@ -25,11 +25,9 @@ const SLIDES = [
 
 export default function BorgoResort() {
   const [[i, dir], setI] = useState<[number, number]>([0, 1]);
-  const [mounted, setMounted] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
     const checkSize = () => setIsDesktop(window.innerWidth >= 1024);
     checkSize();
     window.addEventListener("resize", checkSize);

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import type React from "react";
 import TextLogo from "./TextLogo";
+import TransitionLink from "./TransitionLink";
 
 function CircleIcon({ children }: { children: React.ReactNode }) {
   return (
@@ -22,7 +23,7 @@ const GROUPS = {
       { text: "Gallery", href: "#" },
       { text: "Video", href: "#" },
       { text: "Career", href: "#" },
-      { text: "Privacy policy", href: "#" },
+      { text: "Privacy policy", href: "/privacy-policy" },
     ],
   },
   info: {
@@ -105,12 +106,21 @@ function FooterGroup({
       >
         {links.map((link, index) => (
           <motion.li key={`${link.text}-${index}`} variants={softReveal}>
-            <Link
-              href={link.href}
-              className="block font-sans text-[14px] font-light leading-[1.2] text-cream transition-opacity duration-300 hover:opacity-70"
-            >
-              {link.text}
-            </Link>
+            {link.href === "/privacy-policy" ? (
+              <TransitionLink
+                href={link.href}
+                className="block font-sans text-[14px] font-light leading-[1.2] text-cream transition-opacity duration-300 hover:opacity-70"
+              >
+                {link.text}
+              </TransitionLink>
+            ) : (
+              <Link
+                href={link.href}
+                className="block font-sans text-[14px] font-light leading-[1.2] text-cream transition-opacity duration-300 hover:opacity-70"
+              >
+                {link.text}
+              </Link>
+            )}
           </motion.li>
         ))}
       </motion.ul>
@@ -242,9 +252,9 @@ export default function Footer() {
             <Link href="#" className="transition-colors duration-300 hover:text-cream">
               Terms & Conditions
             </Link>
-            <Link href="#" className="transition-colors duration-300 hover:text-cream">
+            <TransitionLink href="/privacy-policy" className="transition-colors duration-300 hover:text-cream">
               Privacy Policy
-            </Link>
+            </TransitionLink>
           </div>
         </motion.div>
       </motion.div>

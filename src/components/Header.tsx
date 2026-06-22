@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import Logo from "./Logo";
 import HeroLogo from "./HeroLogo";
+import TransitionLink from "./TransitionLink";
 
 const EASE = [0.25, 0.1, 0.25, 1] as const;
 const CUSTOM_EASE = [0.68, 0.09, 0, 0.97] as const;
@@ -211,7 +212,7 @@ function CloseIcon() {
   );
 }
 
-export default function Header() {
+export default function Header({ theme = "default" }: { theme?: "default" | "light" } = {}) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [hovered, setHovered] = useState<number | null>(null);
@@ -230,17 +231,20 @@ export default function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  const closeMenu = () => {
+    setMenuOpen(false);
+    setHovered(null);
+  };
+
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
 
     if (menuOpen) {
       panelRef.current?.focus();
-    } else {
-      setHovered(null);
     }
 
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setMenuOpen(false);
+      if (e.key === "Escape") closeMenu();
     };
 
     window.addEventListener("keydown", onKey);
@@ -268,8 +272,8 @@ export default function Header() {
     };
   }, [langDropdownOpen]);
 
-  const onDark = !scrolled;
-  const navColor = onDark ? "text-cream" : "text-dark-text";
+  const onDark = theme === "light" ? false : !scrolled;
+  const navColor = onDark ? "text-cream" : "text-black";
 
   const headerInit = {
     hidden: {},
@@ -359,9 +363,9 @@ export default function Header() {
                   }}
                   exit={{ opacity: 0, transition: { duration: 0.2 } }}
                 >
-                  <Link href="/">
+                  <TransitionLink href="/" direction="backward">
                     <HeroLogo className="h-12 w-auto text-white" />
-                  </Link>
+                  </TransitionLink>
                 </motion.div>
 
                 <motion.div
@@ -375,7 +379,7 @@ export default function Header() {
                   exit={{ opacity: 0, transition: { duration: 0.2 } }}
                 >
                   <button
-                    onClick={() => setMenuOpen(false)}
+                    onClick={closeMenu}
                     aria-label="Close menu"
                     className="flex cursor-pointer items-center justify-center text-cream transition-opacity duration-300 hover:opacity-70"
                   >
@@ -443,7 +447,7 @@ export default function Header() {
                       <span className="absolute -bottom-[1px] left-0 z-20 h-[1.5px] w-full origin-left scale-x-0 bg-cream transition-transform duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:scale-x-100" />
                       <Link
                         href={item.href}
-                        onClick={() => setMenuOpen(false)}
+                        onClick={closeMenu}
                         onMouseEnter={() => setHovered(i)}
                         onMouseLeave={() => setHovered(null)}
                         className="relative flex h-[141px] items-end overflow-hidden pb-[20px] text-cream"
@@ -492,7 +496,7 @@ export default function Header() {
                     <Link
                       key={item.index}
                       href={item.href}
-                      onClick={() => setMenuOpen(false)}
+                      onClick={closeMenu}
                       className="group flex flex-col items-center text-center font-sans"
                     >
                       <span className="text-[18px] font-thin leading-none text-cream/35 transition-colors duration-300 group-hover:text-cream/70">
@@ -521,7 +525,7 @@ export default function Header() {
                     <Link
                       key={item.index}
                       href={item.href}
-                      onClick={() => setMenuOpen(false)}
+                      onClick={closeMenu}
                       className="group flex flex-col items-center text-center font-sans"
                     >
                       <span className="text-[16px] font-thin leading-none text-cream/35">
@@ -616,9 +620,12 @@ export default function Header() {
           initial="hidden"
           animate="show"
           variants={headerInit}
-          className={`fixed left-0 top-0 w-full border-b transition-colors duration-[400ms] ${scrolled
-            ? "border-dark-green/10 bg-cream/95 backdrop-blur-sm"
-            : "border-cream/15 bg-transparent"
+          className={`fixed left-0 top-0 w-full border-b transition-colors duration-[400ms] ${
+            theme === "light"
+              ? "border-black/10 bg-white"
+              : scrolled
+                ? "border-dark-green/10 bg-cream/95 backdrop-blur-sm"
+                : "border-cream/15 bg-transparent"
             }`}
           style={{
             zIndex: 1001,
@@ -693,12 +700,12 @@ export default function Header() {
 
             <motion.div
               variants={fadeSlide}
-              className={`flex flex-col items-center transition-colors duration-300 ${onDark ? "text-cream" : "text-dark-text"
+              className={`flex flex-col items-center transition-colors duration-300 ${onDark ? "text-cream" : "text-black"
                 }`}
             >
-              <Link href="/">
+              <TransitionLink href="/" direction="backward">
                 <HeroLogo className="h-8 sm:h-10 w-auto" />
-              </Link>
+              </TransitionLink>
             </motion.div>
 
             <motion.div variants={fadeSlide} className="flex flex-1 items-center justify-end gap-6">
@@ -714,7 +721,7 @@ export default function Header() {
                 aria-label="Open menu"
                 aria-expanded={menuOpen}
                 aria-controls="main-nav-overlay"
-                className={`group flex h-[44px] w-[58px] cursor-pointer items-center justify-center transition-colors duration-300 hover:opacity-70 focus:outline-none focus-visible:ring-1 focus-visible:ring-current ${onDark ? "text-cream" : "text-dark-text"
+                className={`group flex h-[44px] w-[58px] cursor-pointer items-center justify-center transition-colors duration-300 hover:opacity-70 focus:outline-none focus-visible:ring-1 focus-visible:ring-current ${onDark ? "text-cream" : "text-black"
                   }`}
               >
                 <BurgerIcon />
