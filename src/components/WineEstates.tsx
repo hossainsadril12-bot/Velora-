@@ -355,7 +355,7 @@ export default function WineEstates() {
             transformOrigin: "left top",
             willChange: "transform, clip-path",
           }}
-          className="relative m-0 block select-none whitespace-nowrap text-center font-serif text-[clamp(84px,11.4vw,225px)] uppercase leading-[1.0] tracking-[-0.045em] text-white font-thin"
+          className="relative m-0 block select-none whitespace-nowrap text-center font-serif text-[clamp(44px,11.4vw,225px)] uppercase leading-[1.0] tracking-[-0.045em] text-white font-thin"
         >
           Projects
         </motion.h2>

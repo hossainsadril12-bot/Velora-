@@ -1,4 +1,4 @@
-import Link from "next/link";
+import TransitionLink from "./TransitionLink";
 
 type Variant = "dark-filled" | "cream-outlined" | "green-outlined" | "wine-outlined" | "mustard" | "tan" | "dark-outlined";
 
@@ -41,8 +41,8 @@ export default function CtaButton({
   className?: string;
 }) {
   return (
-    <Link href={href} className={`${base} ${variants[variant]} ${className}`}>
+    <TransitionLink href={href} className={`${base} ${variants[variant]} ${className}`}>
       {children}
-    </Link>
+    </TransitionLink>
   );
 }

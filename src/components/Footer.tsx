@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import type React from "react";
 import TextLogo from "./TextLogo";
@@ -114,12 +114,12 @@ function FooterGroup({
                 {link.text}
               </TransitionLink>
             ) : (
-              <Link
+              <TransitionLink
                 href={link.href}
                 className="block font-sans text-[14px] font-light leading-[1.2] text-cream transition-opacity duration-300 hover:opacity-70"
               >
                 {link.text}
-              </Link>
+              </TransitionLink>
             )}
           </motion.li>
         ))}
@@ -241,7 +241,7 @@ export default function Footer() {
 
         {/* BOTTOM LEGAL TEXT */}
         <motion.div
-          className="mt-[120px] flex flex-col items-start justify-between gap-6 pr-20 font-sans text-[12px] font-light text-cream/60 sm:flex-row sm:items-center"
+          className="mt-[120px] flex flex-col items-start justify-between gap-6 pr-0 font-sans text-[12px] font-light text-cream/60 sm:flex-row sm:items-center sm:pr-20"
           variants={softReveal}
         >
           <span>
@@ -249,9 +249,9 @@ export default function Footer() {
           </span>
 
           <div className="flex gap-8">
-            <Link href="#" className="transition-colors duration-300 hover:text-cream">
+            <TransitionLink href="#" className="transition-colors duration-300 hover:text-cream">
               Terms & Conditions
-            </Link>
+            </TransitionLink>
             <TransitionLink href="/privacy-policy" className="transition-colors duration-300 hover:text-cream">
               Privacy Policy
             </TransitionLink>

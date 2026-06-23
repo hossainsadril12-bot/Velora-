@@ -22,7 +22,7 @@ export default function FoodExperience() {
         <RevealText
           as="h1"
           dir="fromBottom"
-          className="relative m-0 select-none whitespace-nowrap text-center font-serif text-[64px] uppercase leading-none text-dark-text sm:text-[120px] lg:text-[192px] lg:leading-[192px] font-thin"
+          className="relative m-0 select-none whitespace-nowrap text-center font-serif text-[34px] uppercase leading-none text-dark-text sm:text-[64px] md:text-[110px] lg:text-[192px] lg:leading-[192px] font-thin"
         >
           Velora Emporio
         </RevealText>

@@ -4,6 +4,7 @@ import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import FloatingSocial from "@/components/FloatingSocial";
 import TransitionProvider from "@/components/TransitionProvider";
+import BookingProvider from "@/components/BookingProvider";
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
@@ -36,8 +37,10 @@ export default function RootLayout({
     >
       <body className="min-h-full bg-cream text-dark-green">
         <TransitionProvider>
-          <SmoothScroll>{children}</SmoothScroll>
-          <FloatingSocial />
+          <BookingProvider>
+            <SmoothScroll>{children}</SmoothScroll>
+            <FloatingSocial />
+          </BookingProvider>
         </TransitionProvider>
       </body>
     </html>

@@ -52,7 +52,7 @@ export default function WineMaking() {
             as="h1"
             dir="fromTopRotated"
             origin="center bottom"
-            className="font-serif uppercase leading-[0.92] text-white text-[64px] sm:text-[110px] lg:text-[153px] font-thin"
+            className="font-serif uppercase leading-[0.92] text-white text-[44px] sm:text-[80px] md:text-[110px] lg:text-[153px] font-thin"
           >
             Equity
           </RevealText>
@@ -61,7 +61,7 @@ export default function WineMaking() {
             dir="fromBottomRotated"
             delay={0.15}
             origin="center bottom"
-            className="font-serif uppercase leading-[0.92] text-white text-[64px] sm:text-[110px] lg:text-[153px] font-thin"
+            className="font-serif uppercase leading-[0.92] text-white text-[44px] sm:text-[80px] md:text-[110px] lg:text-[153px] font-thin"
           >
             Partners
           </RevealText>

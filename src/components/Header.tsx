@@ -1,45 +1,41 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import Logo from "./Logo";
 import HeroLogo from "./HeroLogo";
 import TransitionLink from "./TransitionLink";
+import { useBooking } from "./BookingProvider";
 
 const EASE = [0.25, 0.1, 0.25, 1] as const;
 const CUSTOM_EASE = [0.68, 0.09, 0, 0.97] as const;
 
 const PRIMARY_NAV = [
   {
-    index: "01",
-    label: "Eiman Estates Ltd.",
-    href: "#estates",
+    label: "About",
+    href: "/about",
   },
   {
-    index: "02",
-    label: "Our People",
-    href: "#wines",
+    label: "People",
+    href: "/people",
   },
   {
-    index: "03",
     label: "Honourable Adviser",
-    href: "#borgo",
+    href: "/adviser",
   },
   {
-    index: "04",
     label: "Equity Partners",
     href: "#about",
   },
 ];
 
 const SECONDARY_NAV = [
-  { index: "05", label: "Compliance", href: "#Compliance" },
-  { index: "06", label: "Environment", href: "#Environment" },
-  { index: "07", label: "Collaborations ", href: "#Collaborations" },
-  { index: "08", label: "Projects", href: "#projects" },
-  { index: "09", label: "News & Events", href: "#news" },
-  { index: "10", label: "Contact Us", href: "#contact" },
+  { label: "Compliance", href: "/compliance" },
+  { label: "Environment", href: "/environment" },
+  { label: "Collaboration", href: "/collaboration" },
+  { label: "Projects", href: "#projects" },
+  { label: "News & Events", href: "#news" },
+  { label: "Contact Us", href: "#contact" },
 ];
 
 function Emblem({ className = "" }: { className?: string }) {
@@ -213,6 +209,7 @@ function CloseIcon() {
 }
 
 export default function Header({ theme = "default" }: { theme?: "default" | "light" } = {}) {
+  const { openBooking } = useBooking();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [hovered, setHovered] = useState<number | null>(null);
@@ -264,9 +261,11 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
         setLangDropdownOpen(false);
       }
     };
+
     if (langDropdownOpen) {
       document.addEventListener("mousedown", handleClickOutside);
     }
+
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
@@ -350,8 +349,8 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
               }}
             >
               {/* TOP BAR */}
-              <div className="relative flex h-[112px] shrink-0 items-center justify-between px-[70px]">
-                <div /> {/* Left placeholder for alignment */}
+              <div className="relative flex h-[112px] shrink-0 items-center justify-between px-6 lg:px-[70px]">
+                <div />
 
                 <motion.div
                   className="absolute left-1/2 top-[51px] flex -translate-x-1/2 -translate-y-1/2 flex-col items-center text-white"
@@ -392,7 +391,7 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
               <motion.nav
                 role="navigation"
                 aria-label="Primary"
-                className="flex flex-1 flex-col px-[84px]"
+                className="flex flex-1 flex-col items-center justify-center px-6 lg:px-[84px]"
                 initial="hidden"
                 animate="show"
                 exit="exit"
@@ -412,74 +411,63 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
                   },
                 }}
               >
-                {PRIMARY_NAV.map((item, i) => {
-                  const layout = [
-                    { numberLeft: "52px", textMargin: "88px" },
-                    { numberLeft: "468px", textMargin: "505px" },
-                    { numberLeft: "254px", textMargin: "291px" },
-                    { numberLeft: "465px", textMargin: "505px" },
-                  ][i];
+                <div className="w-full max-w-[1040px]">
+                  {PRIMARY_NAV.map((item, i) => {
+                    const active = hovered === i;
+                    const dim = hovered !== null && hovered !== i;
 
-                  const active = hovered === i;
-                  const dim = hovered !== null && hovered !== i;
-
-                  return (
-                    <motion.div
-                      key={item.index}
-                      variants={{
-                        hidden: {
-                          opacity: 0,
-                          y: 35,
-                        },
-                        show: {
-                          opacity: 1,
-                          y: 0,
-                          transition: { ease: EASE, duration: 0.65 },
-                        },
-                        exit: {
-                          opacity: 0,
-                          y: -20,
-                          transition: { duration: 0.25 },
-                        },
-                      }}
-                      className="group relative border-b border-cream/30"
-                    >
-                      <span className="absolute -bottom-[1px] left-0 z-20 h-[1.5px] w-full origin-left scale-x-0 bg-cream transition-transform duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:scale-x-100" />
-                      <Link
-                        href={item.href}
-                        onClick={closeMenu}
-                        onMouseEnter={() => setHovered(i)}
-                        onMouseLeave={() => setHovered(null)}
-                        className="relative flex h-[141px] items-end overflow-hidden pb-[20px] text-cream"
+                    return (
+                      <motion.div
+                        key={item.label}
+                        variants={{
+                          hidden: {
+                            opacity: 0,
+                            y: 35,
+                          },
+                          show: {
+                            opacity: 1,
+                            y: 0,
+                            transition: { ease: EASE, duration: 0.65 },
+                          },
+                          exit: {
+                            opacity: 0,
+                            y: -20,
+                            transition: { duration: 0.25 },
+                          },
+                        }}
+                        className="group relative border-b border-cream/30"
                       >
-                        <span
-                          className="absolute bottom-[27px] z-10 font-sans text-[15px] font-bold leading-none text-cream"
-                          style={{ left: layout.numberLeft }}
-                        >
-                          {item.index}
-                        </span>
+                        <span className="absolute -bottom-[1px] left-0 z-20 h-[1.5px] w-full origin-left scale-x-0 bg-cream transition-transform duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:scale-x-100" />
 
-                        <motion.div
-                          className="flex items-end"
-                          style={{
-                            marginLeft: layout.textMargin,
-                            transformOrigin: "left center",
-                          }}
-                          initial={false}
-                          animate={{
-                            opacity: dim ? 0.45 : 1,
-                            x: active ? 16 : 0,
-                          }}
-                          transition={{ ease: EASE, duration: 0.45 }}
+                        <TransitionLink
+                          href={item.href}
+                          onClick={closeMenu}
+                          onMouseEnter={() => setHovered(i)}
+                          onMouseLeave={() => setHovered(null)}
+                          direction="forward"
+                          className="relative flex h-[118px] items-center justify-center overflow-hidden text-center text-cream lg:h-[128px]"
                         >
-                          <span className="block font-serif font-thin text-[38px] leading-none tracking-tight sm:text-[48px] md:text-[60px] lg:text-[72px] transition-colors duration-300">
-                            {item.label}
-                          </span>
-                        </motion.div>
-                      </Link>
-                    </motion.div>
-                  );
-                })}
+                          <motion.div
+                            className="flex items-center justify-center"
+                            style={{
+                              transformOrigin: "center center",
+                            }}
+                            initial={false}
+                            animate={{
+                              opacity: dim ? 0.45 : 1,
+                              x: active ? 10 : 0,
+                            }}
+                            transition={{ ease: EASE, duration: 0.45 }}
+                          >
+                            <span className="block font-serif text-[38px] font-thin leading-none tracking-tight transition-colors duration-300 sm:text-[48px] md:text-[60px] lg:text-[72px]">
+                              {item.label}
+                            </span>
+                          </motion.div>
+                        </TransitionLink>
+                      </motion.div>
+                    );
+                  })}
+                </div>
 
                 {/* SECONDARY NAV DESKTOP */}
                 <motion.div
@@ -493,20 +481,17 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
                   exit={{ opacity: 0, transition: { duration: 0.2 } }}
                 >
                   {SECONDARY_NAV.map((item) => (
-                    <Link
-                      key={item.index}
+                    <TransitionLink
+                      key={item.label}
                       href={item.href}
                       onClick={closeMenu}
+                      direction="forward"
                       className="group flex flex-col items-center text-center font-sans"
                     >
-                      <span className="text-[18px] font-thin leading-none text-cream/35 transition-colors duration-300 group-hover:text-cream/70">
-                        {item.index}
-                      </span>
-
-                      <span className="mt-[7px] whitespace-nowrap text-[15px] font-thin leading-[1.15] text-cream transition-opacity duration-300 group-hover:opacity-70">
+                      <span className="whitespace-nowrap text-[15px] font-thin leading-[1.15] text-cream transition-opacity duration-300 group-hover:opacity-70">
                         {item.label}
                       </span>
-                    </Link>
+                    </TransitionLink>
                   ))}
                 </motion.div>
 
@@ -522,20 +507,17 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
                   exit={{ opacity: 0, transition: { duration: 0.2 } }}
                 >
                   {SECONDARY_NAV.map((item) => (
-                    <Link
-                      key={item.index}
+                    <TransitionLink
+                      key={item.label}
                       href={item.href}
                       onClick={closeMenu}
+                      direction="forward"
                       className="group flex flex-col items-center text-center font-sans"
                     >
-                      <span className="text-[16px] font-thin leading-none text-cream/35">
-                        {item.index}
-                      </span>
-
-                      <span className="mt-1 text-[14px] font-thin leading-tight text-cream">
+                      <span className="text-[14px] font-thin leading-tight text-cream">
                         {item.label}
                       </span>
-                    </Link>
+                    </TransitionLink>
                   ))}
                 </motion.div>
               </motion.nav>
@@ -558,7 +540,7 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
 
                 <div className="flex items-center gap-[90px] justify-self-start">
                   <a
-                    href="tel:+39057739911"
+                    href="tel:+8801335086800"
                     className="flex items-center gap-[14px] font-sans text-[15px] font-bold text-cream/55 transition-opacity duration-300 hover:opacity-70"
                   >
                     <span className="flex h-[34px] w-[34px] items-center justify-center rounded-full border border-cream text-cream">
@@ -568,7 +550,7 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
                   </a>
 
                   <a
-                    href="mailto:info@sanfelice.com"
+                    href="mailto:info@eimanestates.com"
                     className="flex items-center gap-[14px] font-sans text-[15px] font-bold text-cream/55 transition-opacity duration-300 hover:opacity-70"
                   >
                     <span className="flex h-[34px] w-[34px] items-center justify-center rounded-full border border-cream text-cream">
@@ -592,6 +574,7 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
                   >
                     <WhatsAppIcon />
                   </a>
+
                   <a
                     href="#"
                     aria-label="X"
@@ -620,12 +603,11 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
           initial="hidden"
           animate="show"
           variants={headerInit}
-          className={`fixed left-0 top-0 w-full border-b transition-colors duration-[400ms] ${
-            theme === "light"
-              ? "border-black/10 bg-white"
-              : scrolled
-                ? "border-dark-green/10 bg-cream/95 backdrop-blur-sm"
-                : "border-cream/15 bg-transparent"
+          className={`fixed left-0 top-0 w-full border-b transition-colors duration-[400ms] ${theme === "light"
+            ? "border-black/10 bg-white"
+            : scrolled
+              ? "border-dark-green/10 bg-cream/95 backdrop-blur-sm"
+              : "border-cream/15 bg-transparent"
             }`}
           style={{
             zIndex: 1001,
@@ -646,6 +628,7 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
                     aria-expanded={langDropdownOpen}
                   >
                     <span>{selectedLang}</span>
+
                     <motion.span
                       animate={{ rotate: langDropdownOpen ? 180 : 0 }}
                       transition={{ duration: 0.2 }}
@@ -653,6 +636,7 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
                     >
                       <Chevron />
                     </motion.span>
+
                     <span
                       className={`absolute -bottom-1 left-0 h-[1.5px] w-full origin-left bg-current transition-transform duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:scale-x-100 ${langDropdownOpen ? "scale-x-100" : "scale-x-0"
                         }`}
@@ -666,7 +650,7 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -10, scale: 0.95 }}
                         transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                        className="absolute left-0 mt-3 py-1.5 w-24 overflow-hidden rounded-lg border border-white/10 bg-black/45 text-white shadow-xl backdrop-blur-md z-50 flex flex-col"
+                        className="absolute left-0 z-50 mt-3 flex w-24 flex-col overflow-hidden rounded-lg border border-white/10 bg-black/45 py-1.5 text-white shadow-xl backdrop-blur-md"
                         role="listbox"
                       >
                         {["En", "Bn", "Ar", "Ch"].map((lang) => (
@@ -678,9 +662,9 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
                               setSelectedLang(lang);
                               setLangDropdownOpen(false);
                             }}
-                            className={`w-full px-4 py-2 text-left font-sans text-[14px] font-bold transition-colors duration-200 cursor-pointer block ${selectedLang === lang
+                            className={`block w-full cursor-pointer px-4 py-2 text-left font-sans text-[14px] font-bold transition-colors duration-200 ${selectedLang === lang
                               ? "text-tan"
-                              : "text-white/90 hover:text-white hover:bg-white/10"
+                              : "text-white/90 hover:bg-white/10 hover:text-white"
                               }`}
                           >
                             {lang}
@@ -704,16 +688,19 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
                 }`}
             >
               <TransitionLink href="/" direction="backward">
-                <HeroLogo className="h-8 sm:h-10 w-auto" />
+                <HeroLogo className="h-8 w-auto sm:h-10" />
               </TransitionLink>
             </motion.div>
 
             <motion.div variants={fadeSlide} className="flex flex-1 items-center justify-end gap-6">
               <nav className={`hidden items-center gap-6 lg:flex ${navColor}`}>
-                <Link href="#" className="group relative font-sans text-[15px] font-bold">
+                <button
+                  onClick={openBooking}
+                  className="group relative cursor-pointer font-sans text-[15px] font-bold focus:outline-none"
+                >
                   Book an Appointment
                   <span className="absolute -bottom-1 left-0 h-[1.5px] w-full origin-left scale-x-0 bg-current transition-transform duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:scale-x-100" />
-                </Link>
+                </button>
               </nav>
 
               <button

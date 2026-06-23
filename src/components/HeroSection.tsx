@@ -110,7 +110,7 @@ export default function HeroSection() {
         {/* OWN WHAT MATTERS — parallax group */}
         <motion.div
           style={{ y: topY }}
-          className="flex flex-col items-start text-left ml-[400px]"
+          className="flex flex-col items-start text-left ml-2 sm:ml-12 md:ml-24 lg:ml-[400px]"
         >
           <span className="block overflow-hidden">
             <motion.h1
@@ -119,7 +119,7 @@ export default function HeroSection() {
               animate="visible"
               variants={wordMask}
               style={{ transformOrigin: "left bottom", display: "block" }}
-              className="font-serif uppercase leading-[0.86] text-[16vw] sm:text-[15vw] lg:text-[128px] font-thin"
+              className="font-serif uppercase leading-[0.86] text-[14vw] sm:text-[15vw] lg:text-[128px] font-thin"
             >
               OWN
             </motion.h1>
@@ -132,7 +132,7 @@ export default function HeroSection() {
               animate="visible"
               variants={wordMask}
               style={{ transformOrigin: "left bottom", display: "block" }}
-              className="font-serif uppercase leading-[0.86] text-[19vw] sm:text-[18vw] lg:text-[150px] font-thin"
+              className="font-serif uppercase leading-[0.86] text-[16vw] sm:text-[18vw] lg:text-[150px] font-thin"
             >
               WHAT
             </motion.h1>
@@ -145,7 +145,7 @@ export default function HeroSection() {
               animate="visible"
               variants={wordMask}
               style={{ transformOrigin: "left bottom", display: "block" }}
-              className="font-serif uppercase leading-[0.86] text-[19vw] sm:text-[18vw] lg:text-[150px] font-thin"
+              className="font-serif uppercase leading-[0.86] text-[16vw] sm:text-[18vw] lg:text-[150px] font-thin"
             >
               MATTERS
             </motion.h1>
