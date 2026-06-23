@@ -10,9 +10,20 @@ interface TransitionLinkProps extends LinkProps {
   className?: string;
   direction?: "forward" | "backward";
   onClick?: React.MouseEventHandler<HTMLAnchorElement>;
+  onMouseEnter?: React.MouseEventHandler<HTMLAnchorElement>;
+  onMouseLeave?: React.MouseEventHandler<HTMLAnchorElement>;
 }
 
-export default function TransitionLink({ children, href, className, direction = "forward", onClick, ...props }: TransitionLinkProps) {
+export default function TransitionLink({ 
+  children, 
+  href, 
+  className, 
+  direction = "forward", 
+  onClick, 
+  onMouseEnter,
+  onMouseLeave,
+  ...props 
+}: TransitionLinkProps) {
   const router = useRouter();
   const pathname = usePathname();
   const { startTransition } = useTransition();
@@ -38,7 +49,14 @@ export default function TransitionLink({ children, href, className, direction = 
   };
 
   return (
-    <Link href={href} onClick={handleTransition} className={className} {...props}>
+    <Link 
+      href={href} 
+      onClick={handleTransition} 
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      className={className} 
+      {...props}
+    >
       {children}
     </Link>
   );
