@@ -1,16 +1,11 @@
 "use client";
 
-import { createContext, useContext, useState, useCallback, ReactNode } from "react";
-
-export type IntroState = "idle" | "transitioning" | "completed";
+import { createContext, useContext, useState, ReactNode } from "react";
 
 type IntroContextType = {
-  /** Current phase of the homepage cinematic intro. */
-  introState: IntroState;
-  /** Advance to the next phase. */
-  advance: () => void;
-  /** Legacy compat — true once the intro has fully completed. */
+  /** True once the homepage cinematic intro has finished (logo docked into navbar). */
   introDone: boolean;
+  setIntroDone: (value: boolean) => void;
 };
 
 const IntroContext = createContext<IntroContextType | undefined>(undefined);
@@ -24,20 +19,10 @@ export function useIntro() {
 }
 
 export default function IntroProvider({ children }: { children: ReactNode }) {
-  const [introState, setIntroState] = useState<IntroState>("idle");
-
-  const advance = useCallback(() => {
-    setIntroState((prev) => {
-      if (prev === "idle") return "transitioning";
-      if (prev === "transitioning") return "completed";
-      return prev;
-    });
-  }, []);
-
-  const introDone = introState === "completed";
+  const [introDone, setIntroDone] = useState(false);
 
   return (
-    <IntroContext.Provider value={{ introState, advance, introDone }}>
+    <IntroContext.Provider value={{ introDone, setIntroDone }}>
       {children}
     </IntroContext.Provider>
   );

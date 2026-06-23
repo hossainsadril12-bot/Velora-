@@ -274,9 +274,9 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
   }, [langDropdownOpen]);
 
   const pathname = usePathname();
-  const { introState, introDone } = useIntro();
-  // The cinematic intro runs on the homepage. While it's active (idle or
-  // transitioning), the header hides and the hero section owns the logo.
+  const { introDone } = useIntro();
+  // The cinematic intro only runs on the homepage. While it runs, the navbar
+  // hides and its logo drops the shared layoutId (the intro logo owns it).
   const introRunning = pathname === "/" && !introDone;
 
   const onDark = theme === "light" ? false : !scrolled;
@@ -696,14 +696,13 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
                 }`}
             >
               <TransitionLink href="/" direction="backward">
-                <motion.div
+                <motion.span
                   layoutId={introRunning ? undefined : "brand-logo"}
-                  transition={{ layout: { duration: 1.2, ease: CUSTOM_EASE } }}
+                  transition={{ layout: { duration: 0.7, ease: CUSTOM_EASE } }}
                   className="block"
-                  style={{ color: "inherit" }}
                 >
                   <HeroLogo className="h-8 w-auto sm:h-10" />
-                </motion.div>
+                </motion.span>
               </TransitionLink>
             </motion.div>
 
