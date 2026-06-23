@@ -5,6 +5,7 @@ import SmoothScroll from "@/components/SmoothScroll";
 import FloatingSocial from "@/components/FloatingSocial";
 import TransitionProvider from "@/components/TransitionProvider";
 import BookingProvider from "@/components/BookingProvider";
+import IntroProvider from "@/components/IntroProvider";
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
@@ -36,12 +37,14 @@ export default function RootLayout({
       className={`${dmSans.variable} ${cormorant.variable} h-full antialiased`}
     >
       <body className="min-h-full bg-cream text-dark-green">
-        <TransitionProvider>
-          <BookingProvider>
-            <SmoothScroll>{children}</SmoothScroll>
-            <FloatingSocial />
-          </BookingProvider>
-        </TransitionProvider>
+        <IntroProvider>
+          <TransitionProvider>
+            <BookingProvider>
+              <SmoothScroll>{children}</SmoothScroll>
+              <FloatingSocial />
+            </BookingProvider>
+          </TransitionProvider>
+        </IntroProvider>
       </body>
     </html>
   );

@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import Logo from "./Logo";
 import HeroLogo from "./HeroLogo";
 import TransitionLink from "./TransitionLink";
 import { useBooking } from "./BookingProvider";
+import { useIntro } from "./IntroProvider";
 
 const EASE = [0.25, 0.1, 0.25, 1] as const;
 const CUSTOM_EASE = [0.68, 0.09, 0, 0.97] as const;
@@ -270,6 +272,12 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [langDropdownOpen]);
+
+  const pathname = usePathname();
+  const { introDone } = useIntro();
+  // The cinematic intro only runs on the homepage. While it runs, the navbar
+  // hides and its logo drops the shared layoutId (the intro logo owns it).
+  const introRunning = pathname === "/" && !introDone;
 
   const onDark = theme === "light" ? false : !scrolled;
   const navColor = onDark ? "text-cream" : "text-black";
@@ -601,7 +609,7 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
       {!menuOpen && (
         <motion.header
           initial="hidden"
-          animate="show"
+          animate={introRunning ? "hidden" : "show"}
           variants={headerInit}
           className={`fixed left-0 top-0 w-full border-b transition-colors duration-[400ms] ${theme === "light"
             ? "border-black/10 bg-white"
@@ -688,7 +696,13 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
                 }`}
             >
               <TransitionLink href="/" direction="backward">
-                <HeroLogo className="h-8 w-auto sm:h-10" />
+                <motion.span
+                  layoutId={introRunning ? undefined : "brand-logo"}
+                  transition={{ layout: { duration: 0.7, ease: CUSTOM_EASE } }}
+                  className="block"
+                >
+                  <HeroLogo className="h-8 w-auto sm:h-10" />
+                </motion.span>
               </TransitionLink>
             </motion.div>
 

@@ -6,6 +6,7 @@ import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
 import { easeJ } from "@/lib/motion";
 import Logo from "./Logo";
 import HeroLogo from "./HeroLogo";
+import { useIntro } from "./IntroProvider";
 
 /**
  * Hero — full-viewport parallax stack.
@@ -24,7 +25,8 @@ const wordMask = {
   visible: (i: number) => ({
     y: "0%",
     rotate: 0,
-    transition: { duration: 1.4, ease: easeJ, delay: 2.4 + i * 0.18 },
+    // Plays once the intro logo has docked (introDone) — small stagger after.
+    transition: { duration: 1.4, ease: easeJ, delay: 0.5 + i * 0.18 },
   }),
 };
 
@@ -49,7 +51,12 @@ function Emblem({ className = "" }: { className?: string }) {
 }
 
 export default function HeroSection() {
-  const [showIntro, setShowIntro] = useState(true);
+  const { introDone, setIntroDone } = useIntro();
+  // Play the cinematic intro only when it hasn't run yet this session. On a
+  // client-side return to home (introDone already true) we skip straight to the
+  // page — this also guarantees the navbar logo is the sole owner of the shared
+  // layoutId, so there's never a duplicate-layoutId conflict.
+  const [showIntro, setShowIntro] = useState(() => !introDone);
 
   // Lock body scroll while intro is showing
   useEffect(() => {
@@ -62,6 +69,17 @@ export default function HeroSection() {
       document.body.style.overflow = "";
     };
   }, [showIntro]);
+
+  // End the intro when the image finishes expanding (~2.4s): unmount the intro
+  // logo (hands off to the navbar via shared layoutId) and reveal the page.
+  useEffect(() => {
+    if (!showIntro) return;
+    const t = setTimeout(() => {
+      setShowIntro(false);
+      setIntroDone(true);
+    }, 2400);
+    return () => clearTimeout(t);
+  }, [showIntro, setIntroDone]);
 
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
@@ -116,7 +134,7 @@ export default function HeroSection() {
             <motion.h1
               custom={0}
               initial="hidden"
-              animate="visible"
+              animate={introDone ? "visible" : "hidden"}
               variants={wordMask}
               style={{ transformOrigin: "left bottom", display: "block" }}
               className="font-serif uppercase leading-[0.86] text-[14vw] sm:text-[15vw] lg:text-[128px] font-thin"
@@ -129,7 +147,7 @@ export default function HeroSection() {
             <motion.h1
               custom={1}
               initial="hidden"
-              animate="visible"
+              animate={introDone ? "visible" : "hidden"}
               variants={wordMask}
               style={{ transformOrigin: "left bottom", display: "block" }}
               className="font-serif uppercase leading-[0.86] text-[16vw] sm:text-[18vw] lg:text-[150px] font-thin"
@@ -142,7 +160,7 @@ export default function HeroSection() {
             <motion.h1
               custom={2}
               initial="hidden"
-              animate="visible"
+              animate={introDone ? "visible" : "hidden"}
               variants={wordMask}
               style={{ transformOrigin: "left bottom", display: "block" }}
               className="font-serif uppercase leading-[0.86] text-[16vw] sm:text-[18vw] lg:text-[150px] font-thin"
@@ -186,29 +204,18 @@ export default function HeroSection() {
         </motion.div>
       </motion.div>
 
-      {/* Cinematic Intro Overlay */}
+      {/* Cinematic Intro — cream bg + center image that expands to full screen.
+          Crossfades out on exit; the hero bg behind is the same image, so the
+          handoff is seamless. */}
       <AnimatePresence>
         {showIntro && (
           <motion.div
-            key="intro-overlay"
-            className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#FFF9ED]"
+            key="intro-bg"
+            className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#FFF9ED] pointer-events-none"
             initial={{ opacity: 1 }}
-            animate={{ opacity: 0 }}
-            transition={{ duration: 0.8, delay: 2.4, ease: "easeInOut" }}
-            onAnimationComplete={() => setShowIntro(false)}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, transition: { duration: 0.6, ease: "easeInOut" } }}
           >
-            <motion.div
-              className="absolute z-10 top-8 sm:top-12 flex flex-col items-center"
-              initial={{ opacity: 0, color: "#050505" }}
-              animate={{ opacity: 1, color: "#ffffff" }}
-              transition={{
-                opacity: { duration: 0.8, delay: 0.2 },
-                color: { duration: 0.8, delay: 1.2, ease: "easeInOut" },
-              }}
-            >
-              <HeroLogo className="h-12 sm:h-16 w-auto" />
-            </motion.div>
-
             <motion.div
               className="relative overflow-hidden"
               initial={{
@@ -243,6 +250,25 @@ export default function HeroSection() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Intro logo — own layer above the bg. On intro end it unmounts and the
+          navbar logo mounts with the same layoutId, so Framer morphs it
+          (shrinks + travels) into the header. */}
+      {showIntro && (
+        <div className="fixed inset-x-0 top-8 sm:top-12 z-[10001] flex justify-center pointer-events-none">
+          <motion.div
+            layoutId="brand-logo"
+            initial={{ opacity: 0, color: "#050505" }}
+            animate={{ opacity: 1, color: "#F5F1E9" }}
+            transition={{
+              opacity: { duration: 0.8, delay: 0.2 },
+              color: { duration: 0.8, delay: 1.2, ease: "easeInOut" },
+            }}
+          >
+            <HeroLogo className="h-12 sm:h-16 w-auto" />
+          </motion.div>
+        </div>
+      )}
     </section>
   );
 }
