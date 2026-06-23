@@ -40,7 +40,7 @@ export default function AdviserPage() {
             {/* Left Side: Premium Full-bleed Image */}
             <div className="relative w-full h-[400px] lg:h-auto overflow-hidden group">
               <Image
-                src="/adviser.jpg"
+                src="/Shamim Z Bosunia.jpeg"
                 alt="Prof. Dr. M. Shamim Z. Bosunia"
                 fill
                 priority
