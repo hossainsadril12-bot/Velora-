@@ -76,7 +76,7 @@ function Card({ n }: { n: News }) {
 
 export default function NewsEvents() {
   return (
-    <section className="bg-cream px-6 py-24 lg:px-10">
+    <section className="bg-cream px-6 py-12 sm:py-16 lg:px-10 lg:py-24">
       <div className="grid grid-cols-1 gap-12 lg:grid-cols-[30fr_70fr] lg:gap-16">
         {/* LEFT LABEL */}
         <div className="lg:sticky lg:top-28 lg:self-start">

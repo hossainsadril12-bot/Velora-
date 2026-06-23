@@ -69,7 +69,7 @@ export default function BorgoResort() {
   };
 
   const renderLeftContent = () => (
-    <div className="flex flex-1 flex-col items-center justify-center py-10 w-full max-w-[640px] mx-auto">
+    <div className="flex flex-1 flex-col items-center justify-center py-4 sm:py-6 lg:py-10 w-full max-w-[640px] mx-auto">
       {/* HEADING: Velora Enani logo */}
       <div className="overflow-hidden pb-1 w-full flex justify-center">
         <motion.h1
@@ -188,7 +188,7 @@ export default function BorgoResort() {
       className="relative w-full overflow-hidden bg-[#F5F1E9] flex flex-col lg:flex-row lg:h-[calc(100vh-70px)] lg:min-h-[640px] lg:max-h-[940px]"
     >
       {/* LEFT CONTENT */}
-      <div className="w-full flex flex-col justify-center items-center px-8 py-20 sm:px-12 lg:absolute lg:left-0 lg:top-0 lg:bottom-0 lg:w-1/2 lg:h-full lg:px-20 lg:py-32 lg:z-0">
+      <div className="w-full flex flex-col justify-center items-center px-8 py-12 sm:px-12 sm:py-16 lg:absolute lg:left-0 lg:top-0 lg:bottom-0 lg:w-1/2 lg:h-full lg:px-20 lg:py-32 lg:z-0">
         {renderLeftContent()}
       </div>
 

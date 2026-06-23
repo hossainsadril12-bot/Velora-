@@ -14,7 +14,7 @@ export default function PrivacyPolicy() {
         initial={{ opacity: 0, filter: "blur(8px)", y: 20 }}
         animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
         transition={{ duration: 1.2, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-        className="relative w-full min-h-screen overflow-hidden bg-velora-cream px-6 pb-20 pt-32 text-[#000000] sm:px-12 lg:px-24"
+        className="relative w-full min-h-screen overflow-hidden bg-velora-cream px-6 pb-12 pt-24 sm:px-12 sm:pb-16 sm:pt-28 lg:px-24 lg:pb-20 lg:pt-32 text-[#000000]"
       >
         {/* Faded Shadow Animation Overlay */}
         <motion.div

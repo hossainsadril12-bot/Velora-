@@ -35,7 +35,7 @@ export default function AboutPage() {
         {/* Content Container */}
         <div className="relative z-20 flex-grow flex flex-col">
           {/* Main Grid: Split Layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 flex-grow w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-2 grid-rows-[auto_1fr] lg:grid-rows-1 flex-grow w-full">
             
             {/* Left Side: Premium Full-bleed Image */}
             <div className="relative w-full h-[350px] lg:h-auto overflow-hidden group">

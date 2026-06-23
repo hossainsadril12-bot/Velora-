@@ -8,7 +8,7 @@ export default function DiscoverPanel() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <section className="bg-deep-green px-5 py-20 text-center relative overflow-hidden">
+    <section className="bg-deep-green px-5 py-12 sm:py-16 lg:py-20 text-center relative overflow-hidden">
       <div className="flex flex-col items-center">
         <RevealText
           as="h2"

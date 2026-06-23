@@ -15,7 +15,7 @@ export default function FoodExperience() {
   return (
     <section className="overflow-hidden bg-velora-cream">
       {/* TOP SPACE */}
-      <div className="h-[35px]" />
+      <div className="h-[16px] sm:h-[35px]" />
 
       {/* HEADING */}
       <div className="relative mx-6 mb-2 sm:mx-10 lg:mx-[64px]">
@@ -92,7 +92,7 @@ export default function FoodExperience() {
         </ImageReveal>
       </div>
 
-      <div className="h-[60px]" />
+      <div className="h-[28px] sm:h-[60px]" />
     </section>
   );
 }

@@ -14,7 +14,7 @@ export default function CompliancePage() {
         initial={{ opacity: 0, filter: "blur(8px)", y: 20 }}
         animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
         transition={{ duration: 1.2, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-        className="relative w-full min-h-screen bg-[#FDFBF7] pt-[100px] lg:pt-[160px] pb-24 text-[#000000] flex flex-col"
+        className="relative w-full min-h-screen bg-[#FDFBF7] pt-[84px] sm:pt-[100px] lg:pt-[160px] pb-12 sm:pb-16 lg:pb-24 text-[#000000] flex flex-col"
       >
         {/* Faded Shadow Animation Overlay */}
         <motion.div
