@@ -47,22 +47,21 @@ export default function BorgoResort() {
     mass: 0.5,
   });
 
-  // RIGHT PANEL (IMAGE) ANIMATION: Finishes at 0.65
-  const rightPanelWidth = useTransform(smoothProgress, [0, 0.35, 0.65], ["100%", "95%", "50%"]);
-  const imageScale = useTransform(smoothProgress, [0, 0.35, 0.65], [1.1, 1.08, 1]);
+  // RIGHT PANEL (IMAGE) ANIMATION: Finishes at 0.85 (much slower)
+  const rightPanelWidth = useTransform(smoothProgress, [0, 0.25, 0.65, 0.85], ["100%", "92%", "65%", "50%"]);
+  const imageScale = useTransform(smoothProgress, [0, 0.25, 0.65, 0.85], [1.1, 1.07, 1.03, 1]);
 
   // LEFT PANEL (TEXT) ANIMATIONS: 
-  // Stretched the middle points (0.35, 0.40, 0.45) so they start slower.
-  // Set the final finishes to 0.60, 0.62, and 0.64 so they fully appear right BEFORE the image hits 0.65.
+  // Adjusted to follow the three-phase smooth scrolling curve, now extended to match the slower image.
 
-  const headerY = useTransform(smoothProgress, [0, 0.35, 0.60], ["100%", "85%", "0%"]);
-  const headerOpacity = useTransform(smoothProgress, [0, 0.35, 0.60], [0, 0.15, 1]);
+  const headerY = useTransform(smoothProgress, [0, 0.25, 0.60, 0.75], ["100%", "85%", "40%", "0%"]);
+  const headerOpacity = useTransform(smoothProgress, [0, 0.25, 0.60, 0.75], [0, 0.15, 0.6, 1]);
 
-  const buttonY = useTransform(smoothProgress, [0.05, 0.40, 0.62], [40, 34, 0]);
-  const buttonOpacity = useTransform(smoothProgress, [0.05, 0.40, 0.62], [0, 0.15, 1]);
+  const buttonY = useTransform(smoothProgress, [0.05, 0.30, 0.65, 0.80], [40, 34, 15, 0]);
+  const buttonOpacity = useTransform(smoothProgress, [0.05, 0.30, 0.65, 0.80], [0, 0.15, 0.6, 1]);
 
-  const textY = useTransform(smoothProgress, [0.10, 0.45, 0.64], [40, 34, 0]);
-  const textOpacity = useTransform(smoothProgress, [0.10, 0.45, 0.64], [0, 0.15, 1]);
+  const textY = useTransform(smoothProgress, [0.10, 0.35, 0.70, 0.85], [40, 34, 15, 0]);
+  const textOpacity = useTransform(smoothProgress, [0.10, 0.35, 0.70, 0.85], [0, 0.15, 0.6, 1]);
 
   const go = (d: number) => {
     setI(([p]) => [(p + d + SLIDES.length) % SLIDES.length, d]);

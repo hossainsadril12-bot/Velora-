@@ -30,14 +30,14 @@ export default function PrivacyPolicy() {
 
         <div className="relative z-20 mx-auto flex max-w-4xl flex-col items-center">
           {/* PAGE HEADER */}
-          <div className="mb-12 w-full border-b border-[#183029]/25 pb-8 text-center">
+          <div className="mb-12 mt-24 w-full border-b border-[#183029]/25 pb-8 text-center">
             <h1 className="font-serif text-4xl font-light text-dark-text md:text-5xl lg:text-6xl">
               PRIVACY POLICY
             </h1>
           </div>
 
           {/* CONTENT */}
-          <div className="w-full space-y-8 text-center font-sans text-sm font-light leading-relaxed md:text-base">
+          <div className="w-full space-y-[130px] text-center font-sans text-sm font-light leading-relaxed md:text-base">
             <section className="space-y-4">
               <p>
                 We respect and recognize the importance of protecting your

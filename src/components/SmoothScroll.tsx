@@ -13,10 +13,10 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
     if (reduce) return;
 
     const lenis = new Lenis({
-      lerp: 0.1,
+      lerp: 0.05, // Lower lerp for much smoother, heavier, premium scroll
       smoothWheel: true,
-      wheelMultiplier: 1.0,
-      touchMultiplier: 2.0,
+      wheelMultiplier: 0.8, // Reduced speed for a more relaxed feel
+      touchMultiplier: 1.5, // Slightly reduced touch speed
       infinite: false,
     });
 

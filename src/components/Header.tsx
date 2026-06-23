@@ -696,13 +696,14 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
                 }`}
             >
               <TransitionLink href="/" direction="backward">
-                <motion.span
+                <motion.div
                   layoutId={introRunning ? undefined : "brand-logo"}
-                  transition={{ layout: { duration: 0.7, ease: CUSTOM_EASE } }}
+                  transition={{ layout: { duration: 1.6, ease: CUSTOM_EASE } }}
                   className="block"
+                  style={{ color: "inherit" }}
                 >
                   <HeroLogo className="h-8 w-auto sm:h-10" />
-                </motion.span>
+                </motion.div>
               </TransitionLink>
             </motion.div>
 
