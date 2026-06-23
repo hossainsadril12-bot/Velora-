@@ -37,17 +37,19 @@ export default function AdviserPage() {
           {/* Main Grid: Split Layout */}
           <div className="grid grid-cols-1 lg:grid-cols-2 grid-rows-[auto_1fr] lg:grid-rows-1 flex-grow w-full">
             
-            {/* Left Side: Premium Full-bleed Image */}
-            <div className="relative w-full h-[400px] lg:h-auto overflow-hidden group">
-              <Image
-                src="/Shamim Z Bosunia.jpeg"
-                alt="Prof. Dr. M. Shamim Z. Bosunia"
-                fill
-                priority
-                className="object-cover object-top transition-transform duration-1000 ease-out group-hover:scale-105"
-                sizes="(max-width: 1024px) 100vw, 50vw"
-              />
-              <div className="absolute inset-0 bg-black/10 transition-opacity duration-500 group-hover:bg-black/5" />
+            {/* Left Side: Premium Portrait Frame */}
+            <div className="relative w-full h-[500px] lg:h-auto bg-[#F5F1E9] flex items-center justify-center p-8 md:p-12 lg:p-16 overflow-hidden">
+              <div className="relative w-full h-full min-h-[350px] lg:min-h-[500px] bg-white rounded-xl shadow-xl border border-tan/10 overflow-hidden group">
+                <Image
+                  src="/Shamim Z Bosunia.jpeg"
+                  alt="Prof. Dr. M. Shamim Z. Bosunia"
+                  fill
+                  priority
+                  className="object-contain p-4 transition-transform duration-1000 ease-out group-hover:scale-[1.03]"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
+                <div className="absolute inset-0 bg-black/[0.02] pointer-events-none" />
+              </div>
             </div>
 
             {/* Right Side: Cream Background Content Card */}
