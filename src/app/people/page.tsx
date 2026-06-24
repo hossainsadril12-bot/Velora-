@@ -37,7 +37,7 @@ export default function PeoplePage() {
             {/* Left Side: Premium Full-bleed Image */}
             <div className="relative w-full h-[350px] lg:h-auto overflow-hidden group">
               <Image
-                src="https://admin.sanfelice.com/app/uploads/2023/02/slider1.jpg"
+                src="/Metro-Team-2026_3300_Website.jpg.jpeg"
                 alt="Eiman Estates Collective Experience"
                 fill
                 priority

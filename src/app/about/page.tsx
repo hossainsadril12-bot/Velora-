@@ -40,7 +40,7 @@ export default function AboutPage() {
             {/* Left Side: Premium Full-bleed Image */}
             <div className="relative w-full h-[350px] lg:h-auto overflow-hidden group">
               <Image
-                src="https://admin.sanfelice.com/app/uploads/2023/04/DSC_6934-scaled.jpg"
+                src="/lucas-kepner-Yn8D5B8C-eY-unsplash.jpg.jpeg"
                 alt="Eiman Estates Premium Property"
                 fill
                 priority

@@ -29,7 +29,7 @@ export default function CompliancePage() {
         />
 
         <div className="w-full max-w-[1400px] mx-auto px-6 lg:px-16 grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-8 flex-grow lg:items-center items-start">
-          
+
           {/* Left Side: Context & Branding */}
           <div className="lg:col-span-5 flex flex-col items-center text-center lg:pr-12 pt-4 w-full">
             <div className="flex items-center mb-6 justify-center">
@@ -59,7 +59,7 @@ export default function CompliancePage() {
 
           {/* Right Side: Regulatory Cards */}
           <div className="lg:col-span-7 flex flex-col gap-5">
-            
+
             {/* Card 1 */}
             <div className="flex items-start md:items-center gap-8 p-6 md:p-8 rounded-[12px] border border-tan/30 bg-[#FAF9F5] transition-colors hover:border-tan/60 hover:bg-white">
               <div className="shrink-0 text-tan w-[60px] flex justify-center">
@@ -80,7 +80,7 @@ export default function CompliancePage() {
               </div>
               <div className="flex flex-col gap-2">
                 <h3 className="font-serif text-[22px] font-light text-dark-text tracking-wide">
-                  <span className="font-medium font-sans">1. </span>Legal Frameworks:
+                  <span className="font-medium font-sans">1. </span>Legal Frameworks
                 </h3>
                 <p className="font-sans text-[14px] leading-relaxed text-[#4A4A4A]">
                   BNBC 2020 (structural design, earthquake resistance, materials, plumbing), Building Construction Act (1952), Real Estate Development and Management Act (2010) compliant.
@@ -101,7 +101,7 @@ export default function CompliancePage() {
               </div>
               <div className="flex flex-col gap-2">
                 <h3 className="font-serif text-[22px] font-light text-dark-text tracking-wide">
-                  <span className="font-medium font-sans">2. </span>Land Usage & Zoning Clearance:
+                  <span className="font-medium font-sans">2. </span>Land Usage & Zoning Clearance
                 </h3>
                 <p className="font-sans text-[14px] leading-relaxed text-[#4A4A4A]">
                   Obtained from the relevant authorities.
@@ -120,7 +120,7 @@ export default function CompliancePage() {
               </div>
               <div className="flex flex-col gap-2">
                 <h3 className="font-serif text-[22px] font-light text-dark-text tracking-wide">
-                  <span className="font-medium font-sans">3. </span>Fire Safety Approval:
+                  <span className="font-medium font-sans">3. </span>Fire Safety Approval
                 </h3>
                 <p className="font-sans text-[14px] leading-relaxed text-[#4A4A4A]">
                   Obtained NOC (No Objection Certificate) from FSCD (Fire Safety and Civil Defense).
@@ -149,7 +149,7 @@ export default function CompliancePage() {
               </div>
               <div className="flex flex-col gap-2">
                 <h3 className="font-serif text-[22px] font-light text-dark-text tracking-wide">
-                  <span className="font-medium font-sans">4. </span>Setbacks & Density:
+                  <span className="font-medium font-sans">4. </span>Setbacks & Density
                 </h3>
                 <p className="font-sans text-[14px] leading-relaxed text-[#4A4A4A]">
                   Adhered to Floor Area Ratios (FAR), Maximum Ground Coverage, and Perimeter Setbacks.
@@ -173,7 +173,7 @@ export default function CompliancePage() {
               </div>
               <div className="flex flex-col gap-2">
                 <h3 className="font-serif text-[22px] font-light text-dark-text tracking-wide">
-                  <span className="font-medium font-sans">5. </span>Developer’s Responsibilities:
+                  <span className="font-medium font-sans">5. </span>Developer’s Responsibilities
                 </h3>
                 <p className="font-sans text-[14px] leading-relaxed text-[#4A4A4A]">
                   Continuous site supervision by registered engineers, archiving of plans and permits on-site, notifying concerned customers and stakeholders upon completing different construction for inspections.

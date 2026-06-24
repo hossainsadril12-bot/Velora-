@@ -31,43 +31,33 @@ export default function CollaborationPage() {
 
         <div className="relative z-20 flex-grow flex flex-col items-center pb-24">
           
-          {/* Top Images Section */}
-          <div className="w-full grid grid-cols-1 md:grid-cols-2">
-            
-            {/* Left Image Box */}
-            <div className="w-full flex flex-col">
+          {/* Top Image Section */}
+          <div className="w-full flex flex-col">
+            <div className="w-full grid grid-cols-1 md:grid-cols-2">
               <div className="relative w-full h-[300px] md:h-[400px] lg:h-[450px]">
                 <Image
                   src="/hero-bg.jpg"
-                  alt="Eiman Estate Ltd. Resort"
+                  alt="Resort"
                   fill
                   className="object-cover"
+                  priority
                 />
               </div>
-              <div className="w-full bg-[#183029] py-4 px-6 flex items-center justify-center min-h-[80px]">
-                <span className="font-serif text-white text-[18px] md:text-[22px] tracking-wide text-center uppercase">
-                  Eiman Estate Ltd.
-                </span>
-              </div>
-            </div>
-
-            {/* Right Image Box */}
-            <div className="w-full flex flex-col">
               <div className="relative w-full h-[300px] md:h-[400px] lg:h-[450px]">
                 <Image
                   src="/you-le-hRWsD2ti-os-unsplash.jpg"
                   alt="HuaDu Architecture & Urban Design (HDD) Shanghai"
                   fill
                   className="object-cover"
+                  priority
                 />
               </div>
-              <div className="w-full bg-[#183029] py-4 px-6 flex items-center justify-center min-h-[80px]">
-                <span className="font-serif text-white text-[18px] md:text-[22px] tracking-wide text-center uppercase">
-                  HuaDu Architecture & Urban Design (HDD)
-                </span>
-              </div>
             </div>
-
+            <div className="w-full bg-[#183029] py-4 px-6 flex items-center justify-center min-h-[80px]">
+              <span className="font-serif text-white text-[18px] md:text-[22px] tracking-wide text-center uppercase">
+                HuaDu Architecture & Urban Design (HDD)
+              </span>
+            </div>
           </div>
 
           {/* Content Section */}

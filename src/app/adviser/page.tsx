@@ -93,12 +93,12 @@ export default function AdviserPage() {
             </div>
 
             {/* Paragraph Content */}
-            <div className="mx-auto max-w-[700px] text-center font-sans text-[14px] sm:text-[15px] leading-[1.8] font-light tracking-[0.01em] text-dark-text">
+            <div className="mx-auto max-w-[700px] px-6 sm:px-10 md:px-12 text-center font-sans text-[14px] sm:text-[15px] leading-[1.8] font-light tracking-[0.01em] text-dark-text">
               <p>
                 Prof. Dr. M. Shamim Z. Bosunia is a prominent academician,
                 leader, and structural engineering expert of Bangladesh. He earned
                 his bachelor’s degree in civil engineering in 1965 from Bangladesh University of Engineering and Technology (BUET) and
-                joined Dept. of Civil Engineering as a lecturer in 1969.
+                joined Dept. of Civil Engineering as a lecturer <span className="whitespace-nowrap">in 1969.</span>
               </p>
 
               <p className="mt-0">
