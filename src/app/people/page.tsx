@@ -33,7 +33,7 @@ export default function PeoplePage() {
         <div className="relative z-20 flex-grow flex flex-col">
           {/* Main Grid: Split Layout */}
           <div className="grid grid-cols-1 lg:grid-cols-2 grid-rows-[auto_1fr] lg:grid-rows-1 flex-grow w-full">
-            
+
             {/* Left Side: Premium Full-bleed Image */}
             <div className="relative w-full h-[350px] lg:h-auto overflow-hidden group">
               <Image
@@ -50,13 +50,13 @@ export default function PeoplePage() {
             {/* Right Side: Cream Background Content Card */}
             <div className="bg-white flex flex-col justify-center items-center px-8 py-12 md:px-16 lg:px-24 text-center">
               <span className="font-sans text-xs font-bold uppercase tracking-[3px] text-tan mb-3">
-                Eiman Estates
+                Eiman Estates LTD.
               </span>
-              
+
               <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-light text-dark-text uppercase tracking-wide mb-6">
                 People
               </h1>
-              
+
               {/* Divider Ornament */}
               <div className="flex items-center gap-3 mb-8 justify-center text-tan/40">
                 <div className="h-px w-20 bg-tan/40"></div>
@@ -66,7 +66,7 @@ export default function PeoplePage() {
                 </svg>
                 <div className="h-px w-20 bg-tan/40"></div>
               </div>
-              
+
               <p className="max-w-[540px] font-sans text-sm md:text-base font-light leading-relaxed text-[#2B2B2B]">
                 Eiman Estates Ltd. is formed and governed by an eclectic mix of industry dignitaries. Their collective years of experience and profound sense of judgement are always there to guide you through this journey of investment partnership.
               </p>

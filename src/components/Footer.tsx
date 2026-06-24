@@ -23,7 +23,7 @@ const GROUPS = {
       { text: "Gallery", href: "#" },
       { text: "Video", href: "#" },
       { text: "Career", href: "#" },
-      { text: "Privacy policy", href: "/privacy-policy" },
+      { text: "Privacy Policy", href: "/privacy-Policy" },
     ],
   },
   info: {
@@ -133,17 +133,17 @@ export default function Footer() {
 
   const motionProps = shouldReduceMotion
     ? {
-        initial: false as const,
-        whileInView: undefined,
-      }
+      initial: false as const,
+      whileInView: undefined,
+    }
     : {
-        initial: "hidden" as const,
-        whileInView: "visible" as const,
-        viewport: {
-          once: true,
-          amount: 0.18,
-        },
-      };
+      initial: "hidden" as const,
+      whileInView: "visible" as const,
+      viewport: {
+        once: true,
+        amount: 0.18,
+      },
+    };
 
   return (
     <motion.footer
@@ -181,7 +181,7 @@ export default function Footer() {
                 >
                   <CircleIcon>
                     <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                      <path d="M3 3.5c0 5 4.5 9.5 9.5 9.5l1.5-2-3-1.5-1 1.2A8 8 0 014.8 5.5L6 4.5 4.5 1.5 3 3.5z" fill="currentColor"/>
+                      <path d="M3 3.5c0 5 4.5 9.5 9.5 9.5l1.5-2-3-1.5-1 1.2A8 8 0 014.8 5.5L6 4.5 4.5 1.5 3 3.5z" fill="currentColor" />
                     </svg>
                   </CircleIcon>
                   <span className="font-sans text-[14px] font-light leading-[1.2] text-cream">
@@ -196,8 +196,8 @@ export default function Footer() {
                 >
                   <CircleIcon>
                     <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                      <rect x="2" y="4" width="12" height="8" rx="1" stroke="currentColor" strokeWidth="1.2"/>
-                      <path d="M2.5 4.5L8 9l5.5-4.5" stroke="currentColor" strokeWidth="1.2"/>
+                      <rect x="2" y="4" width="12" height="8" rx="1" stroke="currentColor" strokeWidth="1.2" />
+                      <path d="M2.5 4.5L8 9l5.5-4.5" stroke="currentColor" strokeWidth="1.2" />
                     </svg>
                   </CircleIcon>
                   <span className="font-sans text-[14px] font-light leading-[1.2] text-cream">
@@ -210,13 +210,13 @@ export default function Footer() {
               <motion.div className="flex items-start gap-3" variants={softReveal}>
                 <CircleIcon>
                   <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                    <path d="M8 1.5a4.5 4.5 0 00-4.5 4.5c0 3.3 4.5 8.5 4.5 8.5s4.5-5.2 4.5-8.5A4.5 4.5 0 008 1.5z" stroke="currentColor" strokeWidth="1.2"/>
+                    <path d="M8 1.5a4.5 4.5 0 00-4.5 4.5c0 3.3 4.5 8.5 4.5 8.5s4.5-5.2 4.5-8.5A4.5 4.5 0 008 1.5z" stroke="currentColor" strokeWidth="1.2" />
                     <circle cx="8" cy="6" r="1.6" fill="currentColor" />
                   </svg>
                 </CircleIcon>
                 <span className="max-w-[280px] font-sans text-[14px] font-light leading-[1.4] text-cream">
                   Rupsha Tower, Flat 10/B<br />
-                  Plot 7, Road 17, Banani, Dhaka 1213,<br />
+                  Plot 7, Road 17, Banani, Dhaka 1213<br />
                   Bangladesh
                 </span>
               </motion.div>
@@ -248,14 +248,14 @@ export default function Footer() {
             © {new Date().getFullYear()} Eiman Estates Ltd. All rights reserved.
           </span>
 
-          <div className="flex gap-8">
+          {/* <div className="flex gap-8">
             <TransitionLink href="#" className="transition-colors duration-300 hover:text-cream">
               Terms & Conditions
             </TransitionLink>
             <TransitionLink href="/privacy-policy" className="transition-colors duration-300 hover:text-cream">
               Privacy Policy
             </TransitionLink>
-          </div>
+          </div> */}
         </motion.div>
       </motion.div>
 

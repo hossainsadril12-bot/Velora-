@@ -51,8 +51,8 @@ export default function BookingModal() {
   const validate = () => {
     const newErrors: { [key: string]: string } = {};
     if (!formData.name.trim()) newErrors.name = "Name is required";
-    if (!formData.phone.trim()) newErrors.phone = "Phone is required";
-    if (!formData.address.trim()) newErrors.address = "Address is required";
+    if (!formData.phone.trim()) newErrors.phone = "Mobile Number is required";
+    if (!formData.address.trim()) newErrors.address = "Contact Address is required";
     if (!formData.email.trim()) {
       newErrors.email = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
@@ -131,7 +131,7 @@ export default function BookingModal() {
                   <div className="flex flex-col items-center text-[#050505] mb-6">
                     <HeroLogo className="h-10 sm:h-12 w-auto mb-3 text-[#050505]" />
                     <h3 className="font-serif text-2xl uppercase tracking-wider text-[#050505] font-light">
-                      Registration Form
+                      Appointment Form
                     </h3>
                   </div>
 
@@ -147,7 +147,7 @@ export default function BookingModal() {
                         value={formData.name}
                         onChange={handleChange}
                         className="w-full bg-transparent border-b border-gray-300 focus:border-tan outline-none py-2 text-sm text-[#050505] transition-colors duration-300 placeholder-gray-400"
-                        placeholder="Your full name"
+                        placeholder=""
                       />
                       {errors.name && (
                         <p className="text-xs text-red-500 mt-1">{errors.name}</p>
@@ -165,7 +165,7 @@ export default function BookingModal() {
                         value={formData.email}
                         onChange={handleChange}
                         className="w-full bg-transparent border-b border-gray-300 focus:border-tan outline-none py-2 text-sm text-[#050505] transition-colors duration-300 placeholder-gray-400"
-                        placeholder="yourname@example.com"
+                        placeholder=""
                       />
                       {errors.email && (
                         <p className="text-xs text-red-500 mt-1">{errors.email}</p>
@@ -175,7 +175,7 @@ export default function BookingModal() {
                     {/* Address Input */}
                     <div className="relative">
                       <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1">
-                        * Address
+                        * Contact Address
                       </label>
                       <input
                         type="text"
@@ -183,7 +183,7 @@ export default function BookingModal() {
                         value={formData.address}
                         onChange={handleChange}
                         className="w-full bg-transparent border-b border-gray-300 focus:border-tan outline-none py-2 text-sm text-[#050505] transition-colors duration-300 placeholder-gray-400"
-                        placeholder="Your residential address"
+                        placeholder=""
                       />
                       {errors.address && (
                         <p className="text-xs text-red-500 mt-1">{errors.address}</p>
@@ -193,7 +193,7 @@ export default function BookingModal() {
                     {/* Phone Input */}
                     <div className="relative">
                       <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1">
-                        * Phone
+                        * Mobile Number
                       </label>
                       <input
                         type="tel"
@@ -231,7 +231,7 @@ export default function BookingModal() {
                         type="submit"
                         className="w-full py-4 bg-tan hover:bg-[#9c8965] text-white text-xs font-bold uppercase tracking-[2.5px] rounded-none transition-all duration-300 shadow-md hover:shadow-lg focus:outline-none cursor-pointer"
                       >
-                        Book Register
+                        Submit
                       </button>
                     </div>
                   </form>
