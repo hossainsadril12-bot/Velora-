@@ -6,6 +6,63 @@ import Footer from "@/components/Footer";
 import Image from "next/image";
 import { motion } from "framer-motion";
 
+type Person = {
+  name: string;
+  role: string;
+  image: string;
+};
+
+const PEOPLE: Person[] = [
+  {
+    name: "Paul Venables",
+    role: "Chairman",
+    image:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=700&q=80&sat=-100",
+  },
+  {
+    name: "Will McGinness",
+    role: "MD",
+    image:
+      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=700&q=80&sat=-100",
+  },
+  {
+    name: "Paul Birks-Hay",
+    role: "Director",
+    image:
+      "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=700&q=80&sat=-100",
+  },
+  {
+    name: "Kate Jeffers",
+    role: "Director",
+    image:
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=700&q=80&sat=-100",
+  },
+  {
+    name: "Michael Davidson",
+    role: "Director",
+    image:
+      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=700&q=80&sat=-100",
+  },
+  {
+    name: "Lee Einhorn",
+    role: "Director",
+    image:
+      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=700&q=80&sat=-100",
+  },
+  {
+    name: "Gary Brown",
+    role: "Director",
+    image:
+      "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?auto=format&fit=crop&w=700&q=80&sat=-100",
+  },
+  {
+    name: "Mary Johnstone",
+    role: "Director",
+    image:
+      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=700&q=80&sat=-100",
+  },
+];
+
 export default function PeoplePage() {
   return (
     <>
@@ -15,62 +72,50 @@ export default function PeoplePage() {
         initial={{ opacity: 0, filter: "blur(8px)", y: 20 }}
         animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
         transition={{ duration: 1.2, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-        className="relative w-full min-h-screen bg-velora-cream pt-[70px] lg:pt-[100px] text-[#000000] flex flex-col"
+        className="relative w-full min-h-screen bg-velora-cream pt-[90px] lg:pt-[110px] pb-20 lg:pb-28 text-dark-text overflow-hidden"
       >
-        {/* Faded Shadow Animation Overlay */}
-        <motion.div
-          initial={{ opacity: 0.6 }}
-          animate={{ opacity: 0 }}
-          transition={{ duration: 1.8, delay: 0.2, ease: "easeOut" }}
-          className="pointer-events-none absolute inset-0 z-10"
-          style={{
-            background:
-              "radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.3) 100%)",
-          }}
-        />
+        <div className="relative z-10 mx-auto w-full max-w-[1400px] px-6 sm:px-10 lg:px-16 pt-8 sm:pt-12">
+          {/* Title */}
+          <div className="text-center">
+            <h1 className="font-serif text-4xl sm:text-5xl lg:text-[64px] font-extralight tracking-wide text-dark-text">
+              People
+            </h1>
+          </div>
 
-        {/* Content Container */}
-        <div className="relative z-20 flex-grow flex flex-col">
-          {/* Main Grid: Split Layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 grid-rows-[auto_1fr] lg:grid-rows-1 flex-grow w-full">
+          {/* Intro */}
+          <p className="mx-auto mt-8 max-w-[760px] text-center font-sans text-[18px] font-extralight leading-[26px] text-dark-text">
+            Eiman Estates Ltd. is formed and governed by an eclectic mix of
+            industry dignitaries. Their collective years of experience and
+            profound sense of judgement are always there to guide you through
+            this journey of investment partnership.
+          </p>
 
-            {/* Left Side: Premium Full-bleed Image */}
-            <div className="relative w-full h-[350px] lg:h-auto overflow-hidden group">
-              <Image
-                src="https://admin.sanfelice.com/app/uploads/2023/02/slider1.jpg"
-                alt="Eiman Estates Collective Experience"
-                fill
-                priority
-                className="object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
-                sizes="(max-width: 1024px) 100vw, 50vw"
-              />
-              <div className="absolute inset-0 bg-black/10 transition-opacity duration-500 group-hover:bg-black/5" />
-            </div>
+          {/* People Grid */}
+          <div className="mt-16 sm:mt-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
+            {PEOPLE.map((person) => (
+              <article
+                key={person.name}
+                className="relative aspect-[4/5] w-full overflow-hidden bg-dark-text/5"
+              >
+                <Image
+                  src={person.image}
+                  alt={person.name}
+                  fill
+                  className="object-cover grayscale"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                />
 
-            {/* Right Side: Cream Background Content Card */}
-            <div className="bg-white flex flex-col justify-center items-center px-8 py-12 md:px-16 lg:px-24 text-center">
-              <span className="font-sans text-xs font-bold uppercase tracking-[3px] text-tan mb-3">
-                Eiman Estates LTD.
-              </span>
+                {/* Bottom gradient for text legibility */}
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
 
-              <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-light text-dark-text uppercase tracking-wide mb-6">
-                People
-              </h1>
-
-              {/* Divider Ornament */}
-              <div className="flex items-center gap-3 mb-8 justify-center text-tan/40">
-                <div className="h-px w-20 bg-tan/40"></div>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#b09b78" strokeWidth="1.2">
-                  <rect x="5" y="5" width="14" height="14" transform="rotate(45 12 12)" />
-                  <circle cx="12" cy="12" r="3" />
-                </svg>
-                <div className="h-px w-20 bg-tan/40"></div>
-              </div>
-
-              <p className="max-w-[540px] font-sans text-sm md:text-base font-light leading-relaxed text-[#2B2B2B]">
-                Eiman Estates Ltd. is formed and governed by an eclectic mix of industry dignitaries. Their collective years of experience and profound sense of judgement are always there to guide you through this journey of investment partnership.
-              </p>
-            </div>
+                {/* Designation only */}
+                <div className="absolute inset-x-0 bottom-0 p-5">
+                  <p className="font-sans text-[24px] font-light uppercase tracking-[1.5px] text-white/85">
+                    {person.role}
+                  </p>
+                </div>
+              </article>
+            ))}
           </div>
         </div>
       </motion.main>

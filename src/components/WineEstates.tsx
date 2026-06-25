@@ -342,7 +342,7 @@ export default function WineEstates() {
   );
 
   return (
-    <section ref={sectionRef} className="overflow-hidden bg-tan pt-4 pb-8">
+    <section id="projects" ref={sectionRef} className="overflow-hidden bg-tan pt-4 pb-8">
       {/* Heading */}
       <div className="relative w-full overflow-hidden px-[10vw] sm:px-[10vw] lg:px-[10.8vw] pb-0 -mb-[12px]">
         <motion.h2

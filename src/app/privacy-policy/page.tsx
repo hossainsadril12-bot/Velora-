@@ -30,23 +30,20 @@ export default function PrivacyPolicy() {
 
         <div className="relative z-20 mx-auto flex max-w-4xl flex-col items-center">
           {/* PAGE HEADER */}
-          <div className="mb-12 mt-24 w-full border-b border-[#183029]/25 pb-8 text-center">
-            <h1 className="font-serif text-4xl font-light text-dark-text md:text-5xl lg:text-6xl">
+          <div className="mb-16 mt-24 w-full text-center">
+            <h1 className="font-serif text-4xl font-light text-dark-text md:text-5xl lg:text-6xl mb-8">
               PRIVACY POLICY
             </h1>
+            <p className="mx-auto max-w-3xl font-sans text-sm font-light leading-relaxed md:text-base text-[#2B2B2B]">
+              We respect and recognize the importance of protecting your personal information when you browse
+              our website and seek services. The following is our privacy policy and we will comply with it to ensure
+              your privacy is not breached.
+            </p>
+            <div className="mt-16 w-full border-b border-[#183029]/15" />
           </div>
 
           {/* CONTENT */}
           <div className="w-full space-y-[130px] text-center font-sans text-sm font-light leading-relaxed md:text-base">
-            <section className="space-y-4">
-              <p>
-                We respect and recognize the importance of protecting your
-                personal information when you browse our website and seek our
-                services. This Privacy Policy explains how we collect, use, and
-                protect your information. We are committed to complying with this
-                policy to ensure that your privacy is not breached.
-              </p>
-            </section>
 
             <section className="space-y-4">
               <h2 className="font-serif text-2xl font-light uppercase text-dark-text md:text-3xl">
@@ -54,19 +51,14 @@ export default function PrivacyPolicy() {
               </h2>
 
               <p>
-                When you use our services, you may voluntarily provide personal
-                information such as your name, phone number, email address,
-                contact address, or other relevant details. We may collect
-                personal identification information through contact form
-                submissions, blog subscriptions, service requests, application
-                forms, or other features available on our website.
+                When you use our services, you may provide personal information about yourself <br /> (your name, phone
+                number, email address, contact address, etc.). We may collect personal identification information
+                through several ways, including contact form submissions on our site, blog subscriptions, and via other
+                services, features, or application forms we make available on our website. We only collect information
+                when you provide it to us voluntarily to enhance your user experience in connection with the products
+                and services we offer.
               </p>
 
-              <p>
-                We only collect information when you provide it to us
-                voluntarily. This helps us enhance your user experience and
-                provide better products, services, and support.
-              </p>
             </section>
 
             <section className="space-y-4">
@@ -75,23 +67,15 @@ export default function PrivacyPolicy() {
               </h2>
 
               <p>
-                Cookies are small pieces of data that may be transmitted from a
-                website to your computer or device while browsing. They help
-                identify your browser and improve your experience on our website.
+                Cookies are small bits of data that can be transmitted from a website to your computer or devices
+                while browsing to uniquely identify your browser. When you interact with the site and use our services,
+                we may store one more cookie on your device. This is to enhance the user experience through
+                customization so that we can provide you with the exact information you want regularly. You may opt
+                out of receiving cookies by changing your browser settings. However, if you choose to do so, some of
+                the features and resources on our website might not be available to you.
               </p>
 
-              <p>
-                When you interact with our website and use our services, we may
-                store one or more cookies on your device. This allows us to
-                customize your experience and provide you with relevant
-                information more efficiently.
-              </p>
 
-              <p>
-                You may choose to disable cookies by changing your browser
-                settings. However, if you do so, some features and resources on
-                our website may not function properly or may not be available.
-              </p>
             </section>
 
             <section className="space-y-4">
@@ -100,35 +84,30 @@ export default function PrivacyPolicy() {
               </h2>
 
               <p>
-                When you interact with our website, your device may automatically
-                transmit non-personal identification information. This may
-                include your IP address, browser software, device information,
-                operating system, and other technical details.
+                When you interact with the website, the device through which you browse also transmits a variety of
+                non-personal identification information, such as your IP address, browser software, and other technical
+                information, which we may collect.
               </p>
 
-              <p>
-                This information helps us understand how visitors use our
-                website, improve website performance, and maintain security.
-              </p>
+
+
+
             </section>
 
-            <section className="space-y-5">
+            <section className="space-y-6">
               <h2 className="font-serif text-2xl font-light uppercase text-dark-text md:text-3xl">
-                How We Use the Information Collected
+                HOW WE USE THE INFORMATION COLLECTED
               </h2>
 
               <p>
-                We may use the information we collect for the following
-                purposes:
+                We use the information for the following purposes:
               </p>
 
-              <div className="mx-auto mt-6 w-full max-w-3xl border-t border-[#183029]/20">
+              <div className="mx-auto mt-8 w-full max-w-3xl">
                 {[
-                  "To improve our customer service.",
-                  "To personalize your experience.",
-                  "To make our website more user-friendly.",
-                  "To send periodic emails regarding updates, content, services, or relevant information.",
-                  "To respond to your questions, requests, or inquiries.",
+                  "To improve our customer service",
+                  "To personalize your experience",
+                  "To make our site user-friendly",
                 ].map((item) => (
                   <div
                     key={item}
@@ -139,10 +118,14 @@ export default function PrivacyPolicy() {
                 ))}
               </div>
 
-              <p>
-                If at any time you would like to unsubscribe from receiving
-                future emails, we include unsubscribe instructions at the bottom
-                of each email. You may also contact us through our website.
+              <div className="space-y-1 font-sans text-sm font-light leading-relaxed text-[#2B2B2B] md:text-base">
+                <p>To send periodic emails regarding updates, content, etc.</p>
+                <p>as well as respond to your queries</p>
+              </div>
+
+              <p className="mx-auto max-w-3xl pt-4 font-sans text-sm font-light leading-relaxed text-[#2B2B2B] md:text-base">
+                If at any time you would like to unsubscribe from receiving future emails, we include detailed
+                unsubscribe instructions at the bottom of each email, or you may contact us via our website.
               </p>
             </section>
 
@@ -152,11 +135,9 @@ export default function PrivacyPolicy() {
               </h2>
 
               <p>
-                Your privacy is important to us, and we are committed to
-                protecting your personal information. We implement appropriate
-                data collection, storage, and security measures to protect your
-                information from unauthorized access, alteration, disclosure, or
-                destruction.
+                Your privacy is important, and we are committed to protecting. We implement appropriate data
+                collection & storage and ensure security measures to protect your personal information from
+                unauthorized access or disclosure.
               </p>
             </section>
 
@@ -166,25 +147,24 @@ export default function PrivacyPolicy() {
               </h2>
 
               <p>
-                We do not knowingly collect personal identification information
-                from any person under the age of 13. Our services and website are
-                not designed to attract anyone under the age of 13.
+                We will not knowingly collect personal identification information from any person under the age of 13.
+                Neither our services nor our site is designed to attract the attention of anyone under the age of 13
               </p>
             </section>
 
-            <section className="space-y-4">
+            <section className="space-y-8 pt-6">
               <h2 className="font-serif text-2xl font-light uppercase text-dark-text md:text-3xl">
-                Changes / Amendments
+                CHANGES/ AMENDMENTS
               </h2>
 
-              <p>
-                Eiman Estates Ltd. reserves the right to update this Privacy
-                Policy at any time. We encourage visitors to check this page
-                frequently to stay informed about how we protect the information
-                we collect.
+              <p className="mx-auto max-w-3xl font-sans text-sm font-light leading-relaxed text-[#2B2B2B] md:text-base">
+                Eiman Estates Ltd. reserves the discretion to update this privacy policy at any time. We encourage you
+                to check back on this page frequently to stay updated.
               </p>
 
-              <p>
+              <div className="w-full border-b border-[#183029]/10 my-10" />
+
+              <p className="mx-auto max-w-3xl font-sans text-sm font-light leading-relaxed text-[#2B2B2B] md:text-base">
                 By using this website, you indicate your acceptance of this policy
                 and terms of service. And in case of any changes in the privacy
                 policy, your continued use of the website and services will be
@@ -192,7 +172,7 @@ export default function PrivacyPolicy() {
                 please feel free to{" "}
                 <Link
                   href="/contact"
-                  className="text-tan font-bold underline underline-offset-4 transition-colors duration-300 hover:text-tan/70"
+                  className="text-tan transition-opacity duration-300 hover:opacity-85"
                 >
                   contact us
                 </Link>

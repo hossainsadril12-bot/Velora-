@@ -4,7 +4,6 @@ import Image from "next/image";
 import { useRef, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { easeJ } from "@/lib/motion";
-import HeroLogo from "./HeroLogo";
 import { useIntro } from "./IntroProvider";
 
 const HERO_IMG = "/Inani Beach.png";
@@ -138,36 +137,6 @@ export default function HeroSection() {
           <div className="absolute inset-0 bg-[rgba(24,48,41,0.3)]" />
         </motion.div>
       </motion.div>
-
-      {/* Intro logo — centered at top, morphs color from dark → white */}
-      {!introDone && (
-        <motion.div
-          layoutId="brand-logo"
-          className="pointer-events-none fixed inset-x-0 top-0 z-[10001] flex justify-center"
-          style={{ paddingTop: introState === "idle" ? 48 : 30 }}
-          initial={{ opacity: 0, color: "#050505" }}
-          animate={{
-            opacity: 1,
-            color:
-              introState === "idle"
-                ? "#050505"
-                : "#F5F1E9",
-          }}
-          transition={{
-            opacity: { duration: 0.5, delay: 0.1 },
-            color: { duration: MERGE_DURATION * 0.7, ease: MERGE_EASE },
-            layout: { duration: MERGE_DURATION, ease: MERGE_EASE },
-          }}
-        >
-          <HeroLogo
-            className={`w-auto transition-all ${
-              introState === "idle"
-                ? "h-14 sm:h-16"
-                : "h-8 sm:h-10"
-            }`}
-          />
-        </motion.div>
-      )}
 
       {/* ──────────────────────────────────────────────────────
           HERO CONTENT — fades + slides up after intro completes

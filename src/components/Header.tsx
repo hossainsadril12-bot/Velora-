@@ -1,16 +1,16 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import Logo from "./Logo";
 import HeroLogo from "./HeroLogo";
 import TransitionLink from "./TransitionLink";
 import { useBooking } from "./BookingProvider";
 import { useIntro } from "./IntroProvider";
+import { smoothScrollToId } from "@/lib/scroll";
 
 const EASE = [0.25, 0.1, 0.25, 1] as const;
-const CUSTOM_EASE = [0.68, 0.09, 0, 0.97] as const;
 
 const PRIMARY_NAV = [
   {
@@ -27,7 +27,8 @@ const PRIMARY_NAV = [
   },
   {
     label: "Equity Partners",
-    href: "#about",
+    href: "/?scroll=equity-partners",
+    scrollId: "equity-partners",
   },
 ];
 
@@ -35,9 +36,9 @@ const SECONDARY_NAV = [
   { label: "Compliance", href: "/compliance" },
   { label: "Environment", href: "/environment" },
   { label: "Collaboration", href: "/collaboration" },
-  { label: "Projects", href: "#projects" },
+  { label: "Projects", href: "/?scroll=projects", scrollId: "projects" },
   { label: "News & Events", href: "#news" },
-  { label: "Contact Us", href: "#contact" },
+  { label: "Contact Us", href: "/?scroll=footer", scrollId: "footer" },
 ];
 
 function Emblem({ className = "" }: { className?: string }) {
@@ -212,6 +213,7 @@ function CloseIcon() {
 
 export default function Header({ theme = "default" }: { theme?: "default" | "light" } = {}) {
   const { openBooking } = useBooking();
+  const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [hovered, setHovered] = useState<number | null>(null);
@@ -274,13 +276,42 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
   }, [langDropdownOpen]);
 
   const pathname = usePathname();
-  const { introDone } = useIntro();
-  // The cinematic intro only runs on the homepage. While it runs, the navbar
-  // hides and its logo drops the shared layoutId (the intro logo owns it).
+  const { introState, introDone } = useIntro();
+  // The cinematic intro only runs on the homepage. While it runs, the logo
+  // stays fixed in its navbar position (no morph) and the nav controls hold
+  // back until the hero image has covered the frame.
   const introRunning = pathname === "/" && !introDone;
+
+  /** Handles clicks on scroll-anchor links inside the nav menu */
+  const handleScrollClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    scrollId: string
+  ) => {
+    e.preventDefault();
+    closeMenu();
+    if (pathname === "/") {
+      // Already on home: just scroll after menu close animation
+      setTimeout(() => smoothScrollToId(scrollId, 2200, 80), 120);
+    } else {
+      // On another page: save target, then navigate home
+      sessionStorage.setItem("scrollTo", scrollId);
+      router.push("/");
+    }
+  };
 
   const onDark = theme === "light" ? false : !scrolled;
   const navColor = onDark ? "text-cream" : "text-black";
+
+  // Logo color during the homepage intro: dark over the cream idle frame,
+  // then cream once the hero image expands to cover the viewport. Outside the
+  // intro it follows the normal nav color.
+  const logoColor = introRunning
+    ? introState === "idle"
+      ? "text-black"
+      : "text-cream"
+    : onDark
+      ? "text-cream"
+      : "text-black";
 
   const headerInit = {
     hidden: {},
@@ -447,31 +478,54 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
                       >
                         <span className="absolute -bottom-[1px] left-0 z-20 h-[1.5px] w-full origin-left scale-x-0 bg-cream transition-transform duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:scale-x-100" />
 
-                        <TransitionLink
-                          href={item.href}
-                          onClick={closeMenu}
-                          onMouseEnter={() => setHovered(i)}
-                          onMouseLeave={() => setHovered(null)}
-                          direction="forward"
-                          className="relative flex h-[118px] items-center justify-center overflow-hidden text-center text-cream lg:h-[128px]"
-                        >
-                          <motion.div
-                            className="flex items-center justify-center"
-                            style={{
-                              transformOrigin: "center center",
-                            }}
-                            initial={false}
-                            animate={{
-                              opacity: dim ? 0.45 : 1,
-                              x: active ? 10 : 0,
-                            }}
-                            transition={{ ease: EASE, duration: 0.45 }}
+                        {"scrollId" in item && item.scrollId ? (
+                          <a
+                            href={item.href}
+                            onClick={(e) => handleScrollClick(e, item.scrollId as string)}
+                            onMouseEnter={() => setHovered(i)}
+                            onMouseLeave={() => setHovered(null)}
+                            className="relative flex h-[118px] items-center justify-center overflow-hidden text-center text-cream lg:h-[128px] cursor-pointer"
                           >
-                            <span className="block font-serif text-[38px] font-thin leading-none tracking-tight transition-colors duration-300 sm:text-[48px] md:text-[60px] lg:text-[72px]">
-                              {item.label}
-                            </span>
-                          </motion.div>
-                        </TransitionLink>
+                            <motion.div
+                              className="flex items-center justify-center"
+                              style={{ transformOrigin: "center center" }}
+                              initial={false}
+                              animate={{
+                                opacity: dim ? 0.45 : 1,
+                                x: active ? 10 : 0,
+                              }}
+                              transition={{ ease: EASE, duration: 0.45 }}
+                            >
+                              <span className="block font-serif text-[38px] font-thin leading-none tracking-tight transition-colors duration-300 sm:text-[48px] md:text-[60px] lg:text-[72px]">
+                                {item.label}
+                              </span>
+                            </motion.div>
+                          </a>
+                        ) : (
+                          <TransitionLink
+                            href={item.href}
+                            onClick={closeMenu}
+                            onMouseEnter={() => setHovered(i)}
+                            onMouseLeave={() => setHovered(null)}
+                            direction="forward"
+                            className="relative flex h-[118px] items-center justify-center overflow-hidden text-center text-cream lg:h-[128px]"
+                          >
+                            <motion.div
+                              className="flex items-center justify-center"
+                              style={{ transformOrigin: "center center" }}
+                              initial={false}
+                              animate={{
+                                opacity: dim ? 0.45 : 1,
+                                x: active ? 10 : 0,
+                              }}
+                              transition={{ ease: EASE, duration: 0.45 }}
+                            >
+                              <span className="block font-serif text-[38px] font-thin leading-none tracking-tight transition-colors duration-300 sm:text-[48px] md:text-[60px] lg:text-[72px]">
+                                {item.label}
+                              </span>
+                            </motion.div>
+                          </TransitionLink>
+                        )}
                       </motion.div>
                     );
                   })}
@@ -488,19 +542,32 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
                   }}
                   exit={{ opacity: 0, transition: { duration: 0.2 } }}
                 >
-                  {SECONDARY_NAV.map((item) => (
-                    <TransitionLink
-                      key={item.label}
-                      href={item.href}
-                      onClick={closeMenu}
-                      direction="forward"
-                      className="group flex flex-col items-center text-center font-sans"
-                    >
-                      <span className="whitespace-nowrap text-[15px] font-thin leading-[1.15] text-cream transition-opacity duration-300 group-hover:opacity-70">
-                        {item.label}
-                      </span>
-                    </TransitionLink>
-                  ))}
+                  {SECONDARY_NAV.map((item) =>
+                    "scrollId" in item && item.scrollId ? (
+                      <a
+                        key={item.label}
+                        href={item.href}
+                        onClick={(e) => handleScrollClick(e, item.scrollId as string)}
+                        className="group flex flex-col items-center text-center font-sans cursor-pointer"
+                      >
+                        <span className="whitespace-nowrap text-[15px] font-thin leading-[1.15] text-cream transition-opacity duration-300 group-hover:opacity-70">
+                          {item.label}
+                        </span>
+                      </a>
+                    ) : (
+                      <TransitionLink
+                        key={item.label}
+                        href={item.href}
+                        onClick={closeMenu}
+                        direction="forward"
+                        className="group flex flex-col items-center text-center font-sans"
+                      >
+                        <span className="whitespace-nowrap text-[15px] font-thin leading-[1.15] text-cream transition-opacity duration-300 group-hover:opacity-70">
+                          {item.label}
+                        </span>
+                      </TransitionLink>
+                    )
+                  )}
                 </motion.div>
 
                 {/* SECONDARY NAV MOBILE */}
@@ -514,19 +581,32 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
                   }}
                   exit={{ opacity: 0, transition: { duration: 0.2 } }}
                 >
-                  {SECONDARY_NAV.map((item) => (
-                    <TransitionLink
-                      key={item.label}
-                      href={item.href}
-                      onClick={closeMenu}
-                      direction="forward"
-                      className="group flex flex-col items-center text-center font-sans"
-                    >
-                      <span className="text-[14px] font-thin leading-tight text-cream">
-                        {item.label}
-                      </span>
-                    </TransitionLink>
-                  ))}
+                  {SECONDARY_NAV.map((item) =>
+                    "scrollId" in item && item.scrollId ? (
+                      <a
+                        key={item.label}
+                        href={item.href}
+                        onClick={(e) => handleScrollClick(e, item.scrollId as string)}
+                        className="group flex flex-col items-center text-center font-sans cursor-pointer"
+                      >
+                        <span className="text-[14px] font-thin leading-tight text-cream">
+                          {item.label}
+                        </span>
+                      </a>
+                    ) : (
+                      <TransitionLink
+                        key={item.label}
+                        href={item.href}
+                        onClick={closeMenu}
+                        direction="forward"
+                        className="group flex flex-col items-center text-center font-sans"
+                      >
+                        <span className="text-[14px] font-thin leading-tight text-cream">
+                          {item.label}
+                        </span>
+                      </TransitionLink>
+                    )
+                  )}
                 </motion.div>
               </motion.nav>
 
@@ -609,7 +689,7 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
       {!menuOpen && (
         <motion.header
           initial="hidden"
-          animate={introRunning ? "hidden" : "show"}
+          animate="show"
           variants={headerInit}
           className={`fixed left-0 top-0 w-full border-b transition-colors duration-[400ms] ${theme === "light"
             ? "border-black/10 bg-white"
@@ -626,6 +706,7 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
             <div className="flex flex-1 items-center gap-6">
               <motion.nav
                 variants={fadeSlide}
+                animate={introRunning ? "hidden" : "show"}
                 className={`hidden items-center gap-6 lg:flex ${navColor}`}
               >
                 <div className="relative" ref={langDropdownRef}>
@@ -692,22 +773,20 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
 
             <motion.div
               variants={fadeSlide}
-              className={`flex flex-col items-center transition-colors duration-300 ${onDark ? "text-cream" : "text-black"
-                }`}
+              className={`flex flex-col items-center transition-colors duration-700 ${logoColor}`}
             >
               <TransitionLink href="/" direction="backward">
-                <motion.div
-                  layoutId={introRunning ? undefined : "brand-logo"}
-                  transition={{ layout: { duration: 1.6, ease: CUSTOM_EASE } }}
-                  className="block"
-                  style={{ color: "inherit" }}
-                >
+                <div className="block" style={{ color: "inherit" }}>
                   <HeroLogo className="h-8 w-auto sm:h-10" />
-                </motion.div>
+                </div>
               </TransitionLink>
             </motion.div>
 
-            <motion.div variants={fadeSlide} className="flex flex-1 items-center justify-end gap-6">
+            <motion.div
+              variants={fadeSlide}
+              animate={introRunning ? "hidden" : "show"}
+              className="flex flex-1 items-center justify-end gap-6"
+            >
               <nav className={`hidden items-center gap-6 lg:flex ${navColor}`}>
                 <button
                   onClick={openBooking}

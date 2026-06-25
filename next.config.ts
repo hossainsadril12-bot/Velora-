@@ -8,6 +8,11 @@ const nextConfig: NextConfig = {
         hostname: "admin.sanfelice.com",
         pathname: "/app/uploads/**",
       },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+        pathname: "/**",
+      },
     ],
   },
   async redirects() {

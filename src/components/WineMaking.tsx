@@ -8,7 +8,7 @@ const BOTTLE_RIGHT = "https://admin.sanfelice.com/app/uploads/2023/04/CampoGiova
 
 export default function WineMaking() {
   return (
-    <section className="relative overflow-hidden py-14 sm:py-20 lg:py-32 flex flex-col items-center justify-center min-h-[60vh]">
+    <section id="equity-partners" className="relative overflow-hidden py-14 sm:py-20 lg:py-32 flex flex-col items-center justify-center min-h-[60vh]">
       {/* Background Image */}
       <Image
         src="/HandShake Image.png"

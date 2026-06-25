@@ -24,7 +24,7 @@ const SLIDES = [
 ];
 
 export default function BorgoResort() {
-  const [[i, dir], setI] = useState<[number, number]>([0, 1]);
+  const [[i], setI] = useState<[number, number]>([0, 1]);
   const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
@@ -137,29 +137,42 @@ export default function BorgoResort() {
 
   const renderRightSlider = () => (
     <>
-      <AnimatePresence initial={false} custom={dir}>
+      <AnimatePresence initial={false}>
         <motion.div
           key={i}
-          custom={dir}
           variants={{
-            enter: (d: number) => ({ x: d > 0 ? "100%" : "-70%" }),
-            center: { x: "0%", transition: { duration: 1.1, ease: easeJ } },
-            exit: (d: number) => ({ x: d > 0 ? "-70%" : "70%", transition: { duration: 1.1, ease: easeJ } }),
+            enter: { opacity: 0 },
+            center: {
+              opacity: 1,
+              transition: { duration: 2.2, ease: easeJ },
+            },
+            exit: {
+              opacity: 0,
+              transition: { duration: 2.2, ease: easeJ },
+            },
           }}
           initial="enter"
           animate="center"
           exit="exit"
           className="absolute inset-0 overflow-hidden"
         >
-          <motion.div style={{ scale: isDesktop ? imageScale : 1 }} className="relative h-full w-full">
-            <Image
-              src={SLIDES[i].src}
-              alt={SLIDES[i].alt}
-              fill
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-cover"
-              priority={i === 0}
-            />
+          {/* Slow Ken Burns zoom on the active slide for a premium drift */}
+          <motion.div
+            initial={{ scale: 1.12 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 7, ease: [0.22, 1, 0.36, 1] }}
+            className="relative h-full w-full"
+          >
+            <motion.div style={{ scale: isDesktop ? imageScale : 1 }} className="relative h-full w-full">
+              <Image
+                src={SLIDES[i].src}
+                alt={SLIDES[i].alt}
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover"
+                priority={i === 0}
+              />
+            </motion.div>
           </motion.div>
         </motion.div>
       </AnimatePresence>

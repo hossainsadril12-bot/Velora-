@@ -23,7 +23,7 @@ const GROUPS = {
       { text: "Gallery", href: "#" },
       { text: "Video", href: "#" },
       { text: "Career", href: "#" },
-      { text: "Privacy Policy", href: "/privacy-Policy" },
+      { text: "Privacy Policy", href: "/privacy-policy" },
     ],
   },
   info: {
@@ -147,6 +147,7 @@ export default function Footer() {
 
   return (
     <motion.footer
+      id="footer"
       className="relative overflow-hidden bg-tan text-cream"
       variants={footerReveal}
       {...motionProps}

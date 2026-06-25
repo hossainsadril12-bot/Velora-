@@ -10,7 +10,7 @@ import IntroProvider from "@/components/IntroProvider";
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
   subsets: ["latin"],
-  weight: ["400", "500", "700"],
+  weight: ["100", "200", "300", "400", "500", "700"],
 });
 
 const cormorant = Cormorant_Garamond({
