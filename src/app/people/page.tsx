@@ -110,7 +110,7 @@ export default function PeoplePage() {
 
                 {/* Designation only */}
                 <div className="absolute inset-x-0 bottom-0 p-5">
-                  <p className="font-sans text-[24px] font-light uppercase tracking-[1.5px] text-white/85">
+                  <p className="font-sans text-[24px] font-light tracking-[1.5px] text-white/85">
                     {person.role}
                   </p>
                 </div>
