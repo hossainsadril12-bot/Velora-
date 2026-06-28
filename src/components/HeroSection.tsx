@@ -5,6 +5,7 @@ import { useRef, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { easeJ } from "@/lib/motion";
 import { useIntro } from "./IntroProvider";
+import { lockScroll } from "@/lib/scroll";
 
 const HERO_IMG = "/Inani Beach.png";
 
@@ -59,16 +60,10 @@ export default function HeroSection() {
     return () => clearTimeout(t);
   }, [introState, advance]);
 
-  // Lock body scroll until intro completes
+  // Lock body scroll until intro completes (Lenis-aware)
   useEffect(() => {
-    if (!introDone) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
+    lockScroll(!introDone);
+    return () => lockScroll(false);
   }, [introDone]);
 
   // === Parallax (active after intro) ===

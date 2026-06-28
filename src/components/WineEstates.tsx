@@ -156,7 +156,11 @@ function EstateCard({
             <img
               src={estate.headingLogo}
               alt={estate.name}
-              className="h-[32px] sm:h-[42px] lg:h-[55px] xl:h-[64px] w-auto object-contain"
+              className={
+                index === 1
+                  ? "w-[148px] h-[32px] sm:w-[194px] sm:h-[42px] lg:w-[254px] lg:h-[55px] xl:w-[296.83px] xl:h-[64px] object-contain"
+                  : "h-[32px] sm:h-[42px] lg:h-[55px] xl:h-[64px] w-auto object-contain"
+              }
             />
           </div>
         ) : (

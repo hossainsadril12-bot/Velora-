@@ -8,7 +8,7 @@ import HeroLogo from "./HeroLogo";
 import TransitionLink from "./TransitionLink";
 import { useBooking } from "./BookingProvider";
 import { useIntro } from "./IntroProvider";
-import { smoothScrollToId } from "@/lib/scroll";
+import { smoothScrollToId, lockScroll } from "@/lib/scroll";
 
 const EASE = [0.25, 0.1, 0.25, 1] as const;
 
@@ -238,7 +238,7 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
   };
 
   useEffect(() => {
-    document.body.style.overflow = menuOpen ? "hidden" : "";
+    lockScroll(menuOpen);
 
     if (menuOpen) {
       panelRef.current?.focus();
@@ -251,7 +251,7 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
     window.addEventListener("keydown", onKey);
 
     return () => {
-      document.body.style.overflow = "";
+      lockScroll(false);
       window.removeEventListener("keydown", onKey);
     };
   }, [menuOpen]);

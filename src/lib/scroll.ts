@@ -9,6 +9,31 @@ function easeInOutCubic(t: number): number {
 }
 
 /**
+ * Lock or unlock page scroll. MUST be used instead of toggling
+ * `document.body.style.overflow` directly.
+ *
+ * Scroll is driven by Lenis (see SmoothScroll.tsx). Setting body
+ * `overflow:hidden` does NOT stop Lenis, and worse, it makes Lenis cache a
+ * scroll-height of ~0. When overflow is later restored, Lenis keeps that stale
+ * height and goes on preventing wheel/touch — leaving the whole page frozen
+ * until the next resize. So we stop/start Lenis alongside the overflow flag and
+ * force a dimension recalc on unlock.
+ */
+export function lockScroll(locked: boolean): void {
+  if (typeof document === "undefined") return;
+  const lenis = typeof window !== "undefined" ? window.__lenis : undefined;
+
+  if (locked) {
+    document.body.style.overflow = "hidden";
+    lenis?.stop();
+  } else {
+    document.body.style.overflow = "";
+    lenis?.start();
+    lenis?.resize();
+  }
+}
+
+/**
  * Smoothly scrolls the page to a target Y position.
  */
 export function smoothScrollTo(targetY: number, duration = 2200): void {

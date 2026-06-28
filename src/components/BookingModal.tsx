@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useBooking } from "./BookingProvider";
 import HeroLogo from "./HeroLogo";
+import { lockScroll } from "@/lib/scroll";
 
 export default function BookingModal() {
   const { isOpen, closeBooking } = useBooking();
@@ -36,16 +37,10 @@ export default function BookingModal() {
     }
   }, [isOpen]);
 
-  // Lock body scroll when modal is open
+  // Lock body scroll when modal is open (Lenis-aware)
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
+    lockScroll(isOpen);
+    return () => lockScroll(false);
   }, [isOpen]);
 
   const validate = () => {
