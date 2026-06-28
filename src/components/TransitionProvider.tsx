@@ -83,7 +83,7 @@ export default function TransitionProvider({ children }: { children: ReactNode }
                 transition: { duration: 0.8, ease: "easeInOut", delay: 0 } 
               }}
               className="fixed inset-0 z-[9999] pointer-events-none"
-              style={{ backgroundColor: "#014331" }}
+              style={{ backgroundColor: "#F5F1E9" }}
             />
           </>
         )}

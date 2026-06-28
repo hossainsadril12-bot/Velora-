@@ -85,7 +85,9 @@ export function smoothScrollToId(
 
     if (el && !isLocked) {
       if (typeof window !== "undefined" && window.__lenis) {
-         window.__lenis.scrollTo(el, { duration: duration / 1000, offset: -headerOffset, easing: easeInOutCubic });
+         requestAnimationFrame(() => {
+           window.__lenis?.scrollTo(el, { duration: duration / 1000, offset: -headerOffset, easing: easeInOutCubic });
+         });
          return;
       }
 

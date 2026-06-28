@@ -291,7 +291,7 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
     closeMenu();
     if (pathname === "/") {
       // Already on home: just scroll after menu close animation
-      setTimeout(() => smoothScrollToId(scrollId, 2200, 80), 120);
+      setTimeout(() => smoothScrollToId(scrollId, 2200, 80), 300);
     } else {
       // On another page: save target, then navigate home
       sessionStorage.setItem("scrollTo", scrollId);
