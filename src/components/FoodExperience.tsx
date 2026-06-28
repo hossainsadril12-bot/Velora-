@@ -30,7 +30,7 @@ export default function FoodExperience() {
               <img
                 src="/Velora Emporio.png"
                 alt="Velora Emporio Logo"
-                className="h-[52px] sm:h-[70px] lg:h-[92px] w-auto object-contain"
+                className="w-[192.86px] h-[52px] sm:w-[259.63px] sm:h-[70px] lg:w-[341.27px] lg:h-[92px] object-contain"
               />
             </div>
 
