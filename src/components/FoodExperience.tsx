@@ -25,14 +25,13 @@ export default function FoodExperience() {
         {/* RIGHT COLUMN - CONTENT */}
         <div className="flex h-full flex-col items-center justify-center px-6 py-20 sm:px-12 lg:px-20 lg:py-0">
           <FadeUp delay={0.2} className="flex flex-col items-center justify-center">
-            {/* LOGO (Text placeholder for Velora logo) */}
-            <div className="flex flex-col items-center justify-center">
-              <span className="font-serif text-[18px] sm:text-[20px] tracking-[0.1em] text-dark-text/90 font-thin leading-none">
-                velora<sup className="text-[10px] ml-0.5 relative -top-1">TM</sup>
-              </span>
-              <span className="mt-1 font-serif text-[44px] sm:text-[64px] lg:text-[76px] xl:text-[88px] tracking-wide text-dark-text font-thin leading-none">
-                Emporio
-              </span>
+            {/* LOGO (Image replacement for Velora logo) */}
+            <div className="flex items-center justify-center">
+              <img
+                src="/Velora Emporio.png"
+                alt="Velora Emporio Logo"
+                className="h-[52px] sm:h-[70px] lg:h-[92px] w-auto object-contain"
+              />
             </div>
 
             {/* PARAGRAPH */}

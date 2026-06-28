@@ -707,7 +707,7 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
               <motion.nav
                 variants={fadeSlide}
                 animate={introRunning ? "hidden" : "show"}
-                className={`hidden items-center gap-6 lg:flex ${navColor}`}
+                className={`flex items-center gap-3 lg:gap-6 ${navColor}`}
               >
                 <div className="relative" ref={langDropdownRef}>
                   <button
@@ -764,8 +764,11 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
                   </AnimatePresence>
                 </div>
 
-                <button className="group relative flex cursor-pointer items-center gap-1.5 font-sans text-[15px] font-bold">
-                  <SearchIcon /> Search
+                <button
+                  aria-label="Search"
+                  className="group relative flex cursor-pointer items-center gap-1.5 font-sans text-[15px] font-bold"
+                >
+                  <SearchIcon /> <span className="hidden lg:inline">Search</span>
                   <span className="absolute -bottom-1 left-0 h-[1.5px] w-full origin-left scale-x-0 bg-current transition-transform duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:scale-x-100" />
                 </button>
               </motion.nav>

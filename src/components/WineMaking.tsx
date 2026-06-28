@@ -23,7 +23,7 @@ export default function WineMaking() {
           dir="fromBottom"
           className="font-metro-thin text-white text-[38px] sm:text-[60px] lg:text-[72px] xl:text-[84px] tracking-wide text-center leading-none"
         >
-          Equity Partners
+          Equity partners
         </RevealText>
 
         {/* Paragraph */}
@@ -74,7 +74,7 @@ export default function WineMaking() {
 
         {/* Button */}
         <ButtonReveal className="mt-14" delay={0.6}>
-          <CtaButton variant="cream-outlined" href="#" className="!font-metro-thin">
+          <CtaButton variant="cream-outlined" href="#" className="!font-metro-thin hover:!text-tan">
             Discover More
           </CtaButton>
         </ButtonReveal>

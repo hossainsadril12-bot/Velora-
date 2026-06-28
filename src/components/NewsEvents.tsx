@@ -95,7 +95,7 @@ export default function NewsEvents() {
       <div className="mx-auto grid max-w-[1600px] grid-cols-1 gap-12 lg:grid-cols-[30fr_70fr] lg:gap-16">
         {/* LEFT LABEL (with 60px left margin as requested) */}
         <div className="lg:sticky lg:top-28 lg:self-start lg:ml-[60px]">
-          <h2 className="font-serif text-[48px] uppercase leading-none text-dark-text lg:text-[56px] font-thin">
+          <h2 className="font-serif text-[48px] leading-none text-dark-text lg:text-[56px] font-thin">
             <RevealText as="span" dir="fromTopRotated" origin="right bottom">
               News &amp;
             </RevealText>
@@ -105,7 +105,7 @@ export default function NewsEvents() {
               delay={0.1}
               origin="right bottom"
             >
-              Events
+              events
             </RevealText>
           </h2>
 

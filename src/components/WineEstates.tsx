@@ -17,6 +17,7 @@ type Estate = {
   logo: string;
   logoAlt: string;
   href: string;
+  headingLogo?: string;
 };
 
 const ESTATES: Estate[] = [
@@ -27,6 +28,7 @@ const ESTATES: Estate[] = [
     logo: "https://admin.sanfelice.com/app/uploads/2023/04/SF-CHIANTICLASSICO-logo-WHITE.png",
     logoAlt: "San Felice Chianti Classico logo",
     href: "/en/estates/san-felice",
+    headingLogo: "/Velora inani.png",
   },
   {
     name: "Velora Emporio",
@@ -35,9 +37,10 @@ const ESTATES: Estate[] = [
     logo: "https://admin.sanfelice.com/app/uploads/2023/04/CampogiovanniMontalcino-logo-BIANCO-1.png",
     logoAlt: "Campogiovanni Montalcino logo",
     href: "/en/estates/campogiovanni",
+    headingLogo: "/Velora Emporio W.png",
   },
   {
-    name: "Coming Soon",
+    name: "Up coming",
     bg: "https://admin.sanfelice.com/app/uploads/2025/04/1920x-1054.png",
     bgAlt: "Bell'Aja vineyard in Bolgheri",
     logo: "https://admin.sanfelice.com/app/uploads/2023/03/BellAjaBolghieri-logo-BIANCO.png",
@@ -148,9 +151,19 @@ function EstateCard({
           duration: 0.6,
         }}
       >
-        <h2 className="m-0 font-serif uppercase text-cream text-[28px] sm:text-[36px] lg:text-[40px] xl:text-[48px] leading-tight font-thin tracking-[-0.03em]">
-          {estate.name}
-        </h2>
+        {estate.headingLogo ? (
+          <div className="flex items-center justify-center">
+            <img
+              src={estate.headingLogo}
+              alt={estate.name}
+              className="h-[32px] sm:h-[42px] lg:h-[55px] xl:h-[64px] w-auto object-contain"
+            />
+          </div>
+        ) : (
+          <h2 className="m-0 font-serif text-cream text-[28px] sm:text-[36px] lg:text-[40px] xl:text-[48px] leading-tight font-thin tracking-[-0.03em]">
+            {estate.name}
+          </h2>
+        )}
       </motion.div>
 
       {/* Hover content */}
@@ -174,7 +187,7 @@ function EstateCard({
       >
         <span className="block h-[40px] lg:h-[44px] xl:h-[52px] overflow-hidden">
           <motion.h2
-            className="m-0 font-serif uppercase text-cream font-thin tracking-[-0.03em] text-[36px] leading-[40px] lg:text-[40px] lg:leading-[44px] xl:text-[48px] xl:leading-[52px]"
+            className="m-0 font-serif text-cream font-thin tracking-[-0.03em] text-[36px] leading-[40px] lg:text-[40px] lg:leading-[44px] xl:text-[48px] xl:leading-[52px]"
             style={{
               fontWeight: 100,
             }}
@@ -230,7 +243,7 @@ function EstateCard({
           >
             <a
               href={estate.href}
-              className="inline-block bg-transparent font-sans font-bold uppercase text-white"
+              className="inline-block bg-transparent font-sans font-bold uppercase text-white transition-colors duration-300 hover:bg-white hover:text-tan"
               style={{
                 padding: "18px 35px",
                 fontSize: "10px",
@@ -353,7 +366,7 @@ export default function WineEstates() {
             transformOrigin: "left top",
             willChange: "transform, clip-path",
           }}
-          className="relative m-0 block select-none whitespace-nowrap text-center font-serif text-[clamp(2.75rem,8vw,6.5rem)] uppercase leading-[0.9] tracking-[-0.045em] text-white font-thin"
+          className="relative m-0 block select-none whitespace-nowrap text-center font-serif text-[clamp(2.75rem,8vw,6.5rem)] leading-[0.9] tracking-[-0.045em] text-white font-thin"
         >
           Projects
         </motion.h2>

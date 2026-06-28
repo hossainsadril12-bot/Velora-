@@ -13,7 +13,7 @@ export default function DiscoverPanel() {
           dir="fromBottom"
           className="font-serif tracking-wide text-white text-[22px] sm:text-[26px] lg:text-[32px] xl:text-[36px] leading-tight max-w-[900px]"
         >
-          Where Design Excellence Meets Trusted Leadership
+          Where design excellence meets trusted leadership
         </RevealText>
 
         <ButtonReveal className="mt-10" delay={0.4}>
