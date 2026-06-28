@@ -153,7 +153,7 @@ export default function Footer() {
       {...motionProps}
     >
       <motion.div
-        className="mx-auto flex min-h-[500px] max-w-[1780px] flex-col px-6 pb-12 pt-[100px] lg:px-[78px]"
+        className="mx-auto flex min-h-[500px] max-w-[1780px] flex-col px-6 pb-12 pt-16 sm:pt-20 lg:px-[78px] lg:pt-[100px]"
         variants={containerStagger}
       >
         {/* TOP AREA */}
@@ -242,7 +242,7 @@ export default function Footer() {
 
         {/* BOTTOM LEGAL TEXT */}
         <motion.div
-          className="mt-[120px] flex flex-col items-start justify-between gap-6 pr-0 font-sans text-[12px] font-light text-cream/60 sm:flex-row sm:items-center sm:pr-20"
+          className="mt-20 lg:mt-[120px] flex flex-col items-start justify-between gap-6 pr-0 font-sans text-[12px] font-light text-cream/60 sm:flex-row sm:items-center sm:pr-20"
           variants={softReveal}
         >
           <span>

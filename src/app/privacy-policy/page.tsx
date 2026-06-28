@@ -43,7 +43,7 @@ export default function PrivacyPolicy() {
           </div>
 
           {/* CONTENT */}
-          <div className="w-full space-y-[130px] text-center font-sans text-sm font-light leading-relaxed md:text-base">
+          <div className="w-full space-y-16 sm:space-y-24 lg:space-y-[130px] text-center font-sans text-sm font-light leading-relaxed md:text-base">
 
             <section className="space-y-4">
               <h2 className="font-serif text-2xl font-light uppercase text-dark-text md:text-3xl">
@@ -51,7 +51,7 @@ export default function PrivacyPolicy() {
               </h2>
 
               <p>
-                When you use our services, you may provide personal information about yourself <br /> (your name, phone
+                When you use our services, you may provide personal information about yourself <br className="hidden sm:inline" /> (your name, phone
                 number, email address, contact address, etc.). We may collect personal identification information
                 through several ways, including contact form submissions on our site, blog subscriptions, and via other
                 services, features, or application forms we make available on our website. We only collect information

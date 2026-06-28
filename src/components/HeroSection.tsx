@@ -24,6 +24,26 @@ const wordMask = {
 export default function HeroSection() {
   const { introState, advance, introDone } = useIntro();
 
+  // === Reset to top on every full page load ===
+  // Browser scroll restoration would otherwise return the viewport to the
+  // section the user was on before refresh, leaving the intro to play
+  // off-screen above the locked scroll position. Force start at the top.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    // Only on a fresh full load (intro about to play); on client-side nav the
+    // intro is already "completed" and page.tsx owns scroll-to-section.
+    if (introState !== "idle") return;
+    const prev = window.history.scrollRestoration;
+    window.history.scrollRestoration = "manual";
+    window.scrollTo(0, 0);
+    window.__lenis?.scrollTo(0, { immediate: true });
+    return () => {
+      window.history.scrollRestoration = prev;
+    };
+  // Run once on mount; reads the initial introState intentionally.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // === Intro timing ===
   // After mount: wait 1.0s in "idle" state, then advance to "transitioning"
   useEffect(() => {
@@ -73,7 +93,7 @@ export default function HeroSection() {
     <section
       ref={ref}
       className="relative h-screen w-full overflow-hidden"
-      style={{ backgroundColor: introDone ? "var(--dark-green)" : "#FFF9ED" }}
+      style={{ backgroundColor: introDone ? "#F5F1E9" : "#FFF9ED" }}
     >
       {/* ──────────────────────────────────────────────────────
           SINGLE IMAGE LAYER
@@ -90,12 +110,23 @@ export default function HeroSection() {
         <motion.div
           className="relative overflow-hidden"
           style={{ borderRadius: introState === "idle" ? 8 : 0 }}
-          initial={{
-            width: "min(80vw, 1200px)",
-            height: "min(65vh, 800px)",
-            opacity: 0,
-            scale: 0.9,
-          }}
+          initial={
+            introDone
+              ? {
+                  // Client-nav back to home: intro already done — start full, no replay.
+                  width: "100vw",
+                  height: "120vh",
+                  opacity: 1,
+                  scale: 1,
+                  borderRadius: 0,
+                }
+              : {
+                  width: "min(80vw, 1200px)",
+                  height: "min(65vh, 800px)",
+                  opacity: 0,
+                  scale: 0.9,
+                }
+          }
           animate={
             introState === "idle"
               ? {
@@ -106,8 +137,9 @@ export default function HeroSection() {
                 }
               : {
                   width: "100vw",
-                  // To support parallax after expanding, height needs to be larger than viewport
-                  height: introDone ? "120vh" : "100vh",
+                  // Expand straight to parallax-ready height (120vh) in one move.
+                  // No second height jump on completion → no zoom when components appear.
+                  height: "120vh",
                   opacity: 1,
                   scale: 1,
                   borderRadius: 0,

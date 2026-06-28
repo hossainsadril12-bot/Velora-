@@ -109,17 +109,10 @@ export default function BorgoResort() {
         </motion.h1>
       </div>
 
-      {/* CTA BUTTON */}
-      <motion.div style={{ y: buttonY, opacity: buttonOpacity }} className="mt-10 lg:mt-12">
-        <CtaButton variant="tan" href="#" className="rounded-[2.5px] min-w-[183px]">
-          Learn More
-        </CtaButton>
-      </motion.div>
-
       {/* PARAGRAPH */}
       <motion.p
         style={{ y: textY, opacity: textOpacity }}
-        className="m-0 mt-12 max-w-[580px] font-sans text-base leading-relaxed text-[#000000] text-center lg:mt-16 font-medium"
+        className="m-0 mt-8 sm:mt-10 lg:mt-12 max-w-[580px] font-serif text-base leading-relaxed text-dark-text text-center font-light"
       >
         Welcome to Velora Inani, the first of its kind &lsquo;Lifestyle Hotel&rsquo;
         <br />
@@ -128,10 +121,14 @@ export default function BorgoResort() {
         Designed by HuaDu Architecture &amp; Urban Design,
         <br />
         a Shanghai-based architecture firm that operates across three continents and holds a first-rate qualification from  China&rsquo;s <br />State Construction Ministry.
-        <br />
-        <br />
-
       </motion.p>
+
+      {/* CTA BUTTON */}
+      <motion.div style={{ y: buttonY, opacity: buttonOpacity }} className="mt-10 sm:mt-12 lg:mt-14">
+        <CtaButton variant="tan" href="#" className="rounded-[2.5px] min-w-[183px]">
+          Learn More
+        </CtaButton>
+      </motion.div>
     </div>
   );
 
@@ -200,7 +197,7 @@ export default function BorgoResort() {
       className="relative w-full overflow-hidden bg-[#F5F1E9] flex flex-col lg:flex-row lg:h-[calc(100vh-70px)] lg:min-h-[640px] lg:max-h-[940px]"
     >
       {/* LEFT CONTENT */}
-      <div className="w-full flex flex-col justify-center items-center px-8 py-12 sm:px-12 sm:py-16 lg:absolute lg:left-0 lg:top-0 lg:bottom-0 lg:w-1/2 lg:h-full lg:px-20 lg:py-32 lg:z-0">
+      <div className="w-full flex flex-col justify-center items-center px-8 py-12 sm:px-12 sm:py-16 lg:absolute lg:left-0 lg:top-0 lg:bottom-0 lg:w-1/2 lg:h-full lg:px-16 lg:py-16 xl:px-20 xl:py-24 lg:z-0">
         {renderLeftContent()}
       </div>
 

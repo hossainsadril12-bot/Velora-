@@ -6,12 +6,12 @@ import TransitionLink from "./TransitionLink";
 
 export default function DiscoverPanel() {
   return (
-    <section className="bg-deep-green px-5 py-12 sm:py-16 lg:py-20 text-center relative overflow-hidden">
+    <section className="bg-deep-green px-5 py-12 sm:py-16 lg:py-20 xl:py-24 text-center relative overflow-hidden">
       <div className="flex flex-col items-center">
         <RevealText
           as="h2"
           dir="fromBottom"
-          className="font-serif tracking-wide text-white text-[28.8px] leading-tight"
+          className="font-serif tracking-wide text-white text-[22px] sm:text-[26px] lg:text-[32px] xl:text-[36px] leading-tight max-w-[900px]"
         >
           Where Design Excellence Meets Trusted Leadership
         </RevealText>

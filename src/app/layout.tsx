@@ -36,6 +36,9 @@ export default function RootLayout({
       lang="en"
       className={`${dmSans.variable} ${cormorant.variable} h-full antialiased`}
     >
+      <head>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xz/fonts@1/serve/metropolis.min.css" />
+      </head>
       <body className="min-h-full bg-cream text-dark-green">
         <IntroProvider>
           <TransitionProvider>
