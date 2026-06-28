@@ -95,13 +95,13 @@ export default function PeoplePage() {
             {PEOPLE.map((person) => (
               <article
                 key={person.name}
-                className="relative aspect-[4/5] w-full overflow-hidden bg-dark-text/5"
+                className="group relative aspect-[4/5] w-full overflow-hidden bg-dark-text/5"
               >
                 <Image
                   src={person.image}
                   alt={person.name}
                   fill
-                  className="object-cover grayscale"
+                  className="object-cover grayscale transition-all duration-500 ease-out group-hover:grayscale-0 group-hover:scale-105"
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                 />
 
