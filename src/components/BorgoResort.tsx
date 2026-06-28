@@ -54,14 +54,17 @@ export default function BorgoResort() {
   // LEFT PANEL (TEXT) ANIMATIONS: 
   // Adjusted to follow the three-phase smooth scrolling curve, now extended to match the slower image.
 
-  const headerY = useTransform(smoothProgress, [0, 0.25, 0.60, 0.75], ["100%", "85%", "40%", "0%"]);
-  const headerOpacity = useTransform(smoothProgress, [0, 0.25, 0.60, 0.75], [0, 0.15, 0.6, 1]);
+  // Left content reveals LATER in the scroll (after the right image has mostly
+  // settled, which finishes ~0.85). Pushed into the back half for a delayed feel
+  // while staying fully scroll-driven. Stagger order preserved: header → button → text.
+  const headerY = useTransform(smoothProgress, [0.40, 0.55, 0.78, 0.92], ["100%", "85%", "40%", "0%"]);
+  const headerOpacity = useTransform(smoothProgress, [0.40, 0.55, 0.78, 0.92], [0, 0.15, 0.6, 1]);
 
-  const buttonY = useTransform(smoothProgress, [0.05, 0.30, 0.65, 0.80], [40, 34, 15, 0]);
-  const buttonOpacity = useTransform(smoothProgress, [0.05, 0.30, 0.65, 0.80], [0, 0.15, 0.6, 1]);
+  const buttonY = useTransform(smoothProgress, [0.45, 0.60, 0.82, 0.94], [40, 34, 15, 0]);
+  const buttonOpacity = useTransform(smoothProgress, [0.45, 0.60, 0.82, 0.94], [0, 0.15, 0.6, 1]);
 
-  const textY = useTransform(smoothProgress, [0.10, 0.35, 0.70, 0.85], [40, 34, 15, 0]);
-  const textOpacity = useTransform(smoothProgress, [0.10, 0.35, 0.70, 0.85], [0, 0.15, 0.6, 1]);
+  const textY = useTransform(smoothProgress, [0.50, 0.62, 0.84, 0.95], [40, 34, 15, 0]);
+  const textOpacity = useTransform(smoothProgress, [0.50, 0.62, 0.84, 0.95], [0, 0.15, 0.6, 1]);
 
   const go = (d: number) => {
     setI(([p]) => [(p + d + SLIDES.length) % SLIDES.length, d]);
