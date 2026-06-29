@@ -86,6 +86,7 @@ export function smoothScrollToId(
     if (el && !isLocked) {
       if (typeof window !== "undefined" && window.__lenis) {
          requestAnimationFrame(() => {
+           window.__lenis?.resize();
            window.__lenis?.scrollTo(el, { duration: duration / 1000, offset: -headerOffset, easing: easeInOutCubic });
          });
          return;

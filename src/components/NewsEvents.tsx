@@ -91,7 +91,7 @@ function Card({ n }: { n: News }) {
 
 export default function NewsEvents() {
   return (
-    <section className="bg-cream px-6 py-12 sm:py-16 lg:px-10 lg:py-24 xl:px-16">
+    <section id="news" className="bg-cream px-6 py-12 sm:py-16 lg:px-10 lg:py-24 xl:px-16">
       <div className="mx-auto grid max-w-[1600px] grid-cols-1 gap-12 lg:grid-cols-[30fr_70fr] lg:gap-16">
         {/* LEFT LABEL (with 60px left margin as requested) */}
         <div className="lg:sticky lg:top-28 lg:self-start lg:ml-[60px]">

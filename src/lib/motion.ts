@@ -29,7 +29,7 @@ export const transitionBorgo: Transition = { duration: 1.6, ease: easeJ };
 export const fadeInOut: Transition = { duration: 1.0, ease: easeSharp };
 
 /* Shared viewport trigger ------------------------------------------------- */
-export const viewportOnce = { once: true, margin: "0px 0px -80px 0px" } as const;
+export const viewportOnce = { once: true, margin: "0px 0px -20px 0px" } as const;
 
 /* ──────────────────────────────────────────────────────────────────────────
    Heading clip reveal — text "emerges" from below an invisible mask line.

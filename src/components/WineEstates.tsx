@@ -40,7 +40,7 @@ const ESTATES: Estate[] = [
     headingLogo: "/Velora Emporio W.png",
   },
   {
-    name: "Up coming",
+    name: "Upcoming",
     bg: "https://admin.sanfelice.com/app/uploads/2025/04/1920x-1054.png",
     bgAlt: "Bell'Aja vineyard in Bolgheri",
     logo: "https://admin.sanfelice.com/app/uploads/2023/03/BellAjaBolghieri-logo-BIANCO.png",
@@ -152,17 +152,23 @@ function EstateCard({
         }}
       >
         {estate.headingLogo ? (
-          <div className="flex items-center justify-center">
-            <img
-              src={estate.headingLogo}
-              alt={estate.name}
-              className={
-                index === 1
-                  ? "w-[148px] h-[32px] sm:w-[194px] sm:h-[42px] lg:w-[254px] lg:h-[55px] xl:w-[296.83px] xl:h-[64px] object-contain"
-                  : "h-[32px] sm:h-[42px] lg:h-[55px] xl:h-[64px] w-auto object-contain"
-              }
-            />
-          </div>
+          index === 1 ? (
+            <div className="flex items-center justify-center h-[72px]">
+              <img
+                src={estate.headingLogo}
+                alt={estate.name}
+                className="h-[72px] w-auto object-contain"
+              />
+            </div>
+          ) : (
+            <div className="flex items-center justify-center">
+              <img
+                src={estate.headingLogo}
+                alt={estate.name}
+                className="h-[32px] sm:h-[42px] lg:h-[55px] xl:h-[64px] w-auto object-contain"
+              />
+            </div>
+          )
         ) : (
           <h2 className="m-0 font-serif text-cream text-[28px] sm:text-[36px] lg:text-[40px] xl:text-[48px] leading-tight font-thin tracking-[-0.03em]">
             {estate.name}
@@ -357,7 +363,7 @@ export default function WineEstates() {
   );
 
   return (
-    <section id="projects" ref={sectionRef} className="overflow-hidden bg-tan py-12 sm:py-16 lg:py-20 xl:py-24">
+    <section id="projects" ref={sectionRef} className="overflow-hidden bg-tan py-[16px]">
       {/* Heading */}
       <div className="relative w-full overflow-hidden px-6 sm:px-10 lg:px-[30px] pb-0">
         <motion.h2
@@ -383,7 +389,7 @@ export default function WineEstates() {
           opacity: cardsOpacity,
           willChange: "transform, opacity",
         }}
-        className="mt-10 sm:mt-12 flex w-full flex-col gap-6 px-6 sm:px-10 lg:flex-row lg:gap-6 lg:px-[30px]"
+        className="mt-6 flex w-full flex-col gap-6 px-6 sm:px-10 lg:flex-row lg:gap-6 lg:px-[30px]"
       >
         {ESTATES.map((estate, i) => {
           const revealY =

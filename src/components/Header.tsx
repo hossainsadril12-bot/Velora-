@@ -8,7 +8,7 @@ import HeroLogo from "./HeroLogo";
 import TransitionLink from "./TransitionLink";
 import { useBooking } from "./BookingProvider";
 import { useIntro } from "./IntroProvider";
-import { smoothScrollToId, lockScroll } from "@/lib/scroll";
+import { smoothScrollToId, smoothScrollTo, lockScroll } from "@/lib/scroll";
 
 const EASE = [0.25, 0.1, 0.25, 1] as const;
 
@@ -37,7 +37,7 @@ const SECONDARY_NAV = [
   { label: "Environment", href: "/environment" },
   { label: "Collaboration", href: "/collaboration" },
   { label: "Projects", href: "/?scroll=projects", scrollId: "projects" },
-  { label: "News & Events", href: "#news" },
+  { label: "News & Events", href: "/?scroll=news", scrollId: "news" },
   { label: "Contact Us", href: "/?scroll=footer", scrollId: "footer" },
 ];
 
@@ -299,6 +299,15 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
     }
   };
 
+  /** Logo click: scroll to top on home, otherwise let TransitionLink navigate home */
+  const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    closeMenu();
+    if (pathname === "/") {
+      e.preventDefault();
+      smoothScrollTo(0, 2200);
+    }
+  };
+
   const onDark = theme === "light" ? false : !scrolled;
   const navColor = onDark ? "text-cream" : "text-black";
 
@@ -401,7 +410,7 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
                   }}
                   exit={{ opacity: 0, transition: { duration: 0.2 } }}
                 >
-                  <TransitionLink href="/" direction="backward">
+                  <TransitionLink href="/" direction="backward" onClick={handleLogoClick}>
                     <HeroLogo className="h-12 w-auto text-white" />
                   </TransitionLink>
                 </motion.div>
@@ -778,7 +787,7 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
               variants={fadeSlide}
               className={`flex flex-col items-center transition-colors duration-700 ${logoColor}`}
             >
-              <TransitionLink href="/" direction="backward">
+              <TransitionLink href="/" direction="backward" onClick={handleLogoClick}>
                 <div className="block" style={{ color: "inherit" }}>
                   <HeroLogo className="h-8 w-auto sm:h-10" />
                 </div>
