@@ -110,7 +110,7 @@ export default function FAQPage() {
                     onClick={() => toggleFaq(idx)}
                     className="flex w-full flex-col items-center text-center py-6 md:py-8 focus:outline-none cursor-pointer group"
                   >
-                    <span className="font-sans text-base sm:text-lg font-light text-[#2B2B2B] transition-colors duration-300 group-hover:text-tan">
+                    <span className="font-sans text-[22px] sm:text-[32px] font-light leading-snug text-[#2B2B2B] transition-colors duration-300 group-hover:text-tan">
                       {faq.question}
                     </span>
                   </button>
