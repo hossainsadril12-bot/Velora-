@@ -84,51 +84,35 @@ export default function FAQPage() {
     <>
       <Header theme="light" />
 
-      <main className="min-h-screen bg-velora-cream px-6 pb-24 pt-32 sm:px-12 md:pb-32 md:pt-40 lg:px-24">
-        <div className="mx-auto max-w-3xl">
+      <main className="min-h-screen bg-[#FDFBF7] px-6 pb-24 pt-32 sm:px-12 md:pb-32 md:pt-40 lg:px-24">
+        <div className="mx-auto max-w-3xl flex flex-col items-center">
           {/* HEADER */}
-          <div className="mb-16 text-center">
-            <h1 className="font-serif text-4xl font-light text-dark-text md:text-5xl lg:text-6xl">
-              Frequently Asked Questions
+          <div className="mb-12 text-center">
+            <h1 className="font-serif text-5xl md:text-6xl lg:text-[72px] font-thin text-dark-text tracking-widest uppercase mb-0">
+              FAQ
             </h1>
-            <p className="mt-6 font-sans text-base text-[#2B2B2B] md:text-lg">
-              Everything you need to know about owning a unit at Velora Inani.
-            </p>
           </div>
 
           {/* FAQ LIST */}
-          <div className="space-y-4">
+          <div className="w-full flex flex-col">
             {FAQS.map((faq, idx) => {
               const isOpen = openIndex === idx;
+              const isLast = idx === FAQS.length - 1;
 
               return (
                 <div
                   key={idx}
-                  className="overflow-hidden transition-all duration-300 border-[1.5px] bg-white border-tan"
+                  className={`w-full transition-all duration-300 ${
+                    !isLast ? "border-b border-tan/20" : ""
+                  }`}
                 >
                   <button
                     onClick={() => toggleFaq(idx)}
-                    className="flex w-full items-center justify-between p-5 text-left md:p-6"
+                    className="flex w-full flex-col items-center text-center py-6 md:py-8 focus:outline-none cursor-pointer group"
                   >
-                    <span className="font-sans text-lg font-medium pr-6 md:text-xl transition-colors duration-300 text-[#050505]">
+                    <span className="font-sans text-base sm:text-lg font-light text-[#2B2B2B] transition-colors duration-300 group-hover:text-tan">
                       {faq.question}
                     </span>
-                    <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full transition-colors duration-300 md:h-10 md:w-10 bg-tan text-white">
-                      <motion.svg
-                        animate={{ rotate: isOpen ? 180 : 0 }}
-                        className="h-5 w-5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2.5}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M19 9l-7 7-7-7"
-                        />
-                      </motion.svg>
-                    </div>
                   </button>
 
                   <AnimatePresence initial={false}>
@@ -138,8 +122,9 @@ export default function FAQPage() {
                         animate={{ height: "auto", opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.3, ease: "easeInOut" }}
+                        className="overflow-hidden"
                       >
-                        <div className="px-5 pb-6 pt-0 font-sans text-base leading-relaxed text-[#555] md:px-6 md:text-lg">
+                        <div className="px-6 pb-6 pt-0 font-sans text-[14px] sm:text-[15px] leading-relaxed text-[#4A4A4A] text-center max-w-2xl mx-auto">
                           {faq.answer}
                         </div>
                       </motion.div>
