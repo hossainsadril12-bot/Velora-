@@ -9,8 +9,7 @@ import { easeJ } from "@/lib/motion";
 
 const IMAGES = [
   "/Emporio - Main.webp",
-  "/ethan-hansen-yiTJx4XCcFY-unsplash.jpg",
-  "/lucas-kepner-Yn8D5B8C-eY-unsplash.jpg.jpeg",
+  "/Velora Inani.jpg.jpeg",
 ];
 
 export default function FoodExperience() {
