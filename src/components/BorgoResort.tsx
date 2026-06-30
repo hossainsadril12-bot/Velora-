@@ -15,7 +15,7 @@ import { easeJ } from "@/lib/motion";
 const SLIDES = [
   {
     src: "/photo-1554213808-9c5bab0f624e.jpg",
-    alt: "Borgo San Felice interior/exterior layout view",
+    alt: "Velora interior/exterior layout view",
   },
   {
     src: "/Red_Ghost_Crab.jpg",

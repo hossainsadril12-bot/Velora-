@@ -6,6 +6,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { easeJ } from "@/lib/motion";
 import { useIntro } from "./IntroProvider";
 import { lockScroll } from "@/lib/scroll";
+import TransitionLink from "./TransitionLink";
 
 const HERO_IMG = "/Inani Beach.png";
 
@@ -238,12 +239,12 @@ export default function HeroSection() {
         </span>
 
         <motion.div style={{ opacity: discoverBtnOpacity }} className="pointer-events-auto">
-          <a
-            href="/en/about-us"
+          <TransitionLink
+            href="/about"
             className="inline-block uppercase font-sans font-bold text-[10px] tracking-[2.5px] px-[35px] py-[18px] border transition-all duration-300 cursor-pointer bg-cream text-dark-green border-cream hover:bg-transparent hover:text-cream"
           >
             About Us
-          </a>
+          </TransitionLink>
         </motion.div>
       </motion.div>
     </section>

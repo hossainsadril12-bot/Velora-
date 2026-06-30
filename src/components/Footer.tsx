@@ -32,7 +32,7 @@ const GROUPS = {
       { text: "About Us", href: "#" },
       { text: "News & Events", href: "#" },
       { text: "FAQ", href: "/faq" },
-      { text: "Equity Partners", href: "https://riservata.agricolasanfelice.it" },
+      { text: "Equity Partners", href: "#" },
       { text: "Contact Us", href: "#" },
     ],
   },

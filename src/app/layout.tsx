@@ -21,9 +21,9 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: "San Felice — Authentic Tuscan Soul",
+  title: "Velora — Eiman Estates",
   description:
-    "Borgo San Felice: a luxury Tuscan winery & Relais & Châteaux resort. Discover Star Bene, the Italian way of feeling good.",
+    "Velora by Eiman Estates — where design excellence meets trusted leadership.",
 };
 
 export default function RootLayout({

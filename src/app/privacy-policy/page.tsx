@@ -2,7 +2,6 @@
 
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import Link from "next/link";
 import { motion } from "framer-motion";
 
 export default function PrivacyPolicy() {
@@ -170,12 +169,12 @@ export default function PrivacyPolicy() {
                 policy, your continued use of the website and services will be
                 regarded as your consent to our policy. If you have any queries,
                 please feel free to{" "}
-                <Link
-                  href="/contact"
+                <a
+                  href="mailto:info@eimanestates.com"
                   className="text-tan transition-opacity duration-300 hover:opacity-85"
                 >
                   contact us
-                </Link>
+                </a>
                 .
               </p>
             </section>
