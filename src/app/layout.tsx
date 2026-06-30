@@ -21,9 +21,37 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: "Velora — Eiman Estates",
+  title: {
+    default: "Velora — Eiman Estates",
+    template: "%s | Velora — Eiman Estates",
+  },
   description:
-    "Velora by Eiman Estates — where design excellence meets trusted leadership.",
+    "Velora Inani — a first-of-its-kind Lifestyle Hotel on Marine Drive, Inani, Cox's Bazar. Own a hotel unit. Earn returns. Backed by Eiman Estates.",
+  keywords: [
+    "Velora Inani",
+    "Velora Emporio",
+    "Eiman Estates",
+    "hotel investment Cox's Bazar",
+    "Inani Beach hotel",
+    "lifestyle hotel Bangladesh",
+    "hotel unit ownership",
+  ],
+  metadataBase: new URL(process.env.SITE_URL || "https://velora.eimanestates.com"),
+  openGraph: {
+    title: "Velora — Eiman Estates",
+    description:
+      "Velora Inani — a first-of-its-kind Lifestyle Hotel on Marine Drive, Inani, Cox's Bazar. Own a hotel unit. Earn returns. Backed by Eiman Estates.",
+    url: "https://velora.eimanestates.com",
+    siteName: "Velora — Eiman Estates",
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Velora — Eiman Estates",
+    description:
+      "Velora Inani — a first-of-its-kind Lifestyle Hotel on Marine Drive, Inani, Cox's Bazar.",
+  },
 };
 
 export default function RootLayout({

@@ -9,7 +9,7 @@ import { easeJ } from "@/lib/motion";
 
 const IMAGES = [
   "/Emporio - Main.webp",
-  "/Velora Inani.jpg.jpeg",
+  "/Emporio 2.webp",
 ];
 
 export default function FoodExperience() {
@@ -74,7 +74,7 @@ export default function FoodExperience() {
           <div className="absolute bottom-8 left-8 z-[20] flex gap-3">
             <button
               onClick={handlePrev}
-              className="flex h-14 w-14 cursor-pointer items-center justify-center rounded-full border border-[#183029] bg-[#F5F1E9] text-[#183029] transition-all duration-300 hover:bg-[#183029] hover:text-[#F5F1E9] focus:outline-none shadow-md"
+              className="flex h-14 w-14 cursor-pointer items-center justify-center rounded-full border border-[#183029] bg-[#F5F1E9] text-[#183029] transition-opacity duration-300 hover:opacity-80 focus:outline-none shadow-md"
               aria-label="Previous image"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -83,7 +83,7 @@ export default function FoodExperience() {
             </button>
             <button
               onClick={handleNext}
-              className="flex h-14 w-14 cursor-pointer items-center justify-center rounded-full border border-[#183029] bg-[#F5F1E9] text-[#183029] transition-all duration-300 hover:bg-[#183029] hover:text-[#F5F1E9] focus:outline-none shadow-md"
+              className="flex h-14 w-14 cursor-pointer items-center justify-center rounded-full border border-[#183029] bg-[#F5F1E9] text-[#183029] transition-opacity duration-300 hover:opacity-80 focus:outline-none shadow-md"
               aria-label="Next image"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

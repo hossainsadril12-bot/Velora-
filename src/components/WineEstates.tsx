@@ -8,7 +8,7 @@ import {
   type MotionValue,
 } from "framer-motion";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type Estate = {
   name: string;
@@ -57,6 +57,7 @@ function EstateCard({
   isActive,
   onActivate,
   onDeactivate,
+  hasHover,
   revealY,
 }: {
   estate: Estate;
@@ -64,8 +65,15 @@ function EstateCard({
   isActive: boolean;
   onActivate: (i: number) => void;
   onDeactivate: () => void;
+  hasHover: boolean;
   revealY?: MotionValue<string>;
 }) {
+  const handleTap = (e: React.MouseEvent) => {
+    if (hasHover) return;
+    e.stopPropagation();
+    isActive ? onDeactivate() : onActivate(index);
+  };
+
   return (
     <motion.div
       className="relative h-[420px] sm:h-[480px] w-full min-w-0 cursor-pointer overflow-hidden basis-auto lg:h-[78vh] lg:min-h-[560px] lg:max-h-[820px] lg:basis-0"
@@ -75,7 +83,7 @@ function EstateCard({
         willChange: "transform",
       }}
       initial="rest"
-      whileHover="hover"
+      whileHover={hasHover ? "hover" : undefined}
       variants={{
         rest: {
           flexGrow: 1,
@@ -94,8 +102,9 @@ function EstateCard({
           },
         },
       }}
-      onHoverStart={() => onActivate(index)}
-      onHoverEnd={onDeactivate}
+      onHoverStart={hasHover ? () => onActivate(index) : undefined}
+      onHoverEnd={hasHover ? onDeactivate : undefined}
+      onClick={handleTap}
     >
       {/* Background image */}
       <motion.div
@@ -273,6 +282,11 @@ function EstateCard({
 
 export default function WineEstates() {
   const [activeIndex, setActiveIndex] = useState(-1);
+  const [hasHover, setHasHover] = useState(true);
+
+  useEffect(() => {
+    setHasHover(window.matchMedia("(hover: hover) and (pointer: fine)").matches);
+  }, []);
 
   const sectionRef = useRef<HTMLElement>(null);
 
@@ -390,6 +404,7 @@ export default function WineEstates() {
           willChange: "transform, opacity",
         }}
         className="mt-6 flex w-full flex-col gap-6 px-6 sm:px-10 lg:flex-row lg:gap-6 lg:px-[30px]"
+        onClick={() => { if (!hasHover) setActiveIndex(-1); }}
       >
         {ESTATES.map((estate, i) => {
           const revealY =
@@ -403,6 +418,7 @@ export default function WineEstates() {
               isActive={activeIndex === i}
               onActivate={setActiveIndex}
               onDeactivate={() => setActiveIndex(-1)}
+              hasHover={hasHover}
               revealY={revealY}
             />
           );

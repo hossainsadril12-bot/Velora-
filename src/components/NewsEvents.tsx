@@ -14,8 +14,8 @@ type News = {
 
 const CARDS: News[] = [
   {
-    src: "/thisisengineering-jy2q5tz7JUI-unsplash.jpg",
-    alt: "News Event 1",
+    src: "/coxs-bazar-airport.jpg",
+    alt: "Cox's Bazar Airport",
     title: "Own a hotel unit paying 15 Lac",
     description: "Enjoy an exciting independent profession by becoming an Equity Partner of Velora Inani. Lorem ipsum dolor sit amet, consectetur adipisicing elit.......",
     date: "09/06/2026",
@@ -30,8 +30,8 @@ const CARDS: News[] = [
     href: "#",
   },
   {
-    src: "/you-le-hRWsD2ti-os-unsplash.jpg",
-    alt: "News Event 3",
+    src: "/Own a hotel.png",
+    alt: "Own a Hotel Unit",
     title: "Own a hotel unit paying 15 Lac",
     description: "Enjoy an exciting independent profession by becoming an Equity Partner of Velora Inani. Lorem ipsum dolor sit amet, consectetur adipisicing elit.......",
     date: "09/06/2026",
