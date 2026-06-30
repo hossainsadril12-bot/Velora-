@@ -16,8 +16,8 @@ const CARDS: News[] = [
   {
     src: "/coxs-bazar-airport.jpg",
     alt: "Cox's Bazar Airport",
-    title: "Own a hotel unit paying 15 Lac",
-    description: "Enjoy an exciting independent profession by becoming an Equity Partner of Velora Inani. Lorem ipsum dolor sit amet, consectetur adipisicing elit.......",
+    title: "Intl. Airport in a few months",
+    description: "During a recent parliament session, Afroza Khanam MP, Minister for Civil Aviation and Tourism, confirmed it would take her Government a few more months to upgrade Cox's Bazar Airport to an international facility…",
     date: "09/06/2026",
     href: "#",
   },
@@ -32,8 +32,8 @@ const CARDS: News[] = [
   {
     src: "/Own a hotel.png",
     alt: "Own a Hotel Unit",
-    title: "Own a hotel unit paying 15 Lac",
-    description: "Enjoy an exciting independent profession by becoming an Equity Partner of Velora Inani. Lorem ipsum dolor sit amet, consectetur adipisicing elit.......",
+    title: "A 'Lifestyle Hotel' amidst nature",
+    description: "Velora Inani, the first of its kind 'Lifestyle Hotel' in Cox's Bazar with world-class features and amenities for International & Local tourists. Designed by HuaDu Architecture & Urban Design,…..",
     date: "09/06/2026",
     href: "#",
   },
