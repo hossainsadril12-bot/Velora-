@@ -23,7 +23,7 @@ type Estate = {
 const ESTATES: Estate[] = [
   {
     name: "Velora Inani",
-    bg: "https://admin.sanfelice.com/app/uploads/2023/04/DSC_6934-scaled.jpg",
+    bg: "/Velora Inani.jpg.jpeg",
     bgAlt: "San Felice vineyard rows",
     logo: "https://admin.sanfelice.com/app/uploads/2023/04/SF-CHIANTICLASSICO-logo-WHITE.png",
     logoAlt: "San Felice Chianti Classico logo",
@@ -32,7 +32,7 @@ const ESTATES: Estate[] = [
   },
   {
     name: "Velora Emporio",
-    bg: "https://admin.sanfelice.com/app/uploads/2023/04/CAMPOGIOVANNI_hero-2040x1120-1.jpg",
+    bg: "/Emporio - Main.webp",
     bgAlt: "Campogiovanni estate in Montalcino",
     logo: "https://admin.sanfelice.com/app/uploads/2023/04/CampogiovanniMontalcino-logo-BIANCO-1.png",
     logoAlt: "Campogiovanni Montalcino logo",
@@ -41,7 +41,7 @@ const ESTATES: Estate[] = [
   },
   {
     name: "Upcoming",
-    bg: "https://admin.sanfelice.com/app/uploads/2025/04/1920x-1054.png",
+    bg: "/UPCOMING - BLUR.jpg.jpeg",
     bgAlt: "Bell'Aja vineyard in Bolgheri",
     logo: "https://admin.sanfelice.com/app/uploads/2023/03/BellAjaBolghieri-logo-BIANCO.png",
     logoAlt: "Bell'Aja Bolgheri logo",
