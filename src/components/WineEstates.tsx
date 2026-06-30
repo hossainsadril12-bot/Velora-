@@ -130,19 +130,20 @@ function EstateCard({
         />
       </motion.div>
 
-      {/* Dark overlay */}
+      {/* Dark overlay — fully fades out on hover */}
       <motion.div
         className="absolute inset-0 bg-black"
-        style={{
-          zIndex: 4,
-        }}
-        animate={{
-          opacity: isActive ? 0.4 : 0.6,
-        }}
-        transition={{
-          ease: EASE,
-          duration: 0.9,
-        }}
+        style={{ zIndex: 4 }}
+        animate={{ opacity: isActive ? 0 : 0.6 }}
+        transition={{ ease: EASE, duration: 0.9 }}
+      />
+
+      {/* Bottom gradient — appears with hover content for text readability */}
+      <motion.div
+        className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent"
+        style={{ zIndex: 4 }}
+        animate={{ opacity: isActive ? 1 : 0 }}
+        transition={{ ease: EASE, duration: 0.9 }}
       />
 
       {/* Center text heading default state */}
