@@ -34,13 +34,13 @@ export default function AdviserPage() {
             {/* Left Column */}
             <div className="lg:col-span-3 flex flex-col gap-6 text-dark-text order-2 lg:order-1 self-center">
               <div>
-                <h2 className="font-sans text-[26px] xl:text-[32px] font-light leading-tight mb-6 xl:mb-7 text-dark-text">
+                <h2 className="font-sans text-[28px] font-light leading-tight mb-6 xl:mb-7 text-dark-text lg:whitespace-nowrap">
                   Prof. Dr. M Shamim Z Bosunia
                 </h2>
 
                 <div className="space-y-6 xl:space-y-7">
                   <div>
-                    <h3 className="font-sans text-[20px] xl:text-[24px] font-extralight leading-tight text-dark-text">
+                    <h3 className="font-sans text-[20px] font-extralight leading-tight text-dark-text">
                       Former Professor and Dean
                     </h3>
                     <p className="font-sans text-[15px] xl:text-[16px] font-extralight text-dark-text leading-[24px] mt-1">
@@ -49,14 +49,14 @@ export default function AdviserPage() {
                   </div>
 
                   <div>
-                    <h3 className="font-sans text-[20px] xl:text-[24px] font-extralight leading-tight text-dark-text">President</h3>
+                    <h3 className="font-sans text-[20px] font-extralight leading-tight text-dark-text">President</h3>
                     <p className="font-sans text-[15px] xl:text-[16px] font-extralight text-dark-text leading-[24px] mt-1">
                       Bangladesh Association of Consulting Engineers (BACE)
                     </p>
                   </div>
 
                   <div>
-                    <h3 className="font-sans text-[20px] xl:text-[24px] font-extralight leading-tight text-dark-text">Chairman</h3>
+                    <h3 className="font-sans text-[20px] font-extralight leading-tight text-dark-text">Chairman</h3>
                     <p className="font-sans text-[15px] xl:text-[16px] font-extralight text-dark-text leading-[24px] mt-1">
                       Government-appointed Panel of Experts<br />
                       Padma Multipurpose Bridge & Karnaphuli Tunnel
@@ -64,7 +64,7 @@ export default function AdviserPage() {
                   </div>
 
                   <div>
-                    <h3 className="font-sans text-[20px] xl:text-[24px] font-extralight leading-tight text-dark-text">40+ years</h3>
+                    <h3 className="font-sans text-[20px] font-extralight leading-tight text-dark-text">40+ years</h3>
                     <p className="font-sans text-[15px] xl:text-[16px] font-extralight text-dark-text leading-[24px] mt-1">
                       of National leadership in engineering consultancy
                     </p>
@@ -74,14 +74,14 @@ export default function AdviserPage() {
             </div>
 
             {/* Center Column: Portrait — spans full grid height, anchored to bottom */}
-            <div className="lg:col-span-6 order-1 lg:order-2 h-[55vh] lg:h-full lg:self-stretch flex justify-center items-end min-h-0">
+            <div className="lg:col-span-6 order-1 lg:order-2 h-[55vh] lg:h-full lg:self-stretch flex justify-center items-center min-h-0">
               <div className="relative w-full h-full">
                 <Image
                   src="/Dr. Buosunia.png"
                   alt="Prof. Dr. M. Shamim Z. Bosunia"
                   fill
                   priority
-                  className="object-contain object-bottom"
+                  className="object-contain object-center"
                   sizes="(max-width: 1024px) 100vw, 50vw"
                 />
               </div>
