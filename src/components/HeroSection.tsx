@@ -166,6 +166,7 @@ export default function HeroSection() {
           <video
             ref={vidA}
             src={HERO_VIDEO}
+            autoPlay
             muted
             playsInline
             preload="auto"
