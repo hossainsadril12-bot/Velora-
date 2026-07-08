@@ -123,16 +123,16 @@ export default function PeoplePage() {
 
           {/* Staggered Desktop Layout */}
           <div className="hidden lg:flex lg:justify-center lg:gap-[112px] items-start mt-16">
-            <div className="flex flex-col gap-[146px] pt-[180px]">
+            <div className="flex flex-col gap-[226px] pt-[180px]">
               {col0.map(renderPersonCard)}
             </div>
-            <div className="flex flex-col gap-[146px] pt-[80px]">
+            <div className="flex flex-col gap-[226px] pt-[80px]">
               {col1.map(renderPersonCard)}
             </div>
-            <div className="flex flex-col gap-[146px] pt-[260px]">
+            <div className="flex flex-col gap-[226px] pt-[260px]">
               {col2.map(renderPersonCard)}
             </div>
-            <div className="flex flex-col gap-[146px] pt-0">
+            <div className="flex flex-col gap-[226px] pt-0">
               {col3.map(renderPersonCard)}
             </div>
           </div>
