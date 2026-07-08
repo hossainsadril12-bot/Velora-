@@ -122,7 +122,7 @@ export default function PeoplePage() {
           </p>
 
           {/* Staggered Desktop Layout */}
-          <div className="hidden lg:flex lg:justify-center lg:gap-[112px] items-start mt-16 mb-[128px]">
+          <div className="hidden lg:flex lg:justify-center lg:gap-[112px] items-start mt-16">
             <div className="flex flex-col gap-[146px] pt-[180px]">
               {col0.map(renderPersonCard)}
             </div>
@@ -138,7 +138,7 @@ export default function PeoplePage() {
           </div>
 
           {/* Responsive Mobile/Tablet Layout (Flat grid) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-[112px] gap-y-[146px] justify-items-center lg:hidden mt-12 sm:mt-16 mb-[128px]">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-[112px] gap-y-[146px] justify-items-center lg:hidden mt-12 sm:mt-16 mb-[24px]">
             {PEOPLE.map(renderPersonCard)}
           </div>
         </div>
