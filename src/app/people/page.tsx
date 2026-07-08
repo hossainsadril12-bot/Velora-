@@ -122,23 +122,23 @@ export default function PeoplePage() {
           </p>
 
           {/* Staggered Desktop Layout */}
-          <div className="hidden lg:flex lg:justify-center lg:gap-[64px] items-start mt-16 pb-20">
-            <div className="flex flex-col gap-[64px] pt-[180px]">
+          <div className="hidden lg:flex lg:justify-center lg:gap-[112px] items-start mt-16 mb-[128px]">
+            <div className="flex flex-col gap-[146px] pt-[180px]">
               {col0.map(renderPersonCard)}
             </div>
-            <div className="flex flex-col gap-[64px] pt-[80px]">
+            <div className="flex flex-col gap-[146px] pt-[80px]">
               {col1.map(renderPersonCard)}
             </div>
-            <div className="flex flex-col gap-[64px] pt-[260px]">
+            <div className="flex flex-col gap-[146px] pt-[260px]">
               {col2.map(renderPersonCard)}
             </div>
-            <div className="flex flex-col gap-[64px] pt-0">
+            <div className="flex flex-col gap-[146px] pt-0">
               {col3.map(renderPersonCard)}
             </div>
           </div>
 
           {/* Responsive Mobile/Tablet Layout (Flat grid) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-[64px] justify-items-center lg:hidden mt-12 sm:mt-16">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-[112px] gap-y-[146px] justify-items-center lg:hidden mt-12 sm:mt-16 mb-[128px]">
             {PEOPLE.map(renderPersonCard)}
           </div>
         </div>
