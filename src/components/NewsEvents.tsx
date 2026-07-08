@@ -70,7 +70,7 @@ function Card({ n }: { n: News }) {
           </FadeUp>
 
           <FadeUp y={10} delay={0.1}>
-            <p className="font-sans text-[14px] leading-[1.7] text-dark-text/80">
+            <p className="font-serif text-[14px] font-light leading-[1.7] text-dark-text/80">
               {n.description}{" "}
               <span className="text-tan ml-1 font-medium transition-colors group-hover:text-dark-green">
                 Read more
@@ -80,7 +80,7 @@ function Card({ n }: { n: News }) {
         </div>
 
         <FadeUp y={0} delay={0.3} duration={0.5} className="mt-8">
-          <p className="font-sans text-[13px] font-bold tracking-wide text-dark-text">
+          <p className="font-serif text-[13px] font-light tracking-wide text-dark-text">
             {n.date}
           </p>
         </FadeUp>

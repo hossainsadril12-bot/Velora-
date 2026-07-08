@@ -14,12 +14,16 @@ import { easeJ } from "@/lib/motion";
 
 const SLIDES = [
   {
-    src: "/photo-1554213808-9c5bab0f624e.jpg",
-    alt: "Velora interior/exterior layout view",
+    src: "/Velora - Sunset.webp",
+    alt: "Velora Sunset view",
   },
   {
-    src: "/Red_Ghost_Crab.jpg",
-    alt: "Red Ghost Crab color reference view",
+    src: "/Velora - Ballroom.webp",
+    alt: "Velora Ballroom interior view",
+  },
+  {
+    src: "/Velora - Swimming Pool.webp",
+    alt: "Velora Swimming Pool area",
   },
 ];
 

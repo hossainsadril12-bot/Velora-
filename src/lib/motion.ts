@@ -12,20 +12,20 @@ export const easeDefault = [0.25, 0.1, 0.25, 1] as const;
 export const easeSharp = [0.87, 0, 0.13, 1] as const;
 
 /* Transition presets ------------------------------------------------------ */
-export const transitionDefaultShort: Transition = { duration: 1.7, ease: easeJ };
+export const transitionDefaultShort: Transition = { duration: 2.1, ease: easeJ };
 export const transitionDefault: Transition = {
-  duration: 2.0,
+  duration: 2.5,
   ease: easeJ,
   staggerChildren: 0.2,
 };
-export const transitionDefaultDelayed: Transition = { duration: 2.0, ease: easeJ, delay: 1.0 };
+export const transitionDefaultDelayed: Transition = { duration: 2.5, ease: easeJ, delay: 1.0 };
 export const transitionDefaultDelayedLong: Transition = { duration: 4.2, ease: easeJ, delay: 0.8 };
-export const transitionCubicShort: Transition = { duration: 1.7, ease: easeQ };
-export const transitionCubicShortDelay: Transition = { duration: 1.7, ease: easeQ, delay: 0.8 };
-export const transitionCubic: Transition = { duration: 2.0, ease: easeQ };
-export const transitionCubicDelay: Transition = { duration: 2.0, ease: easeQ, delay: 0.8 };
+export const transitionCubicShort: Transition = { duration: 2.1, ease: easeQ };
+export const transitionCubicShortDelay: Transition = { duration: 2.1, ease: easeQ, delay: 0.8 };
+export const transitionCubic: Transition = { duration: 2.5, ease: easeQ };
+export const transitionCubicDelay: Transition = { duration: 2.5, ease: easeQ, delay: 0.8 };
 export const transitionDefaultLong: Transition = { duration: 4.2, ease: easeQ };
-export const transitionBorgo: Transition = { duration: 1.6, ease: easeJ };
+export const transitionBorgo: Transition = { duration: 2.0, ease: easeJ };
 export const fadeInOut: Transition = { duration: 1.0, ease: easeSharp };
 
 /* Shared viewport trigger ------------------------------------------------- */
@@ -50,7 +50,7 @@ export function headingReveal(dir: HeadingDir = "fromBottom", delay = 0): Varian
     visible: {
       y: "0%",
       rotate: 0,
-      transition: { duration: 2.0, ease: easeJ, delay },
+      transition: { duration: 2.5, ease: easeJ, delay },
     },
   };
 }
@@ -72,7 +72,7 @@ export function imageInnerScale(from = 1.4): Variants {
 export function buttonReveal(delay = 0.8): Variants {
   return {
     hidden: { clipPath: "inset(100% 0% 0% 0%)" },
-    visible: { clipPath: "inset(0% 0% 0% 0%)", transition: { duration: 2.0, ease: easeQ, delay } },
+    visible: { clipPath: "inset(0% 0% 0% 0%)", transition: { duration: 2.4, ease: easeQ, delay } },
   };
 }
 

@@ -48,7 +48,7 @@ export default function EnvironmentPage() {
               <h3 className="font-serif text-[20px] md:text-[22px] font-light text-dark-text tracking-wide mb-2 md:mb-3">
                 Green Practices
               </h3>
-              <p className="font-sans text-[14px] md:text-[15px] leading-relaxed text-[#4A4A4A] max-w-lg">
+              <p className="font-serif text-[14px] md:text-[15px] font-light leading-relaxed text-[#4A4A4A] max-w-lg">
                 Holistic sustainable practices in every aspect of construction.
               </p>
             </div>
@@ -61,7 +61,7 @@ export default function EnvironmentPage() {
               <h3 className="font-serif text-[20px] md:text-[22px] font-light text-dark-text tracking-wide mb-2 md:mb-3">
                 Smart Energy Management System
               </h3>
-              <p className="font-sans text-[14px] md:text-[15px] leading-relaxed text-[#4A4A4A] max-w-lg">
+              <p className="font-serif text-[14px] md:text-[15px] font-light leading-relaxed text-[#4A4A4A] max-w-lg">
                 Energy-efficient systems designed to optimize performance and reduce unnecessary consumption.
               </p>
             </div>
@@ -74,7 +74,7 @@ export default function EnvironmentPage() {
               <h3 className="font-serif text-[20px] md:text-[22px] font-light text-dark-text tracking-wide mb-2 md:mb-3">
                 Water Conservation Strategy
               </h3>
-              <p className="font-sans text-[14px] md:text-[15px] leading-relaxed text-[#4A4A4A] max-w-lg">
+              <p className="font-serif text-[14px] md:text-[15px] font-light leading-relaxed text-[#4A4A4A] max-w-lg">
                 Responsible water conservation practices to reduce waste and protect the surrounding ecosystem.
               </p>
             </div>
@@ -87,7 +87,7 @@ export default function EnvironmentPage() {
               <h3 className="font-serif text-[20px] md:text-[22px] font-light text-dark-text tracking-wide mb-2 md:mb-3">
                 Waste Management Policy
               </h3>
-              <p className="font-sans text-[14px] md:text-[15px] leading-relaxed text-[#4A4A4A] max-w-lg">
+              <p className="font-serif text-[14px] md:text-[15px] font-light leading-relaxed text-[#4A4A4A] max-w-lg">
                 Organized waste reduction, collection, and responsible disposal throughout construction and operations.
               </p>
             </div>

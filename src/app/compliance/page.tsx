@@ -36,7 +36,7 @@ export default function CompliancePage() {
               Compliance
             </h1>
 
-            <p className="max-w-[700px] font-sans text-[15px] md:text-[16px] font-light leading-[1.8] text-[#2B2B2B] text-center">
+            <p className="max-w-[700px] font-serif text-[15px] md:text-[16px] font-light leading-[1.8] text-[#2B2B2B] text-center">
               At Eiman Estates, we are unwavering in our commitment to safe, lawful, and transparent development. We strictly adhere to all applicable laws, regulations, and industry standards to ensure the highest quality, safety, and trust in every aspect of our project.
             </p>
           </div>
@@ -52,7 +52,7 @@ export default function CompliancePage() {
               <h3 className="font-serif text-[20px] md:text-[22px] font-light text-dark-text tracking-wide mb-2 md:mb-3">
                 Legal Frameworks
               </h3>
-              <p className="font-sans text-[14px] md:text-[15px] leading-relaxed text-[#4A4A4A] max-w-lg">
+              <p className="font-serif text-[14px] md:text-[15px] font-light leading-relaxed text-[#4A4A4A] max-w-lg">
                 BNBC 2020 (structural design, earthquake resistance, materials, plumbing), Building Construction Act (1952), Real Estate Development and Management Act (2010) compliant.
               </p>
             </div>
@@ -65,7 +65,7 @@ export default function CompliancePage() {
               <h3 className="font-serif text-[20px] md:text-[22px] font-light text-dark-text tracking-wide mb-2 md:mb-3">
                 Land Usage & Zoning Clearance
               </h3>
-              <p className="font-sans text-[14px] md:text-[15px] leading-relaxed text-[#4A4A4A] max-w-lg">
+              <p className="font-serif text-[14px] md:text-[15px] font-light leading-relaxed text-[#4A4A4A] max-w-lg">
                 Obtained from the relevant authorities.
               </p>
             </div>
@@ -78,7 +78,7 @@ export default function CompliancePage() {
               <h3 className="font-serif text-[20px] md:text-[22px] font-light text-dark-text tracking-wide mb-2 md:mb-3">
                 Fire Safety Approval
               </h3>
-              <p className="font-sans text-[14px] md:text-[15px] leading-relaxed text-[#4A4A4A] max-w-lg">
+              <p className="font-serif text-[14px] md:text-[15px] font-light leading-relaxed text-[#4A4A4A] max-w-lg">
                 Obtained NOC (No Objection Certificate) from FSCD (Fire Safety and Civil Defense).
               </p>
             </div>
@@ -91,7 +91,7 @@ export default function CompliancePage() {
               <h3 className="font-serif text-[20px] md:text-[22px] font-light text-dark-text tracking-wide mb-2 md:mb-3">
                 Setbacks & Density
               </h3>
-              <p className="font-sans text-[14px] md:text-[15px] leading-relaxed text-[#4A4A4A] max-w-lg">
+              <p className="font-serif text-[14px] md:text-[15px] font-light leading-relaxed text-[#4A4A4A] max-w-lg">
                 Adhered to Floor Area Ratios (FAR), Maximum Ground Coverage, and Perimeter Setbacks.
               </p>
             </div>
@@ -104,7 +104,7 @@ export default function CompliancePage() {
               <h3 className="font-serif text-[20px] md:text-[22px] font-light text-dark-text tracking-wide mb-2 md:mb-3">
                 Developer’s Responsibilities
               </h3>
-              <p className="font-sans text-[14px] md:text-[15px] leading-relaxed text-[#4A4A4A] max-w-lg">
+              <p className="font-serif text-[14px] md:text-[15px] font-light leading-relaxed text-[#4A4A4A] max-w-lg">
                 Continuous site supervision by registered engineers, archiving of plans and permits on-site, notifying concerned customers and stakeholders upon completing different construction for inspections.
               </p>
             </div>

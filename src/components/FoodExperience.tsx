@@ -4,12 +4,13 @@ import React, { useState } from "react";
 import Image from "next/image";
 import CtaButton from "./CtaButton";
 import { RevealText, ImageReveal, ButtonReveal, FadeUp } from "./anim";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { easeJ } from "@/lib/motion";
 
 const IMAGES = [
   "/Emporio - Main.webp",
-  "/Emporio 2.webp",
+  "/Emporio - Side Roof Cafeteria.webp",
+  "/Emporio - Showroom Coridor.webp",
 ];
 
 export default function FoodExperience() {
@@ -30,43 +31,35 @@ export default function FoodExperience() {
         <div className="relative h-[400px] sm:h-[500px] w-full lg:h-full">
           <ImageReveal scaleFrom={1.1} className="h-full w-full">
             <div className="relative h-full w-full">
-              <AnimatePresence initial={false}>
-                <motion.div
-                  key={currentIndex}
-                  variants={{
-                    enter: { opacity: 0 },
-                    center: {
-                      opacity: 1,
-                      transition: { duration: 2.2, ease: easeJ },
-                    },
-                    exit: {
-                      opacity: 0,
-                      transition: { duration: 2.2, ease: easeJ },
-                    },
-                  }}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  className="absolute inset-0 overflow-hidden"
-                >
-                  {/* Slow Ken Burns zoom on the active slide for a premium drift */}
+              {IMAGES.map((src, i) => {
+                const isActive = i === currentIndex;
+                return (
                   <motion.div
-                    initial={{ scale: 1.12 }}
-                    animate={{ scale: 1 }}
-                    transition={{ duration: 7, ease: [0.22, 1, 0.36, 1] }}
-                    className="relative h-full w-full"
+                    key={src}
+                    className="absolute inset-0 overflow-hidden"
+                    style={{ zIndex: isActive ? 1 : 0 }}
+                    initial={{ opacity: i === 0 ? 1 : 0 }}
+                    animate={{ opacity: isActive ? 1 : 0 }}
+                    transition={{ duration: 1.5, ease: easeJ }}
                   >
-                    <Image
-                      src={IMAGES[currentIndex]}
-                      alt={`Velora Emporio Architecture ${currentIndex + 1}`}
-                      fill
-                      sizes="(max-width: 1024px) 100vw, 50vw"
-                      className="object-cover"
-                      priority
-                    />
+                    <motion.div
+                      initial={{ scale: 1.12 }}
+                      animate={{ scale: isActive ? 1 : 1.08 }}
+                      transition={{ duration: 7, ease: [0.22, 1, 0.36, 1] }}
+                      className="relative h-full w-full"
+                    >
+                      <Image
+                        src={src}
+                        alt={`Velora Emporio Architecture ${i + 1}`}
+                        fill
+                        sizes="(max-width: 1024px) 100vw, 50vw"
+                        className="object-cover"
+                        priority={i === 0}
+                      />
+                    </motion.div>
                   </motion.div>
-                </motion.div>
-              </AnimatePresence>
+                );
+              })}
             </div>
           </ImageReveal>
 
@@ -111,7 +104,7 @@ export default function FoodExperience() {
             </div>
 
             {/* PARAGRAPH */}
-            <p className="mt-10 sm:mt-14 lg:mt-16 max-w-[540px] text-center font-sans text-[14px] sm:text-[15px] leading-[1.9] text-dark-text/80">
+            <p className="mt-10 sm:mt-14 lg:mt-16 max-w-[540px] text-center font-serif text-base leading-relaxed text-dark-text font-light">
               Welcome to Velora Inani, the first of its kind 'Lifestyle Hotel'
               in Cox's Bazar with world-class features and amenities for International &
               Local tourists. Designed by HuaDu Architecture & Urban Design,

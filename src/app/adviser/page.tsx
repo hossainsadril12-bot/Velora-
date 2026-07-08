@@ -34,38 +34,38 @@ export default function AdviserPage() {
             {/* Left Column */}
             <div className="lg:col-span-3 flex flex-col gap-6 text-dark-text order-2 lg:order-1 self-center">
               <div>
-                <h2 className="font-sans text-[28px] font-light leading-tight mb-6 xl:mb-7 text-dark-text lg:whitespace-nowrap">
+                <h2 className="font-serif text-[28px] font-light leading-tight mb-6 xl:mb-7 text-dark-text lg:whitespace-nowrap">
                   Prof. Dr. M Shamim Z Bosunia
                 </h2>
 
                 <div className="space-y-6 xl:space-y-7">
                   <div>
-                    <h3 className="font-sans text-[20px] font-extralight leading-tight text-dark-text">
+                    <h3 className="font-serif text-[20px] font-light leading-tight text-dark-text">
                       Former Professor and Dean
                     </h3>
-                    <p className="font-sans text-[15px] xl:text-[16px] font-extralight text-dark-text leading-[24px] mt-1">
+                    <p className="font-serif text-[15px] xl:text-[16px] font-light text-dark-text leading-[24px] mt-1">
                       Civil Engineering, BUET
                     </p>
                   </div>
 
                   <div>
-                    <h3 className="font-sans text-[20px] font-extralight leading-tight text-dark-text">President</h3>
-                    <p className="font-sans text-[15px] xl:text-[16px] font-extralight text-dark-text leading-[24px] mt-1">
+                    <h3 className="font-serif text-[20px] font-light leading-tight text-dark-text">President</h3>
+                    <p className="font-serif text-[15px] xl:text-[16px] font-light text-dark-text leading-[24px] mt-1">
                       Bangladesh Association of Consulting Engineers (BACE)
                     </p>
                   </div>
 
                   <div>
-                    <h3 className="font-sans text-[20px] font-extralight leading-tight text-dark-text">Chairman</h3>
-                    <p className="font-sans text-[15px] xl:text-[16px] font-extralight text-dark-text leading-[24px] mt-1">
+                    <h3 className="font-serif text-[20px] font-light leading-tight text-dark-text">Chairman</h3>
+                    <p className="font-serif text-[15px] xl:text-[16px] font-light text-dark-text leading-[24px] mt-1">
                       Government-appointed Panel of Experts<br />
                       Padma Multipurpose Bridge & Karnaphuli Tunnel
                     </p>
                   </div>
 
                   <div>
-                    <h3 className="font-sans text-[20px] font-extralight leading-tight text-dark-text">40+ years</h3>
-                    <p className="font-sans text-[15px] xl:text-[16px] font-extralight text-dark-text leading-[24px] mt-1">
+                    <h3 className="font-serif text-[20px] font-light leading-tight text-dark-text">40+ years</h3>
+                    <p className="font-serif text-[15px] xl:text-[16px] font-light text-dark-text leading-[24px] mt-1">
                       of National leadership in engineering consultancy
                     </p>
                   </div>
@@ -89,10 +89,10 @@ export default function AdviserPage() {
 
             {/* Right Column */}
             <div className="lg:col-span-3 flex flex-col gap-5 text-[#2B2B2B] order-3 self-center pl-0 lg:pl-6">
-              <p className="font-sans text-[15px] xl:text-[16px] text-dark-text font-extralight leading-[24px]">
+              <p className="font-serif text-[15px] xl:text-[16px] text-dark-text font-light leading-[24px]">
                 Prof. Dr. M. Shamim Z. Bosunia is a prominent academician, leader, and structural engineering expert of Bangladesh. He earned his bachelor&apos;s degree in civil engineering in 1965 from Bangladesh University of Engineering and Technology (BUET) and joined Dept. of Civil Engineering as a lecturer in 1969.
               </p>
-              <p className="font-sans text-[15px] xl:text-[16px] text-dark-text font-extralight leading-[24px]">
+              <p className="font-serif text-[15px] xl:text-[16px] text-dark-text font-light leading-[24px]">
                 He completed his master&apos;s in civil engineering in 1972 from BUET. On a Commonwealth Scholarship, he earned his PhD in 1979 from the University of Strathclyde, UK. He became a professor of civil engineering in 1981. He retired from BUET in 2009 and is now serving as Emeritus Professor, Dept. of Civil Engineering, University of Asia Pacific (UAP), Dhaka.
               </p>
             </div>

@@ -32,7 +32,7 @@ const ESTATES: Estate[] = [
   },
   {
     name: "Velora Emporio",
-    bg: "/Emporio - Main.webp",
+    bg: "/Emporio - Drone View.webp",
     bgAlt: "Velora Emporio project",
     logo: "",
     logoAlt: "Velora Emporio logo",

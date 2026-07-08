@@ -75,7 +75,7 @@ export default function CollaborationPage() {
               <div className="h-px w-full bg-tan/20"></div>
 
               <div className="py-6 md:py-8 w-full">
-                <p className="font-sans text-[14px] md:text-[15px] leading-relaxed text-[#4A4A4A] max-w-2xl mx-auto">
+                <p className="font-serif text-[14px] md:text-[15px] font-light leading-relaxed text-[#4A4A4A] max-w-2xl mx-auto">
                   Eiman Estate Ltd. onboarded HuaDu Architecture & Urban Design (HDD), a Shanghai-based architecture firm, to conceptualize and construct Velor Inani. HDD holds a first-rate qualification from China’s State Construction Ministry, the highest professional credential in China’s Construction Industry. HDD’s portfolio spans three continents, including Beijing Sunrise East Kempinsky Hotel.
                 </p>
               </div>
@@ -84,7 +84,7 @@ export default function CollaborationPage() {
               <div className="h-px w-full bg-tan/20"></div>
 
               <div className="py-6 md:py-8 w-full">
-                <p className="font-sans text-[14px] md:text-[15px] leading-relaxed text-[#4A4A4A] max-w-2xl mx-auto">
+                <p className="font-serif text-[14px] md:text-[15px] font-light leading-relaxed text-[#4A4A4A] max-w-2xl mx-auto">
                   HDD is responsible for the Architectural, Structural, MEP, and interior design of Velora Inani.
                 </p>
               </div>

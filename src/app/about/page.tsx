@@ -41,7 +41,7 @@ export default function AboutPage() {
               About
             </h1>
 
-            <p className="font-sans text-[18px] font-extralight leading-[26px] text-dark-text mb-16 sm:mb-24 max-w-full lg:max-w-[1150px]">
+            <p className="font-serif text-[18px] font-light leading-[26px] text-dark-text mb-16 sm:mb-24 max-w-full lg:max-w-[1150px]">
               Eiman Estates Ltd., a new-generation real estate developer driven by the principles of ethical practices <br className="hidden lg:inline" />
               and fair business policies. Led by veteran professionals from different sectors, Eiman Estates Ltd. <br className="hidden lg:inline" />
               aspires to earn unwavering trust from its customers, stakeholders, authorities, and market peers. We <br className="hidden lg:inline" />

@@ -109,14 +109,14 @@ function FooterGroup({
             {link.href === "/privacy-policy" ? (
               <TransitionLink
                 href={link.href}
-                className="block font-sans text-[14px] font-light leading-[1.2] text-cream transition-opacity duration-300 hover:opacity-70"
+                className="block font-serif text-[14px] font-light leading-[1.2] text-cream transition-opacity duration-300 hover:opacity-70"
               >
                 {link.text}
               </TransitionLink>
             ) : (
               <TransitionLink
                 href={link.href}
-                className="block font-sans text-[14px] font-light leading-[1.2] text-cream transition-opacity duration-300 hover:opacity-70"
+                className="block font-serif text-[14px] font-light leading-[1.2] text-cream transition-opacity duration-300 hover:opacity-70"
               >
                 {link.text}
               </TransitionLink>
@@ -185,7 +185,7 @@ export default function Footer() {
                       <path d="M3 3.5c0 5 4.5 9.5 9.5 9.5l1.5-2-3-1.5-1 1.2A8 8 0 014.8 5.5L6 4.5 4.5 1.5 3 3.5z" fill="currentColor" />
                     </svg>
                   </CircleIcon>
-                  <span className="font-sans text-[14px] font-light leading-[1.2] text-cream">
+                  <span className="font-serif text-[14px] font-light leading-[1.2] text-cream">
                     +880 1335 086800
                   </span>
                 </motion.a>
@@ -201,7 +201,7 @@ export default function Footer() {
                       <path d="M2.5 4.5L8 9l5.5-4.5" stroke="currentColor" strokeWidth="1.2" />
                     </svg>
                   </CircleIcon>
-                  <span className="font-sans text-[14px] font-light leading-[1.2] text-cream">
+                  <span className="font-serif text-[14px] font-light leading-[1.2] text-cream">
                     info@eimanestates.com
                   </span>
                 </motion.a>
@@ -215,7 +215,7 @@ export default function Footer() {
                     <circle cx="8" cy="6" r="1.6" fill="currentColor" />
                   </svg>
                 </CircleIcon>
-                <span className="max-w-[280px] font-sans text-[14px] font-light leading-[1.4] text-cream">
+                <span className="max-w-[280px] font-serif text-[14px] font-light leading-[1.4] text-cream">
                   Rupsha Tower, Flat 10/B<br />
                   Plot 7, Road 17, Banani, Dhaka 1213<br />
                   Bangladesh
@@ -242,7 +242,7 @@ export default function Footer() {
 
         {/* BOTTOM LEGAL TEXT */}
         <motion.div
-          className="mt-20 lg:mt-[120px] flex flex-col items-start justify-between gap-6 pr-0 font-sans text-[12px] font-light text-cream/60 sm:flex-row sm:items-center sm:pr-20"
+          className="mt-20 lg:mt-[120px] flex flex-col items-start justify-between gap-6 pr-0 font-serif text-[12px] font-light text-cream/60 sm:flex-row sm:items-center sm:pr-20"
           variants={softReveal}
         >
           <span>
