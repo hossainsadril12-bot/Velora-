@@ -29,14 +29,13 @@ export default function TransitionProvider({ children }: { children: ReactNode }
   useEffect(() => {
     if (pathname !== lastPathname.current) {
       if (isAnimating) {
-        const timer = setTimeout(() => {
-          setIsAnimating(false);
-        }, 0);
-        return () => clearTimeout(timer);
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setIsAnimating(false);
       }
       lastPathname.current = pathname;
     }
   }, [pathname, isAnimating]);
+
 
 
   const startTransition = (callback: () => void, dir: "forward" | "backward" = "forward") => {

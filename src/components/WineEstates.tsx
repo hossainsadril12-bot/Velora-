@@ -286,11 +286,10 @@ export default function WineEstates() {
   const [hasHover, setHasHover] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setHasHover(window.matchMedia("(hover: hover) and (pointer: fine)").matches);
-    }, 0);
-    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setHasHover(window.matchMedia("(hover: hover) and (pointer: fine)").matches);
   }, []);
+
 
 
   const sectionRef = useRef<HTMLElement>(null);
