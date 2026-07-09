@@ -34,46 +34,33 @@ export default function AboutPage() {
 
         {/* Content Container */}
         <div className="relative z-20 flex-grow flex flex-col">
-          {/* Main Grid: Split Layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 grid-rows-[auto_1fr] lg:grid-rows-1 flex-grow w-full">
+          {/* Main Layout: Centered Single Column */}
+          <div className="flex flex-col items-center justify-start flex-grow w-full max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-0 pt-10 sm:pt-16 pb-24 text-center">
+            
+            <h1 className="font-serif text-5xl md:text-6xl lg:text-[64px] font-thin tracking-wide text-[#2B2B2B] mb-12">
+              About
+            </h1>
 
-            {/* Left Side: Premium Full-bleed Image */}
-            <div className="relative w-full h-[350px] lg:h-auto overflow-hidden group">
+            <p className="font-serif text-[18px] font-light leading-[26px] text-dark-text mb-16 sm:mb-24 max-w-full lg:max-w-[1150px]">
+              Eiman Estates Ltd., a new-generation real estate developer driven by the principles of ethical practices <br className="hidden lg:inline" />
+              and fair business policies. Led by veteran professionals from different sectors, Eiman Estates Ltd. <br className="hidden lg:inline" />
+              aspires to earn unwavering trust from its customers, stakeholders, authorities, and market peers. We <br className="hidden lg:inline" />
+              are here to pave the way for investment opportunities where an investor earns more than mere profit, <br className="hidden lg:inline" />
+              rather a peace of mind and true value for their hard-earned money.
+            </p>
+
+            <div className="relative w-full aspect-[2/1] sm:aspect-[21/9] overflow-hidden group">
               <Image
                 src="/lucas-kepner-Yn8D5B8C-eY-unsplash.jpg.jpeg"
                 alt="Eiman Estates Premium Property"
                 fill
                 priority
                 className="object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
-                sizes="(max-width: 1024px) 100vw, 50vw"
+                sizes="(max-width: 1024px) 100vw, 1000px"
               />
-              <div className="absolute inset-0 bg-black/10 transition-opacity duration-500 group-hover:bg-black/5" />
+              <div className="absolute inset-0 bg-black/5 transition-opacity duration-500 group-hover:bg-transparent" />
             </div>
 
-            {/* Right Side: Cream Background Content Card */}
-            <div className="bg-white flex flex-col justify-center items-center px-8 py-12 md:px-16 lg:px-24 text-center">
-              <span className="font-sans text-xs font-bold uppercase tracking-[3px] text-tan mb-3">
-                Eiman Estates LTD.
-              </span>
-
-              <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-light text-dark-text uppercase tracking-wide mb-6">
-                About
-              </h1>
-
-              {/* Divider Ornament */}
-              <div className="flex items-center gap-3 mb-8 justify-center text-tan/40">
-                <div className="h-px w-20 bg-tan/40"></div>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#b09b78" strokeWidth="1.2">
-                  <rect x="5" y="5" width="14" height="14" transform="rotate(45 12 12)" />
-                  <circle cx="12" cy="12" r="3" />
-                </svg>
-                <div className="h-px w-20 bg-tan/40"></div>
-              </div>
-
-              <p className="max-w-[540px] font-sans text-sm md:text-base font-light leading-relaxed text-[#2B2B2B]">
-                Eiman Estates Ltd., a new-generation real estate developer driven by the principles of ethical practices and fair business policies. Led by veteran professionals from different sectors, Eiman Estates Ltd. aspires to earn unwavering trust from its customers, stakeholders, authorities, and market peers. We are here to pave the way for investment opportunities where an investor earns more than mere profit, rather a peace of mind and true value for their hard-earned money.
-              </p>
-            </div>
           </div>
         </div>
       </motion.main>

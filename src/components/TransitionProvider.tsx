@@ -52,9 +52,9 @@ export default function TransitionProvider({ children }: { children: ReactNode }
       <AnimatePresence>
         {isAnimating && (
           <>
-            {/* BOTTOM LAYER: Velora Cream */}
+            {/* BOTTOM LAYER */}
             <motion.div
-              key="slide-door-cream"
+              key="slide-door-bottom"
               initial={{ x: direction === "forward" ? "-100%" : "100%", opacity: 1 }}
               animate={{ 
                 x: "0%", 
@@ -69,9 +69,9 @@ export default function TransitionProvider({ children }: { children: ReactNode }
               style={{ backgroundColor: "#F5F1E9" }}
             />
             
-            {/* TOP LAYER: Deep Green */}
+            {/* TOP LAYER */}
             <motion.div
-              key="slide-door-green"
+              key="slide-door-top"
               initial={{ x: direction === "forward" ? "-100%" : "100%", opacity: 1 }}
               animate={{ 
                 x: "0%", 
@@ -83,7 +83,7 @@ export default function TransitionProvider({ children }: { children: ReactNode }
                 transition: { duration: 0.8, ease: "easeInOut", delay: 0 } 
               }}
               className="fixed inset-0 z-[9999] pointer-events-none"
-              style={{ backgroundColor: "#014331" }}
+              style={{ backgroundColor: "#01563f" }}
             />
           </>
         )}

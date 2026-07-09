@@ -14,17 +14,21 @@ import { easeJ } from "@/lib/motion";
 
 const SLIDES = [
   {
-    src: "/photo-1554213808-9c5bab0f624e.jpg",
-    alt: "Borgo San Felice interior/exterior layout view",
+    src: "/Velora - Sunset.webp",
+    alt: "Velora Sunset view",
   },
   {
-    src: "/Red_Ghost_Crab.jpg",
-    alt: "Red Ghost Crab color reference view",
+    src: "/Velora - Ballroom.webp",
+    alt: "Velora Ballroom interior view",
+  },
+  {
+    src: "/Velora - Swimming Pool.webp",
+    alt: "Velora Swimming Pool area",
   },
 ];
 
 export default function BorgoResort() {
-  const [[i, dir], setI] = useState<[number, number]>([0, 1]);
+  const [[i], setI] = useState<[number, number]>([0, 1]);
   const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
@@ -54,14 +58,17 @@ export default function BorgoResort() {
   // LEFT PANEL (TEXT) ANIMATIONS: 
   // Adjusted to follow the three-phase smooth scrolling curve, now extended to match the slower image.
 
-  const headerY = useTransform(smoothProgress, [0, 0.25, 0.60, 0.75], ["100%", "85%", "40%", "0%"]);
-  const headerOpacity = useTransform(smoothProgress, [0, 0.25, 0.60, 0.75], [0, 0.15, 0.6, 1]);
+  // Left content reveals LATER in the scroll (after the right image has mostly
+  // settled, which finishes ~0.85). Pushed into the back half for a delayed feel
+  // while staying fully scroll-driven. Stagger order preserved: header → button → text.
+  const headerY = useTransform(smoothProgress, [0.40, 0.55, 0.78, 0.92], ["100%", "85%", "40%", "0%"]);
+  const headerOpacity = useTransform(smoothProgress, [0.40, 0.55, 0.78, 0.92], [0, 0.15, 0.6, 1]);
 
-  const buttonY = useTransform(smoothProgress, [0.05, 0.30, 0.65, 0.80], [40, 34, 15, 0]);
-  const buttonOpacity = useTransform(smoothProgress, [0.05, 0.30, 0.65, 0.80], [0, 0.15, 0.6, 1]);
+  const buttonY = useTransform(smoothProgress, [0.45, 0.60, 0.82, 0.94], [40, 34, 15, 0]);
+  const buttonOpacity = useTransform(smoothProgress, [0.45, 0.60, 0.82, 0.94], [0, 0.15, 0.6, 1]);
 
-  const textY = useTransform(smoothProgress, [0.10, 0.35, 0.70, 0.85], [40, 34, 15, 0]);
-  const textOpacity = useTransform(smoothProgress, [0.10, 0.35, 0.70, 0.85], [0, 0.15, 0.6, 1]);
+  const textY = useTransform(smoothProgress, [0.50, 0.62, 0.84, 0.95], [40, 34, 15, 0]);
+  const textOpacity = useTransform(smoothProgress, [0.50, 0.62, 0.84, 0.95], [0, 0.15, 0.6, 1]);
 
   const go = (d: number) => {
     setI(([p]) => [(p + d + SLIDES.length) % SLIDES.length, d]);
@@ -109,17 +116,10 @@ export default function BorgoResort() {
         </motion.h1>
       </div>
 
-      {/* CTA BUTTON */}
-      <motion.div style={{ y: buttonY, opacity: buttonOpacity }} className="mt-10 lg:mt-12">
-        <CtaButton variant="tan" href="#" className="rounded-[2.5px] min-w-[183px]">
-          Learn More
-        </CtaButton>
-      </motion.div>
-
       {/* PARAGRAPH */}
       <motion.p
         style={{ y: textY, opacity: textOpacity }}
-        className="m-0 mt-12 max-w-[580px] font-sans text-base leading-relaxed text-[#000000] text-center lg:mt-16 font-medium"
+        className="m-0 mt-8 sm:mt-10 lg:mt-12 max-w-[580px] font-serif text-base leading-relaxed text-dark-text text-center font-light"
       >
         Welcome to Velora Inani, the first of its kind &lsquo;Lifestyle Hotel&rsquo;
         <br />
@@ -128,38 +128,55 @@ export default function BorgoResort() {
         Designed by HuaDu Architecture &amp; Urban Design,
         <br />
         a Shanghai-based architecture firm that operates across three continents and holds a first-rate qualification from  China&rsquo;s <br />State Construction Ministry.
-        <br />
-        <br />
-
       </motion.p>
+
+      {/* CTA BUTTON */}
+      <motion.div style={{ y: buttonY, opacity: buttonOpacity }} className="mt-10 sm:mt-12 lg:mt-14">
+        <CtaButton variant="tan" href="#" className="rounded-[2.5px] min-w-[183px]">
+          Learn More
+        </CtaButton>
+      </motion.div>
     </div>
   );
 
   const renderRightSlider = () => (
     <>
-      <AnimatePresence initial={false} custom={dir}>
+      <AnimatePresence initial={false}>
         <motion.div
           key={i}
-          custom={dir}
           variants={{
-            enter: (d: number) => ({ x: d > 0 ? "100%" : "-70%" }),
-            center: { x: "0%", transition: { duration: 1.1, ease: easeJ } },
-            exit: (d: number) => ({ x: d > 0 ? "-70%" : "70%", transition: { duration: 1.1, ease: easeJ } }),
+            enter: { opacity: 0 },
+            center: {
+              opacity: 1,
+              transition: { duration: 2.2, ease: easeJ },
+            },
+            exit: {
+              opacity: 0,
+              transition: { duration: 2.2, ease: easeJ },
+            },
           }}
           initial="enter"
           animate="center"
           exit="exit"
           className="absolute inset-0 overflow-hidden"
         >
-          <motion.div style={{ scale: isDesktop ? imageScale : 1 }} className="relative h-full w-full">
-            <Image
-              src={SLIDES[i].src}
-              alt={SLIDES[i].alt}
-              fill
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-cover"
-              priority={i === 0}
-            />
+          {/* Slow Ken Burns zoom on the active slide for a premium drift */}
+          <motion.div
+            initial={{ scale: 1.12 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 7, ease: [0.22, 1, 0.36, 1] }}
+            className="relative h-full w-full"
+          >
+            <motion.div style={{ scale: isDesktop ? imageScale : 1 }} className="relative h-full w-full">
+              <Image
+                src={SLIDES[i].src}
+                alt={SLIDES[i].alt}
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover"
+                priority={i === 0}
+              />
+            </motion.div>
           </motion.div>
         </motion.div>
       </AnimatePresence>
@@ -187,7 +204,7 @@ export default function BorgoResort() {
       className="relative w-full overflow-hidden bg-[#F5F1E9] flex flex-col lg:flex-row lg:h-[calc(100vh-70px)] lg:min-h-[640px] lg:max-h-[940px]"
     >
       {/* LEFT CONTENT */}
-      <div className="w-full flex flex-col justify-center items-center px-8 py-12 sm:px-12 sm:py-16 lg:absolute lg:left-0 lg:top-0 lg:bottom-0 lg:w-1/2 lg:h-full lg:px-20 lg:py-32 lg:z-0">
+      <div className="w-full flex flex-col justify-center items-center px-8 py-12 sm:px-12 sm:py-16 lg:absolute lg:left-0 lg:top-0 lg:bottom-0 lg:w-1/2 lg:h-full lg:px-16 lg:py-16 xl:px-20 xl:py-24 lg:z-0">
         {renderLeftContent()}
       </div>
 

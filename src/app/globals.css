@@ -1,5 +1,16 @@
-@import url("https://cdn.jsdelivr.net/npm/@xz/fonts@1/serve/metropolis.min.css");
 @import "tailwindcss";
+
+@font-face {
+  font-family: 'MetropolisThin';
+  src: url('/metropolis.thin.otf') format('opentype');
+  font-weight: 100;
+  font-style: normal;
+}
+
+.font-metro-thin {
+  font-family: 'MetropolisThin', "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-weight: 100 !important;
+}
 
 :root {
   /* Updated San Felice palette */

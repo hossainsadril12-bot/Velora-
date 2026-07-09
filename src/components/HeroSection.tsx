@@ -1,17 +1,20 @@
 "use client";
 
-import Image from "next/image";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { easeJ } from "@/lib/motion";
-import HeroLogo from "./HeroLogo";
 import { useIntro } from "./IntroProvider";
+import { lockScroll } from "@/lib/scroll";
+import TransitionLink from "./TransitionLink";
 
-const HERO_IMG = "/Inani Beach.png";
+const HERO_VIDEO = "/Background Hero Section Video.mp4";
 
 // Premium cubic-bezier for the merge animation
 const MERGE_EASE = [0.65, 0, 0.15, 1] as const;
 const MERGE_DURATION = 1.6; // seconds for the image expansion
+
+// How long the opacity crossfade takes (ms) — must be < 0.8s trigger window
+const CROSSFADE_MS = 700;
 
 const wordMask = {
   hidden: { y: "115%", rotate: 2 },
@@ -25,153 +28,177 @@ const wordMask = {
 export default function HeroSection() {
   const { introState, advance, introDone } = useIntro();
 
-  // === Intro timing ===
-  // After mount: wait 1.0s in "idle" state, then advance to "transitioning"
+  // ── Seamless loop: two <video> elements crossfade near the end ──────────
+  // activeIdx controls which video is visible (opacity 1).
+  // The standby video is preloaded but at opacity 0.
+  // When active video is ~0.8s from its end, standby starts from 0 and we
+  // cross-fade. After the fade the old video pauses + resets, roles swap.
+  const vidA = useRef<HTMLVideoElement>(null);
+  const vidB = useRef<HTMLVideoElement>(null);
+  const [activeIdx, setActiveIdx] = useState<0 | 1>(0);
+  const isCrossfading = useRef(false);
+
+  // Kick off initial autoplay on mount
+  useEffect(() => {
+    vidA.current?.play().catch(() => {});
+  }, []);
+
+  // Re-attach timeupdate listener whenever the active video changes
+  useEffect(() => {
+    const active  = activeIdx === 0 ? vidA.current : vidB.current;
+    const standby = activeIdx === 0 ? vidB.current : vidA.current;
+    if (!active || !standby) return;
+
+    const onTimeUpdate = () => {
+      if (isCrossfading.current || !active.duration) return;
+      if (active.currentTime >= active.duration / 2 - 0.6) {
+        isCrossfading.current = true;
+        standby.currentTime = 0;
+        standby.play().catch(() => {});
+        // Flip visible video — CSS transition handles the fade
+        setActiveIdx((p) => (p === 0 ? 1 : 0));
+        // After fade completes, pause & reset the old video so it's ready for next loop
+        setTimeout(() => {
+          active.pause();
+          active.currentTime = 0;
+          isCrossfading.current = false;
+        }, CROSSFADE_MS + 120);
+      }
+    };
+
+    active.addEventListener("timeupdate", onTimeUpdate);
+    return () => active.removeEventListener("timeupdate", onTimeUpdate);
+  }, [activeIdx]);
+
+  // ── Reset to top on every full page load ─────────────────────────────────
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (introState !== "idle") return;
+    const prev = window.history.scrollRestoration;
+    window.history.scrollRestoration = "manual";
+    window.scrollTo(0, 0);
+    window.__lenis?.scrollTo(0, { immediate: true });
+    return () => {
+      window.history.scrollRestoration = prev;
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // ── Intro timing ─────────────────────────────────────────────────────────
   useEffect(() => {
     if (introState !== "idle") return;
     const t = setTimeout(() => advance(), 1000);
     return () => clearTimeout(t);
   }, [introState, advance]);
 
-  // After the merge expansion finishes, advance to "completed"
   useEffect(() => {
     if (introState !== "transitioning") return;
     const t = setTimeout(() => advance(), MERGE_DURATION * 1000 + 200);
     return () => clearTimeout(t);
   }, [introState, advance]);
 
-  // Lock body scroll until intro completes
+  // Lock body scroll until intro completes (Lenis-aware)
   useEffect(() => {
-    if (!introDone) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
+    lockScroll(!introDone);
+    return () => lockScroll(false);
   }, [introDone]);
 
-  // === Parallax (active after intro) ===
+  // ── Parallax (active after intro) ────────────────────────────────────────
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
   });
 
-  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
-  const topY = useTransform(scrollYProgress, [0, 1], ["0%", "-160%"]);
-  const descOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  const bgY          = useTransform(scrollYProgress, [0, 1],      ["0%",    "50%"]);
+  const topY         = useTransform(scrollYProgress, [0, 1],      ["0%",    "-160%"]);
+  const descOpacity  = useTransform(scrollYProgress, [0, 0.5],    [1,       0]);
 
-  // Discover overlay
-  const discoverY = useTransform(scrollYProgress, [0.55, 1.0], ["100vh", "0vh"]);
-  const discoverOpacity = useTransform(scrollYProgress, [0.55, 0.85], [0, 1]);
-  const discoverH1Y = useTransform(scrollYProgress, [0.62, 1.0], ["120%", "0%"]);
-  const discoverH2Y = useTransform(scrollYProgress, [0.67, 1.0], ["120%", "0%"]);
-  const discoverBtnOpacity = useTransform(scrollYProgress, [0.75, 1.0], [0, 1]);
+  const discoverY          = useTransform(scrollYProgress, [0.55, 1.0], ["100vh", "0vh"]);
+  const discoverOpacity    = useTransform(scrollYProgress, [0.55, 0.85], [0,      1]);
+  const discoverH1Y        = useTransform(scrollYProgress, [0.62, 1.0], ["120%",  "0%"]);
+  const discoverH2Y        = useTransform(scrollYProgress, [0.67, 1.0], ["120%",  "0%"]);
+  const discoverBtnOpacity = useTransform(scrollYProgress, [0.75, 1.0], [0,       1]);
 
   return (
     <section
       ref={ref}
       className="relative h-screen w-full overflow-hidden"
-      style={{ backgroundColor: introDone ? "var(--dark-green)" : "#FFF9ED" }}
+      style={{ backgroundColor: introDone ? "#F5F1E9" : "#FFF9ED" }}
     >
-      {/* ──────────────────────────────────────────────────────
-          SINGLE IMAGE LAYER
-          Starts as centered 16:9 frame, expands to full viewport
-          Remains mounted as the parallax background after expansion.
-          ────────────────────────────────────────────────────── */}
+      {/* ──────────────────────────────────────────────────────────────────
+          VIDEO BACKGROUND LAYER
+          Same framed → fullscreen animation as before.
+          Two <video> elements crossfade to produce a seamless loop with no
+          visible flash at the restart point.
+          ────────────────────────────────────────────────────────────────── */}
       <motion.div
         className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none"
-        style={{
-          // Once intro completes, apply parallax drift. Before that, stay 0.
-          y: introDone ? bgY : "0%",
-        }}
+        style={{ y: introDone ? bgY : "0%" }}
       >
         <motion.div
           className="relative overflow-hidden"
           style={{ borderRadius: introState === "idle" ? 8 : 0 }}
-          initial={{
-            width: "min(80vw, 1200px)",
-            height: "min(65vh, 800px)",
-            opacity: 0,
-            scale: 0.9,
-          }}
+          initial={
+            introDone
+              ? { width: "100vw", height: "120vh", opacity: 1, scale: 1, borderRadius: 0 }
+              : { width: "min(80vw, 1200px)", height: "min(65vh, 800px)", opacity: 0, scale: 0.9 }
+          }
           animate={
             introState === "idle"
-              ? {
-                  width: "min(80vw, 1200px)",
-                  height: "min(65vh, 800px)",
-                  opacity: 1,
-                  scale: 1,
-                }
-              : {
-                  width: "100vw",
-                  // To support parallax after expanding, height needs to be larger than viewport
-                  height: introDone ? "120vh" : "100vh",
-                  opacity: 1,
-                  scale: 1,
-                  borderRadius: 0,
-                }
+              ? { width: "min(80vw, 1200px)", height: "min(65vh, 800px)", opacity: 1, scale: 1 }
+              : { width: "100vw", height: "120vh", opacity: 1, scale: 1, borderRadius: 0 }
           }
           transition={
             introState === "idle"
               ? {
                   opacity: { duration: 0.8, ease: "easeOut" },
-                  scale: { duration: 0.8, ease: "easeOut" },
+                  scale:   { duration: 0.8, ease: "easeOut" },
                 }
               : {
-                  width: { duration: MERGE_DURATION, ease: MERGE_EASE },
-                  height: { duration: MERGE_DURATION, ease: MERGE_EASE },
+                  width:        { duration: MERGE_DURATION,       ease: MERGE_EASE },
+                  height:       { duration: MERGE_DURATION,       ease: MERGE_EASE },
                   borderRadius: { duration: MERGE_DURATION * 0.6, ease: "easeInOut" },
                 }
           }
         >
-          <Image
-            src={HERO_IMG}
-            alt="Velora Inani — Premium Beachfront Living"
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover"
+          {/* Video A */}
+          <video
+            ref={vidA}
+            src={HERO_VIDEO}
+            autoPlay
+            muted
+            playsInline
+            preload="auto"
+            className="absolute inset-0 h-full w-full object-cover"
+            style={{
+              opacity: activeIdx === 0 ? 1 : 0,
+              transition: `opacity ${CROSSFADE_MS}ms ease`,
+            }}
           />
-          <div className="absolute inset-0 bg-[rgba(24,48,41,0.3)]" />
+
+          {/* Video B — standby, preloaded, invisible until crossfade */}
+          <video
+            ref={vidB}
+            src={HERO_VIDEO}
+            muted
+            playsInline
+            preload="auto"
+            className="absolute inset-0 h-full w-full object-cover"
+            style={{
+              opacity: activeIdx === 1 ? 1 : 0,
+              transition: `opacity ${CROSSFADE_MS}ms ease`,
+            }}
+          />
+
+          {/* Dark overlay sits above both videos */}
+          <div className="absolute inset-0 bg-[rgba(24,48,41,0.3)]" style={{ zIndex: 2 }} />
         </motion.div>
       </motion.div>
 
-      {/* Intro logo — centered at top, morphs color from dark → white */}
-      {!introDone && (
-        <motion.div
-          layoutId="brand-logo"
-          className="pointer-events-none fixed inset-x-0 top-0 z-[10001] flex justify-center"
-          style={{ paddingTop: introState === "idle" ? 48 : 30 }}
-          initial={{ opacity: 0, color: "#050505" }}
-          animate={{
-            opacity: 1,
-            color:
-              introState === "idle"
-                ? "#050505"
-                : "#F5F1E9",
-          }}
-          transition={{
-            opacity: { duration: 0.5, delay: 0.1 },
-            color: { duration: MERGE_DURATION * 0.7, ease: MERGE_EASE },
-            layout: { duration: MERGE_DURATION, ease: MERGE_EASE },
-          }}
-        >
-          <HeroLogo
-            className={`w-auto transition-all ${
-              introState === "idle"
-                ? "h-14 sm:h-16"
-                : "h-8 sm:h-10"
-            }`}
-          />
-        </motion.div>
-      )}
-
-      {/* ──────────────────────────────────────────────────────
+      {/* ──────────────────────────────────────────────────────────────────
           HERO CONTENT — fades + slides up after intro completes
-          ────────────────────────────────────────────────────── */}
+          ────────────────────────────────────────────────────────────────── */}
       <div className="relative z-10 flex h-full w-full flex-col items-start justify-center px-4 text-cream pointer-events-none">
         <motion.div
           style={{ y: topY }}
@@ -242,12 +269,12 @@ export default function HeroSection() {
         </span>
 
         <motion.div style={{ opacity: discoverBtnOpacity }} className="pointer-events-auto">
-          <a
-            href="/en/about-us"
+          <TransitionLink
+            href="/about"
             className="inline-block uppercase font-sans font-bold text-[10px] tracking-[2.5px] px-[35px] py-[18px] border transition-all duration-300 cursor-pointer bg-cream text-dark-green border-cream hover:bg-transparent hover:text-cream"
           >
             About Us
-          </a>
+          </TransitionLink>
         </motion.div>
       </motion.div>
     </section>

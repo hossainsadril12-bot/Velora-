@@ -6,14 +6,14 @@ import TransitionLink from "./TransitionLink";
 
 export default function DiscoverPanel() {
   return (
-    <section className="bg-deep-green px-5 py-12 sm:py-16 lg:py-20 text-center relative overflow-hidden">
+    <section className="bg-deep-green px-5 py-12 sm:py-16 lg:py-20 xl:py-24 text-center relative overflow-hidden">
       <div className="flex flex-col items-center">
         <RevealText
           as="h2"
           dir="fromBottom"
-          className="font-serif tracking-wide text-white text-[28.8px] leading-tight"
+          className="font-serif tracking-wide text-white text-[15px] sm:text-[22px] md:text-[28px] lg:text-[36px] leading-tight whitespace-nowrap max-w-none"
         >
-          Where Design Excellence Meets Trusted Leadership
+          Where design excellence meets trusted leadership
         </RevealText>
 
         <ButtonReveal className="mt-10" delay={0.4}>

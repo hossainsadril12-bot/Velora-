@@ -8,7 +8,7 @@ import {
   type MotionValue,
 } from "framer-motion";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type Estate = {
   name: string;
@@ -17,32 +17,35 @@ type Estate = {
   logo: string;
   logoAlt: string;
   href: string;
+  headingLogo?: string;
 };
 
 const ESTATES: Estate[] = [
   {
     name: "Velora Inani",
-    bg: "https://admin.sanfelice.com/app/uploads/2023/04/DSC_6934-scaled.jpg",
-    bgAlt: "San Felice vineyard rows",
-    logo: "https://admin.sanfelice.com/app/uploads/2023/04/SF-CHIANTICLASSICO-logo-WHITE.png",
-    logoAlt: "San Felice Chianti Classico logo",
-    href: "/en/estates/san-felice",
+    bg: "/Velora Inani.jpg.jpeg",
+    bgAlt: "Velora Inani project",
+    logo: "",
+    logoAlt: "Velora Inani logo",
+    href: "#",
+    headingLogo: "/Velora inani.png",
   },
   {
     name: "Velora Emporio",
-    bg: "https://admin.sanfelice.com/app/uploads/2023/04/CAMPOGIOVANNI_hero-2040x1120-1.jpg",
-    bgAlt: "Campogiovanni estate in Montalcino",
-    logo: "https://admin.sanfelice.com/app/uploads/2023/04/CampogiovanniMontalcino-logo-BIANCO-1.png",
-    logoAlt: "Campogiovanni Montalcino logo",
-    href: "/en/estates/campogiovanni",
+    bg: "/Emporio - Drone View.webp",
+    bgAlt: "Velora Emporio project",
+    logo: "",
+    logoAlt: "Velora Emporio logo",
+    href: "#",
+    headingLogo: "/Velora Emporio W.png",
   },
   {
-    name: "Coming Soon",
-    bg: "https://admin.sanfelice.com/app/uploads/2025/04/1920x-1054.png",
-    bgAlt: "Bell'Aja vineyard in Bolgheri",
-    logo: "https://admin.sanfelice.com/app/uploads/2023/03/BellAjaBolghieri-logo-BIANCO.png",
-    logoAlt: "Bell'Aja Bolgheri logo",
-    href: "/en/estates/bellaja-bolgheri",
+    name: "Upcoming",
+    bg: "/UPCOMING - BLUR.jpg.jpeg",
+    bgAlt: "Upcoming Velora project",
+    logo: "",
+    logoAlt: "",
+    href: "#",
   },
 ];
 
@@ -54,6 +57,7 @@ function EstateCard({
   isActive,
   onActivate,
   onDeactivate,
+  hasHover,
   revealY,
 }: {
   estate: Estate;
@@ -61,18 +65,25 @@ function EstateCard({
   isActive: boolean;
   onActivate: (i: number) => void;
   onDeactivate: () => void;
+  hasHover: boolean;
   revealY?: MotionValue<string>;
 }) {
+  const handleTap = (e: React.MouseEvent) => {
+    if (hasHover) return;
+    e.stopPropagation();
+    isActive ? onDeactivate() : onActivate(index);
+  };
+
   return (
     <motion.div
-      className="relative h-[480px] w-full min-w-0 cursor-pointer overflow-hidden basis-auto lg:h-[72vh] lg:basis-0"
+      className="relative h-[420px] sm:h-[480px] w-full min-w-0 cursor-pointer overflow-hidden basis-auto lg:h-[78vh] lg:min-h-[560px] lg:max-h-[820px] lg:basis-0"
       style={{
         flexShrink: 1,
         y: revealY,
         willChange: "transform",
       }}
       initial="rest"
-      whileHover="hover"
+      whileHover={hasHover ? "hover" : undefined}
       variants={{
         rest: {
           flexGrow: 1,
@@ -91,8 +102,9 @@ function EstateCard({
           },
         },
       }}
-      onHoverStart={() => onActivate(index)}
-      onHoverEnd={onDeactivate}
+      onHoverStart={hasHover ? () => onActivate(index) : undefined}
+      onHoverEnd={hasHover ? onDeactivate : undefined}
+      onClick={handleTap}
     >
       {/* Background image */}
       <motion.div
@@ -118,19 +130,20 @@ function EstateCard({
         />
       </motion.div>
 
-      {/* Dark overlay */}
+      {/* Dark overlay — fully fades out on hover */}
       <motion.div
         className="absolute inset-0 bg-black"
-        style={{
-          zIndex: 4,
-        }}
-        animate={{
-          opacity: isActive ? 0.4 : 0.6,
-        }}
-        transition={{
-          ease: EASE,
-          duration: 0.9,
-        }}
+        style={{ zIndex: 4 }}
+        animate={{ opacity: isActive ? 0 : 0.6 }}
+        transition={{ ease: EASE, duration: 0.9 }}
+      />
+
+      {/* Bottom gradient — appears with hover content for text readability */}
+      <motion.div
+        className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent"
+        style={{ zIndex: 4 }}
+        animate={{ opacity: isActive ? 1 : 0 }}
+        transition={{ ease: EASE, duration: 0.9 }}
       />
 
       {/* Center text heading default state */}
@@ -148,9 +161,29 @@ function EstateCard({
           duration: 0.6,
         }}
       >
-        <h2 className="m-0 font-serif uppercase text-cream text-[32px] sm:text-[40px] leading-tight font-thin tracking-[-0.03em]">
-          {estate.name}
-        </h2>
+        {estate.headingLogo ? (
+          index === 1 ? (
+            <div className="flex items-center justify-center h-[72px]">
+              <img
+                src={estate.headingLogo}
+                alt={estate.name}
+                className="h-[72px] w-auto object-contain"
+              />
+            </div>
+          ) : (
+            <div className="flex items-center justify-center">
+              <img
+                src={estate.headingLogo}
+                alt={estate.name}
+                className="h-[32px] sm:h-[42px] lg:h-[55px] xl:h-[64px] w-auto object-contain"
+              />
+            </div>
+          )
+        ) : (
+          <h2 className="m-0 font-serif text-cream text-[28px] sm:text-[36px] lg:text-[40px] xl:text-[48px] leading-tight font-thin tracking-[-0.03em]">
+            {estate.name}
+          </h2>
+        )}
       </motion.div>
 
       {/* Hover content */}
@@ -172,12 +205,10 @@ function EstateCard({
           delay: 0.1,
         }}
       >
-        <span className="block h-[44px] overflow-hidden">
+        <span className="block h-[40px] lg:h-[44px] xl:h-[52px] overflow-hidden">
           <motion.h2
-            className="m-0 font-serif uppercase text-cream font-thin tracking-[-0.03em]"
+            className="m-0 font-serif text-cream font-thin tracking-[-0.03em] text-[36px] leading-[40px] lg:text-[40px] lg:leading-[44px] xl:text-[48px] xl:leading-[52px]"
             style={{
-              fontSize: "40px",
-              lineHeight: "44px",
               fontWeight: 100,
             }}
             variants={{
@@ -232,7 +263,7 @@ function EstateCard({
           >
             <a
               href={estate.href}
-              className="inline-block bg-transparent font-sans font-bold uppercase text-white"
+              className="inline-block bg-transparent font-sans font-bold uppercase text-white transition-colors duration-300 hover:bg-white hover:text-tan"
               style={{
                 padding: "18px 35px",
                 fontSize: "10px",
@@ -252,6 +283,11 @@ function EstateCard({
 
 export default function WineEstates() {
   const [activeIndex, setActiveIndex] = useState(-1);
+  const [hasHover, setHasHover] = useState(true);
+
+  useEffect(() => {
+    setHasHover(window.matchMedia("(hover: hover) and (pointer: fine)").matches);
+  }, []);
 
   const sectionRef = useRef<HTMLElement>(null);
 
@@ -342,9 +378,9 @@ export default function WineEstates() {
   );
 
   return (
-    <section ref={sectionRef} className="overflow-hidden bg-tan pt-4 pb-8">
+    <section id="projects" ref={sectionRef} className="overflow-hidden bg-tan py-[16px]">
       {/* Heading */}
-      <div className="relative w-full overflow-hidden px-[10vw] sm:px-[10vw] lg:px-[10.8vw] pb-0 -mb-[12px]">
+      <div className="relative w-full overflow-hidden px-6 sm:px-10 lg:px-[30px] pb-0">
         <motion.h2
           style={{
             y: headingY,
@@ -355,7 +391,7 @@ export default function WineEstates() {
             transformOrigin: "left top",
             willChange: "transform, clip-path",
           }}
-          className="relative m-0 block select-none whitespace-nowrap text-center font-serif text-[clamp(44px,11.4vw,225px)] uppercase leading-[1.0] tracking-[-0.045em] text-white font-thin"
+          className="relative m-0 block select-none whitespace-nowrap text-center font-serif text-[clamp(2.75rem,8vw,6.5rem)] leading-[0.9] tracking-[-0.045em] text-white font-thin"
         >
           Projects
         </motion.h2>
@@ -368,7 +404,8 @@ export default function WineEstates() {
           opacity: cardsOpacity,
           willChange: "transform, opacity",
         }}
-        className="-mt-6 flex w-full flex-col gap-6 px-6 sm:px-10 lg:flex-row lg:px-[30px]"
+        className="mt-6 flex w-full flex-col gap-6 px-6 sm:px-10 lg:flex-row lg:gap-6 lg:px-[30px]"
+        onClick={() => { if (!hasHover) setActiveIndex(-1); }}
       >
         {ESTATES.map((estate, i) => {
           const revealY =
@@ -382,6 +419,7 @@ export default function WineEstates() {
               isActive={activeIndex === i}
               onActivate={setActiveIndex}
               onDeactivate={() => setActiveIndex(-1)}
+              hasHover={hasHover}
               revealY={revealY}
             />
           );
