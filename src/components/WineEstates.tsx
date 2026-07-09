@@ -286,8 +286,12 @@ export default function WineEstates() {
   const [hasHover, setHasHover] = useState(true);
 
   useEffect(() => {
-    setHasHover(window.matchMedia("(hover: hover) and (pointer: fine)").matches);
+    const timer = setTimeout(() => {
+      setHasHover(window.matchMedia("(hover: hover) and (pointer: fine)").matches);
+    }, 0);
+    return () => clearTimeout(timer);
   }, []);
+
 
   const sectionRef = useRef<HTMLElement>(null);
 

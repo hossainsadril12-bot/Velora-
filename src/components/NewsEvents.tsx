@@ -14,7 +14,7 @@ type News = {
 
 const CARDS: News[] = [
   {
-    src: "/coxs-bazar-airport.jpg",
+    src: "/Picture1.jpg",
     alt: "Cox's Bazar Airport",
     title: "Intl. Airport in a few months",
     description: "During a recent parliament session, Afroza Khanam MP, Minister for Civil Aviation and Tourism, confirmed it would take her Government a few more months to upgrade Cox's Bazar Airport to an international facility…",

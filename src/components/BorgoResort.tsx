@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   AnimatePresence,
   motion,
@@ -14,22 +14,33 @@ import { easeJ } from "@/lib/motion";
 
 const SLIDES = [
   {
-    src: "/Velora - Sunset.webp",
-    alt: "Velora Sunset view",
+    src: "/Picture2.png",
+    alt: "Velora picture 2 view",
   },
   {
     src: "/Velora - Ballroom.webp",
     alt: "Velora Ballroom interior view",
   },
   {
-    src: "/Velora - Swimming Pool.webp",
-    alt: "Velora Swimming Pool area",
+    src: "/Velora - Sunset.webp",
+    alt: "Velora Sunset view",
   },
 ];
 
 export default function BorgoResort() {
   const [[i], setI] = useState<[number, number]>([0, 1]);
   const [isDesktop, setIsDesktop] = useState(false);
+
+  const go = useCallback((d: number) => {
+    setI(([p]) => [(p + d + SLIDES.length) % SLIDES.length, d]);
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      go(1);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, [go]);
 
   useEffect(() => {
     const checkSize = () => setIsDesktop(window.innerWidth >= 1024);
@@ -70,9 +81,7 @@ export default function BorgoResort() {
   const textY = useTransform(smoothProgress, [0.50, 0.62, 0.84, 0.95], [40, 34, 15, 0]);
   const textOpacity = useTransform(smoothProgress, [0.50, 0.62, 0.84, 0.95], [0, 0.15, 0.6, 1]);
 
-  const go = (d: number) => {
-    setI(([p]) => [(p + d + SLIDES.length) % SLIDES.length, d]);
-  };
+
 
   const renderLeftContent = () => (
     <div className="flex flex-1 flex-col items-center justify-center py-4 sm:py-6 lg:py-10 w-full max-w-[640px] mx-auto">

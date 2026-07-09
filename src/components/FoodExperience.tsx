@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import CtaButton from "./CtaButton";
 import { RevealText, ImageReveal, ButtonReveal, FadeUp } from "./anim";
@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 import { easeJ } from "@/lib/motion";
 
 const IMAGES = [
-  "/Emporio - Main.webp",
+  "/Emporio - Drone View.webp",
   "/Emporio - Side Roof Cafeteria.webp",
   "/Emporio - Showroom Coridor.webp",
 ];
@@ -16,13 +16,21 @@ const IMAGES = [
 export default function FoodExperience() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const handlePrev = () => {
+  const handlePrev = useCallback(() => {
     setCurrentIndex((prev) => (prev === 0 ? IMAGES.length - 1 : prev - 1));
-  };
+  }, []);
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     setCurrentIndex((prev) => (prev === IMAGES.length - 1 ? 0 : prev + 1));
-  };
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      handleNext();
+    }, 3000);
+    return () => clearInterval(timer);
+  }, [handleNext]);
+
 
   return (
     <section className="relative w-full overflow-hidden bg-velora-cream lg:h-screen lg:min-h-[800px]">
@@ -105,13 +113,14 @@ export default function FoodExperience() {
 
             {/* PARAGRAPH */}
             <p className="mt-10 sm:mt-14 lg:mt-16 max-w-[540px] text-center font-serif text-base leading-relaxed text-dark-text font-light">
-              Welcome to Velora Inani, the first of its kind 'Lifestyle Hotel'
-              in Cox's Bazar with world-class features and amenities for International &
-              Local tourists. Designed by HuaDu Architecture & Urban Design,
+              Welcome to Velora Inani, the first of its kind &apos;Lifestyle Hotel&apos;
+              in Cox&apos;s Bazar with world-class features and amenities for International &amp;
+              Local tourists. Designed by HuaDu Architecture &amp; Urban Design,
               a Shanghai-based architecture firm that operates across three continents
-              and holds a first-rate qualification from China's
+              and holds a first-rate qualification from China&apos;s
               State Construction Ministry.
             </p>
+
 
             {/* BUTTON */}
             <ButtonReveal className="mt-10 sm:mt-14 lg:mt-16">

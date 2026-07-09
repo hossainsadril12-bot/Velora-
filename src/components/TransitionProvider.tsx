@@ -29,11 +29,15 @@ export default function TransitionProvider({ children }: { children: ReactNode }
   useEffect(() => {
     if (pathname !== lastPathname.current) {
       if (isAnimating) {
-        setIsAnimating(false);
+        const timer = setTimeout(() => {
+          setIsAnimating(false);
+        }, 0);
+        return () => clearTimeout(timer);
       }
       lastPathname.current = pathname;
     }
   }, [pathname, isAnimating]);
+
 
   const startTransition = (callback: () => void, dir: "forward" | "backward" = "forward") => {
     setDirection(dir);

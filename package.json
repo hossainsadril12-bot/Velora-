@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && next-sitemap",
+    "build": "next build && npx next-sitemap",
     "start": "next start",
     "lint": "eslint"
   },
@@ -27,5 +27,9 @@
     "next-sitemap": "^4.2.3",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "overrides": {
+    "postcss": "^8.5.10"
   }
 }
+
