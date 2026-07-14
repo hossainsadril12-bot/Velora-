@@ -1,20 +1,13 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { easeJ } from "@/lib/motion";
 import { useIntro } from "./IntroProvider";
 import { lockScroll } from "@/lib/scroll";
 import TransitionLink from "./TransitionLink";
 
-const HERO_VIDEO = "/Background Hero Section Video.mp4";
-
-// Premium cubic-bezier for the merge animation
-const MERGE_EASE = [0.65, 0, 0.15, 1] as const;
-const MERGE_DURATION = 1.6; // seconds for the image expansion
-
-// How long the opacity crossfade takes (ms) — must be < 0.8s trigger window
-const CROSSFADE_MS = 700;
+const HERO_VIDEO = "/hero.webm";
 
 const wordMask = {
   hidden: { y: "115%", rotate: 2 },
@@ -26,49 +19,13 @@ const wordMask = {
 };
 
 export default function HeroSection() {
-  const { introState, advance, introDone } = useIntro();
+  const { introState, introDone } = useIntro();
 
-  // ── Seamless loop: two <video> elements crossfade near the end ──────────
-  // activeIdx controls which video is visible (opacity 1).
-  // The standby video is preloaded but at opacity 0.
-  // When active video is ~0.8s from its end, standby starts from 0 and we
-  // cross-fade. After the fade the old video pauses + resets, roles swap.
   const vidA = useRef<HTMLVideoElement>(null);
-  const vidB = useRef<HTMLVideoElement>(null);
-  const [activeIdx, setActiveIdx] = useState<0 | 1>(0);
-  const isCrossfading = useRef(false);
 
-  // Kick off initial autoplay on mount
   useEffect(() => {
     vidA.current?.play().catch(() => {});
   }, []);
-
-  // Re-attach timeupdate listener whenever the active video changes
-  useEffect(() => {
-    const active  = activeIdx === 0 ? vidA.current : vidB.current;
-    const standby = activeIdx === 0 ? vidB.current : vidA.current;
-    if (!active || !standby) return;
-
-    const onTimeUpdate = () => {
-      if (isCrossfading.current || !active.duration) return;
-      if (active.currentTime >= active.duration / 2 - 0.6) {
-        isCrossfading.current = true;
-        standby.currentTime = 0;
-        standby.play().catch(() => {});
-        // Flip visible video — CSS transition handles the fade
-        setActiveIdx((p) => (p === 0 ? 1 : 0));
-        // After fade completes, pause & reset the old video so it's ready for next loop
-        setTimeout(() => {
-          active.pause();
-          active.currentTime = 0;
-          isCrossfading.current = false;
-        }, CROSSFADE_MS + 120);
-      }
-    };
-
-    active.addEventListener("timeupdate", onTimeUpdate);
-    return () => active.removeEventListener("timeupdate", onTimeUpdate);
-  }, [activeIdx]);
 
   // ── Reset to top on every full page load ─────────────────────────────────
   useEffect(() => {
@@ -83,19 +40,6 @@ export default function HeroSection() {
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // ── Intro timing ─────────────────────────────────────────────────────────
-  useEffect(() => {
-    if (introState !== "idle") return;
-    const t = setTimeout(() => advance(), 1000);
-    return () => clearTimeout(t);
-  }, [introState, advance]);
-
-  useEffect(() => {
-    if (introState !== "transitioning") return;
-    const t = setTimeout(() => advance(), MERGE_DURATION * 1000 + 200);
-    return () => clearTimeout(t);
-  }, [introState, advance]);
 
   // Lock body scroll until intro completes (Lenis-aware)
   useEffect(() => {
@@ -123,77 +67,28 @@ export default function HeroSection() {
   return (
     <section
       ref={ref}
-      className="relative h-screen w-full overflow-hidden"
-      style={{ backgroundColor: introDone ? "#F5F1E9" : "#FFF9ED" }}
+      className="relative h-screen w-full overflow-hidden bg-cream"
     >
       {/* ──────────────────────────────────────────────────────────────────
-          VIDEO BACKGROUND LAYER
-          Same framed → fullscreen animation as before.
-          Two <video> elements crossfade to produce a seamless loop with no
-          visible flash at the restart point.
+          VIDEO BACKGROUND — always full screen.
+          IntroOverlay handles the intro presentation above this layer.
+          Two <video> elements crossfade for a seamless loop.
           ────────────────────────────────────────────────────────────────── */}
       <motion.div
-        className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none"
+        className="absolute inset-0 z-0 pointer-events-none overflow-hidden"
         style={{ y: introDone ? bgY : "0%" }}
       >
-        <motion.div
-          className="relative overflow-hidden"
-          style={{ borderRadius: introState === "idle" ? 8 : 0 }}
-          initial={
-            introDone
-              ? { width: "100vw", height: "120vh", opacity: 1, scale: 1, borderRadius: 0 }
-              : { width: "min(80vw, 1200px)", height: "min(65vh, 800px)", opacity: 0, scale: 0.9 }
-          }
-          animate={
-            introState === "idle"
-              ? { width: "min(80vw, 1200px)", height: "min(65vh, 800px)", opacity: 1, scale: 1 }
-              : { width: "100vw", height: "120vh", opacity: 1, scale: 1, borderRadius: 0 }
-          }
-          transition={
-            introState === "idle"
-              ? {
-                  opacity: { duration: 0.8, ease: "easeOut" },
-                  scale:   { duration: 0.8, ease: "easeOut" },
-                }
-              : {
-                  width:        { duration: MERGE_DURATION,       ease: MERGE_EASE },
-                  height:       { duration: MERGE_DURATION,       ease: MERGE_EASE },
-                  borderRadius: { duration: MERGE_DURATION * 0.6, ease: "easeInOut" },
-                }
-          }
-        >
-          {/* Video A */}
-          <video
-            ref={vidA}
-            src={HERO_VIDEO}
-            autoPlay
-            muted
-            playsInline
-            preload="auto"
-            className="absolute inset-0 h-full w-full object-cover"
-            style={{
-              opacity: activeIdx === 0 ? 1 : 0,
-              transition: `opacity ${CROSSFADE_MS}ms ease`,
-            }}
-          />
-
-          {/* Video B — standby, preloaded, invisible until crossfade */}
-          <video
-            ref={vidB}
-            src={HERO_VIDEO}
-            muted
-            playsInline
-            preload="auto"
-            className="absolute inset-0 h-full w-full object-cover"
-            style={{
-              opacity: activeIdx === 1 ? 1 : 0,
-              transition: `opacity ${CROSSFADE_MS}ms ease`,
-            }}
-          />
-
-          {/* Dark overlay sits above both videos */}
-          <div className="absolute inset-0 bg-[rgba(24,48,41,0.3)]" style={{ zIndex: 2 }} />
-        </motion.div>
+        <video
+          ref={vidA}
+          src={HERO_VIDEO}
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-[rgba(24,48,41,0.3)]" style={{ zIndex: 2 }} />
       </motion.div>
 
       {/* ──────────────────────────────────────────────────────────────────

@@ -11,6 +11,7 @@ import WineMaking from "@/components/WineMaking";
 import FoodExperience from "@/components/FoodExperience";
 import NewsEvents from "@/components/NewsEvents";
 import Footer from "@/components/Footer";
+import IntroOverlay from "@/components/IntroOverlay";
 import { smoothScrollToId } from "@/lib/scroll";
 
 export default function Home() {
@@ -36,6 +37,7 @@ export default function Home() {
 
   return (
     <>
+      <IntroOverlay />
       <Header />
       <main className="relative w-full">
         <HeroSection />

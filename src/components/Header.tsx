@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import Logo from "./Logo";
 import HeroLogo from "./HeroLogo";
+import LottieNavLogo from "./LottieNavLogo";
 import TransitionLink from "./TransitionLink";
 import { useBooking } from "./BookingProvider";
 import { useIntro } from "./IntroProvider";
@@ -276,7 +277,7 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
   }, [langDropdownOpen]);
 
   const pathname = usePathname();
-  const { introState, introDone } = useIntro();
+  const { introDone } = useIntro();
   // The cinematic intro only runs on the homepage. While it runs, the logo
   // stays fixed in its navbar position (no morph) and the nav controls hold
   // back until the hero image has covered the frame.
@@ -311,16 +312,6 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
   const onDark = theme === "light" ? false : !scrolled;
   const navColor = onDark ? "text-cream" : "text-black";
 
-  // Logo color during the homepage intro: dark over the cream idle frame,
-  // then cream once the hero image expands to cover the viewport. Outside the
-  // intro it follows the normal nav color.
-  const logoColor = introRunning
-    ? introState === "idle"
-      ? "text-black"
-      : "text-cream"
-    : onDark
-      ? "text-cream"
-      : "text-black";
 
   const headerInit = {
     hidden: {},
@@ -694,9 +685,8 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
         )}
       </AnimatePresence>
 
-      {/* NORMAL HEADER */}
-      {!menuOpen && (
-        <motion.header
+      {/* NORMAL HEADER — always mounted so LottieNavLogo stays loaded across menu open/close */}
+      <motion.header
           initial="hidden"
           animate="show"
           variants={headerInit}
@@ -709,6 +699,8 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
           style={{
             zIndex: 1001,
             transitionTimingFunction: "cubic-bezier(0.25,0.1,0.25,1)",
+            visibility: menuOpen ? "hidden" : "visible",
+            pointerEvents: menuOpen ? "none" : "auto",
           }}
         >
           <div className="mx-auto flex h-[70px] items-center justify-between px-6 lg:h-[100px] lg:px-10">
@@ -785,12 +777,19 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
 
             <motion.div
               variants={fadeSlide}
-              className={`flex flex-col items-center transition-colors duration-700 ${logoColor}`}
+              animate={
+                introRunning
+                  ? "hidden"
+                  : introDone
+                  ? { opacity: 1, y: 0, transition: { duration: 0 } }
+                  : "show"
+              }
+              className="flex flex-col items-center"
             >
               <TransitionLink href="/" direction="backward" onClick={handleLogoClick}>
-                <div className="block" style={{ color: "inherit" }}>
-                  <HeroLogo className="h-8 w-auto sm:h-10" />
-                </div>
+                <LottieNavLogo
+                  className={`h-8 sm:h-10 ${onDark ? "" : "[filter:invert(1)]"}`}
+                />
               </TransitionLink>
             </motion.div>
 
@@ -822,7 +821,6 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
             </motion.div>
           </div>
         </motion.header>
-      )}
     </>
   );
 }

@@ -14,15 +14,15 @@ import { easeJ } from "@/lib/motion";
 
 const SLIDES = [
   {
-    src: "/Picture2.png",
-    alt: "Velora picture 2 view",
+    src: "/Velora - Swimming Pool.webp",
+    alt: "Velora Swimming Pool view",
   },
   {
     src: "/Velora - Ballroom.webp",
     alt: "Velora Ballroom interior view",
   },
   {
-    src: "/Velora - Sunset.webp",
+    src: "/Velora - Sunset 2.webp",
     alt: "Velora Sunset view",
   },
 ];
