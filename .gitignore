@@ -52,3 +52,5 @@ Velora--main/
 
 # testing reports
 /playwright-report/
+/test-results/
+/tests/screenshots/

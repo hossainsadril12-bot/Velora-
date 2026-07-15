@@ -14,7 +14,7 @@ type Person = {
 
 const PEOPLE: Person[] = [
   {
-    name: "Akmal Hossain",
+    name: "Akmal Hossain\nChowdhury",
     role: "Director",
     image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=700&q=80",
   },
@@ -120,13 +120,13 @@ export default function PeoplePage() {
 
           {/* Staggered Desktop Layout */}
           <div className="hidden lg:flex lg:justify-center lg:gap-[112px] items-start mt-16">
-            <div className="flex flex-col gap-[226px] pt-[180px]">
+            <div className="flex flex-col gap-[226px] pt-[260px]">
               {col0.map(renderPersonCard)}
             </div>
             <div className="flex flex-col gap-[226px] pt-[80px]">
               {col1.map(renderPersonCard)}
             </div>
-            <div className="flex flex-col gap-[226px] pt-[260px]">
+            <div className="flex flex-col gap-[226px] pt-[180px]">
               {col2.map(renderPersonCard)}
             </div>
             <div className="flex flex-col gap-[226px] pt-0">
