@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { DM_Sans, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
-import FloatingSocial from "@/components/FloatingSocial";
+import FloatingControls from "@/components/FloatingControls";
 import TransitionProvider from "@/components/TransitionProvider";
 import BookingProvider from "@/components/BookingProvider";
 import IntroProvider from "@/components/IntroProvider";
@@ -78,7 +78,7 @@ export default function RootLayout({
                 {children}
                 <Footer />
               </SmoothScroll>
-              <FloatingSocial />
+              <FloatingControls />
             </BookingProvider>
           </TransitionProvider>
         </IntroProvider>
