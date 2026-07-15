@@ -4,48 +4,74 @@ import { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
 const STORAGE_KEY = "velora-music-off";
-const GESTURE_EVENTS = ["click", "keydown", "touchstart", "pointerdown"] as const;
+// Any of these count as the "first user gesture" browsers require to unlock audio.
+const GESTURE_EVENTS = [
+  "pointerdown",
+  "click",
+  "keydown",
+  "touchstart",
+  "wheel",
+  "scroll",
+] as const;
 
 export default function MusicToggle() {
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const handlerRef = useRef<(() => void) | null>(null);
+  const cleanupRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     const audio = new Audio("/audio/mixkit-sea-waves-loop-1196.wav");
     audio.loop = true;
     audio.volume = 0.35;
+    audio.preload = "auto";
     audioRef.current = audio;
 
     const userTurnedOff = localStorage.getItem(STORAGE_KEY) === "true";
 
+    // Keep local UI state in sync if the media element pauses/plays for any reason.
+    const onPlay = () => setIsPlaying(true);
+    const onPause = () => setIsPlaying(false);
+    audio.addEventListener("play", onPlay);
+    audio.addEventListener("pause", onPause);
+
+    const startPlayback = () => {
+      audio.play().then(() => setIsPlaying(true)).catch(() => {});
+    };
+
+    const armGestureUnlock = () => {
+      const handler = () => {
+        // Only start if the user hasn't explicitly muted since load.
+        if (localStorage.getItem(STORAGE_KEY) !== "true") startPlayback();
+        disarm();
+      };
+      const disarm = () => {
+        GESTURE_EVENTS.forEach((e) =>
+          window.removeEventListener(e, handler, { capture: true }),
+        );
+      };
+      GESTURE_EVENTS.forEach((e) =>
+        window.addEventListener(e, handler, { capture: true, passive: true }),
+      );
+      return disarm;
+    };
+
     if (!userTurnedOff) {
-      // Muted autoplay is universally allowed — unmute immediately after play starts
-      audio.muted = true;
+      // Try immediate playback (works for returning visitors / high engagement).
       audio
         .play()
-        .then(() => {
-          audio.muted = false;
-          setIsPlaying(true);
-        })
+        .then(() => setIsPlaying(true))
         .catch(() => {
-          // Absolute last resort: wait for first user gesture
-          audio.muted = false;
-          const handleGesture = () => {
-            audio.play().then(() => setIsPlaying(true)).catch(() => {});
-            GESTURE_EVENTS.forEach((e) => document.removeEventListener(e, handleGesture));
-          };
-          handlerRef.current = handleGesture;
-          GESTURE_EVENTS.forEach((e) => document.addEventListener(e, handleGesture));
+          // Blocked by autoplay policy — start on the very first user gesture.
+          cleanupRef.current = armGestureUnlock();
         });
     }
 
     return () => {
+      audio.removeEventListener("play", onPlay);
+      audio.removeEventListener("pause", onPause);
       audio.pause();
       audio.src = "";
-      if (handlerRef.current) {
-        GESTURE_EVENTS.forEach((e) => document.removeEventListener(e, handlerRef.current!));
-      }
+      cleanupRef.current?.();
     };
   }, []);
 
@@ -62,7 +88,9 @@ export default function MusicToggle() {
       try {
         await audio.play();
         setIsPlaying(true);
-      } catch {}
+      } catch {
+        // Extremely rare (button click IS a gesture) — ignore.
+      }
     }
   };
 
