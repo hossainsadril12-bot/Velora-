@@ -34,15 +34,22 @@ export default function MusicToggle() {
     audio.addEventListener("play", onPlay);
     audio.addEventListener("pause", onPause);
 
-    const startPlayback = () => {
-      audio.play().then(() => setIsPlaying(true)).catch(() => {});
-    };
-
     const armGestureUnlock = () => {
       const handler = () => {
-        // Only start if the user hasn't explicitly muted since load.
-        if (localStorage.getItem(STORAGE_KEY) !== "true") startPlayback();
-        disarm();
+        if (localStorage.getItem(STORAGE_KEY) !== "true") {
+          audio
+            .play()
+            .then(() => {
+              setIsPlaying(true);
+              disarm();
+            })
+            .catch(() => {
+              // Playback blocked or failed (e.g. on invalid gesture like scroll)
+              // Keep listeners armed for the next user interaction
+            });
+        } else {
+          disarm();
+        }
       };
       const disarm = () => {
         GESTURE_EVENTS.forEach((e) =>
