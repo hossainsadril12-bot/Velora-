@@ -48,7 +48,7 @@ export default function FloatingSocial() {
             initial={{ opacity: 0, y: 20, scale: 0.8 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.8, transition: { duration: 0.2 } }}
-            className="flex flex-col gap-3 pb-2"
+            className="flex flex-col gap-5 pb-2"
           >
             {socialLinks.map((link, index) => (
               <motion.a
@@ -63,7 +63,7 @@ export default function FloatingSocial() {
                   stiffness: 300,
                   damping: 20,
                 }}
-                className="group relative flex h-12 w-12 items-center justify-center rounded-full bg-white/40 backdrop-blur-xl border border-white/60 shadow-[0_8px_32px_0_rgba(1,86,63,0.15)] text-dark-green transition-all hover:bg-white/70 hover:scale-110"
+                className="group relative flex h-12 w-12 items-center justify-center rounded-full bg-white/40 backdrop-blur-md border border-white/60 shadow-[0_4px_16px_0_rgba(1,86,63,0.15)] text-dark-green transition-all hover:bg-white/70 hover:scale-110"
                 aria-label={link.name}
               >
                 {link.icon}
@@ -81,7 +81,7 @@ export default function FloatingSocial() {
         className="relative flex h-14 w-14 items-center justify-center rounded-full bg-white/50 backdrop-blur-xl border border-white/60 shadow-[0_8px_32px_0_rgba(1,86,63,0.2)] text-dark-green transition-transform hover:scale-105 focus:outline-none"
         aria-label="Social media menu"
       >
-        <span className="absolute inset-0 rounded-full border border-white/60 animate-[ping_3s_cubic-bezier(0,0,0.2,1)_infinite] opacity-50"></span>
+        <span className="pointer-events-none absolute inset-0 rounded-full border border-white/60 animate-[ping_3s_cubic-bezier(0,0,0.2,1)_infinite] opacity-50"></span>
         <motion.div
           animate={{ rotate: isOpen ? 45 : 0 }}
           transition={{ duration: 0.3 }}

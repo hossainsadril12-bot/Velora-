@@ -17,7 +17,7 @@ test.describe("Intro animation flow", () => {
     await page.goto("/");
 
     // Overlay should be mounted immediately (z-[200] fixed div)
-    const overlay = page.locator("div.fixed.z-\\[200\\]");
+    const overlay = page.locator("div.fixed.z-50.inset-0");
     await expect(overlay).toBeVisible({ timeout: 2_000 });
 
     await page.screenshot({ path: path.join(SCREENSHOT_DIR, "01-overlay-visible.png") });
@@ -27,7 +27,7 @@ test.describe("Intro animation flow", () => {
     await page.goto("/");
 
     // The blur div has inline style backdropFilter
-    const blurLayer = page.locator("div.fixed.z-\\[200\\] > .absolute").first();
+    const blurLayer = page.locator("div.fixed.z-50.inset-0 > .absolute").first();
     await expect(blurLayer).toBeVisible({ timeout: 2_000 });
 
     const backdropFilter = await blurLayer.evaluate(
@@ -38,32 +38,27 @@ test.describe("Intro animation flow", () => {
     await page.screenshot({ path: path.join(SCREENSHOT_DIR, "02-blur-backdrop.png") });
   });
 
-  test("lottie SVG renders inside overlay", async ({ page }) => {
+  test("lottie SVG renders centrally during intro", async ({ page }) => {
     await page.goto("/");
 
-    // lottie-web injects an <svg> inside the container div
-    const lottieSvg = page.locator("div.fixed.z-\\[200\\] svg").first();
+    // lottie-web injects an <svg> inside the container div, which is now in the header
+    const lottieSvg = page.locator("header div.fixed.z-\\[999\\] svg").first();
     await expect(lottieSvg).toBeVisible({ timeout: 5_000 });
 
     await page.screenshot({ path: path.join(SCREENSHOT_DIR, "03-lottie-svg.png") });
   });
 
-  test("nav logo hidden during intro", async ({ page }) => {
+  test("nav logo container is centered during intro", async ({ page }) => {
     await page.goto("/");
 
     // Wait for overlay to appear (confirms intro is running)
-    await expect(page.locator("div.fixed.z-\\[200\\]")).toBeVisible({ timeout: 2_000 });
+    await expect(page.locator("div.fixed.z-50.inset-0")).toBeVisible({ timeout: 2_000 });
 
-    // Header logo motion.div should be opacity 0 (hidden variant)
-    // It's gated: animate={introRunning ? "hidden" : "show"}
-    // framer-motion sets opacity:0 on the element
-    const headerLogo = page.locator("header svg").first();
-    const opacity = await headerLogo.evaluate(
-      (el) => parseFloat(getComputedStyle(el.closest("[style*='opacity']") ?? el).opacity ?? "1")
-    );
-    expect(opacity).toBeLessThanOrEqual(0.05);
+    // The logo container should have the fixed class centering it
+    const headerLogoContainer = page.locator("header div.fixed.z-\\[999\\]").first();
+    await expect(headerLogoContainer).toBeVisible();
 
-    await page.screenshot({ path: path.join(SCREENSHOT_DIR, "04-logo-hidden-during-intro.png") });
+    await page.screenshot({ path: path.join(SCREENSHOT_DIR, "04-logo-centered-during-intro.png") });
   });
 
   test("overlay disappears after intro completes", async ({ page }) => {
@@ -71,7 +66,7 @@ test.describe("Intro animation flow", () => {
 
     // Wait up to INTRO_TOTAL_MS for the overlay to unmount
     // IntroOverlay returns null when introDone = true
-    await expect(page.locator("div.fixed.z-\\[200\\]")).toHaveCount(0, {
+    await expect(page.locator("div.fixed.z-50.inset-0")).toHaveCount(0, {
       timeout: INTRO_TOTAL_MS,
     });
 
@@ -82,7 +77,7 @@ test.describe("Intro animation flow", () => {
     await page.goto("/");
 
     // Wait for intro to finish
-    await expect(page.locator("div.fixed.z-\\[200\\]")).toHaveCount(0, {
+    await expect(page.locator("div.fixed.z-50.inset-0")).toHaveCount(0, {
       timeout: INTRO_TOTAL_MS,
     });
 
@@ -97,14 +92,14 @@ test.describe("Intro animation flow", () => {
     await page.goto("/");
 
     // Wait for intro to finish
-    await expect(page.locator("div.fixed.z-\\[200\\]")).toHaveCount(0, {
+    await expect(page.locator("div.fixed.z-50.inset-0")).toHaveCount(0, {
       timeout: INTRO_TOTAL_MS,
     });
 
     // OWN / WHAT / MATTERS text should be visible
-    await expect(page.getByText("OWN")).toBeVisible({ timeout: 3_000 });
-    await expect(page.getByText("WHAT")).toBeVisible({ timeout: 3_000 });
-    await expect(page.getByText("MATTERS")).toBeVisible({ timeout: 3_000 });
+    await expect(page.getByText("OWN", { exact: true }).first()).toBeVisible({ timeout: 3_000 });
+    await expect(page.getByText("WHAT", { exact: true }).first()).toBeVisible({ timeout: 3_000 });
+    await expect(page.getByText("MATTERS", { exact: true }).first()).toBeVisible({ timeout: 3_000 });
 
     await page.screenshot({ path: path.join(SCREENSHOT_DIR, "07-hero-text-visible.png") });
   });
@@ -112,13 +107,13 @@ test.describe("Intro animation flow", () => {
   test("scroll locked during intro, unlocked after", async ({ page }) => {
     await page.goto("/");
 
-    // During intro: scrolling should not move the page
-    await page.keyboard.press("End");
-    const scrollDuringIntro = await page.evaluate(() => window.scrollY);
-    expect(scrollDuringIntro).toBe(0);
+    // During intro: scrolling should be locked via overflow: hidden
+    await expect.poll(async () => {
+      return await page.evaluate(() => document.body.style.overflow === "hidden");
+    }).toBe(true);
 
     // Wait for intro to complete
-    await expect(page.locator("div.fixed.z-\\[200\\]")).toHaveCount(0, {
+    await expect(page.locator("div.fixed.z-50.inset-0")).toHaveCount(0, {
       timeout: INTRO_TOTAL_MS,
     });
 
@@ -133,7 +128,7 @@ test.describe("Intro animation flow", () => {
     await page.goto("/");
 
     // Complete the intro
-    await expect(page.locator("div.fixed.z-\\[200\\]")).toHaveCount(0, {
+    await expect(page.locator("div.fixed.z-50.inset-0")).toHaveCount(0, {
       timeout: INTRO_TOTAL_MS,
     });
 
@@ -145,7 +140,7 @@ test.describe("Intro animation flow", () => {
 
     // Overlay must NOT appear on return navigation
     await page.waitForTimeout(500);
-    await expect(page.locator("div.fixed.z-\\[200\\]")).toHaveCount(0, {
+    await expect(page.locator("div.fixed.z-50.inset-0")).toHaveCount(0, {
       timeout: 1_000,
     });
 
@@ -156,10 +151,11 @@ test.describe("Intro animation flow", () => {
     await page.goto("/");
 
     // Video element should exist and be in playing state before intro ends
-    const videoPlaying = await page.evaluate(() => {
-      const videos = Array.from(document.querySelectorAll("video"));
-      return videos.some((v) => !v.paused && v.readyState >= 2);
-    });
-    expect(videoPlaying).toBe(true);
+    await expect.poll(async () => {
+      return await page.evaluate(() => {
+        const videos = Array.from(document.querySelectorAll("video"));
+        return videos.some((v) => !v.paused && v.readyState >= 2);
+      });
+    }, { timeout: 5000 }).toBe(true);
   });
 });

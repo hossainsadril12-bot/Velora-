@@ -6,10 +6,7 @@ import { motion } from "framer-motion";
 
 export default function PrivacyPolicy() {
   return (
-    <>
-      <Header theme="light" />
-
-      <motion.main
+    <><motion.main
         initial={{ opacity: 0, filter: "blur(8px)", y: 20 }}
         animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
         transition={{ duration: 1.2, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
@@ -180,9 +177,6 @@ export default function PrivacyPolicy() {
             </section>
           </div>
         </div>
-      </motion.main>
-
-      <Footer />
-    </>
+      </motion.main></>
   );
 }

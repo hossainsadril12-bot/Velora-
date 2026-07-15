@@ -212,7 +212,7 @@ function CloseIcon() {
   );
 }
 
-export default function Header({ theme = "default" }: { theme?: "default" | "light" } = {}) {
+export default function Header() {
   const { openBooking } = useBooking();
   const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
@@ -224,6 +224,12 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
   const [langDropdownOpen, setLangDropdownOpen] = useState(false);
   const langDropdownRef = useRef<HTMLDivElement>(null);
 
+  const pathname = usePathname();
+  const theme = pathname === "/" ? "default" : "light";
+  const { introState, advance, introDone } = useIntro();
+  // The cinematic intro only runs on the homepage. While it runs, the logo
+  // animates from the center of the screen to its navbar position.
+  const introRunning = pathname === "/" && !introDone;
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
 
@@ -239,6 +245,8 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
   };
 
   useEffect(() => {
+    if (introRunning) return;
+
     lockScroll(menuOpen);
 
     if (menuOpen) {
@@ -252,10 +260,12 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
     window.addEventListener("keydown", onKey);
 
     return () => {
-      lockScroll(false);
+      if (!introRunning) {
+        lockScroll(false);
+      }
       window.removeEventListener("keydown", onKey);
     };
-  }, [menuOpen]);
+  }, [menuOpen, introRunning]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -276,12 +286,16 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
     };
   }, [langDropdownOpen]);
 
-  const pathname = usePathname();
-  const { introDone } = useIntro();
-  // The cinematic intro only runs on the homepage. While it runs, the logo
-  // stays fixed in its navbar position (no morph) and the nav controls hold
-  // back until the hero image has covered the frame.
-  const introRunning = pathname === "/" && !introDone;
+
+  // Fallback to ensure transitioning state completes even if framer-motion doesn't fire
+  useEffect(() => {
+    if (introState === "transitioning") {
+      const t = setTimeout(() => {
+        advance();
+      }, 2700); // 2.5s animation + 200ms buffer
+      return () => clearTimeout(t);
+    }
+  }, [introState, advance]);
 
   /** Handles clicks on scroll-anchor links inside the nav menu */
   const handleScrollClick = (
@@ -690,12 +704,15 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
           initial="hidden"
           animate="show"
           variants={headerInit}
-          className={`fixed left-0 top-0 w-full border-b transition-colors duration-[400ms] ${theme === "light"
-            ? "border-black/10 bg-white"
-            : scrolled
-              ? "border-dark-green/10 bg-cream/95 backdrop-blur-sm"
-              : "border-cream/15 bg-transparent"
-            }`}
+          className={`fixed left-0 top-0 w-full border-b transition-colors duration-[400ms] ${
+            introRunning 
+              ? "border-transparent bg-transparent" 
+              : theme === "light"
+                ? "border-black/10 bg-white"
+                : scrolled
+                  ? "border-dark-green/10 bg-cream/95 backdrop-blur-sm"
+                  : "border-cream/15 bg-transparent"
+          }`}
           style={{
             zIndex: 1001,
             transitionTimingFunction: "cubic-bezier(0.25,0.1,0.25,1)",
@@ -776,19 +793,27 @@ export default function Header({ theme = "default" }: { theme?: "default" | "lig
             </div>
 
             <motion.div
-              variants={fadeSlide}
-              animate={
-                introRunning
-                  ? "hidden"
-                  : introDone
-                  ? { opacity: 1, y: 0, transition: { duration: 0 } }
-                  : "show"
+              layout
+              data-intro={introState}
+              transition={
+                introState === "transitioning"
+                  ? { duration: 2.5, ease: [0.16, 1, 0.3, 1] }
+                  : { duration: 0 }
               }
-              className="flex flex-col items-center"
+              onLayoutAnimationComplete={() => {
+                if (introState === "transitioning") advance();
+              }}
+              className={
+                introRunning && introState === "idle"
+                  ? "fixed top-[50dvh] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] max-w-[480px] z-[999] pointer-events-none"
+                  : "relative flex flex-col items-center z-[999]"
+              }
             >
-              <TransitionLink href="/" direction="backward" onClick={handleLogoClick}>
+              <TransitionLink href="/" direction="backward" onClick={handleLogoClick} className="w-full h-full flex items-center justify-center">
                 <LottieNavLogo
-                  className={`h-8 sm:h-10 ${onDark ? "" : "[filter:invert(1)]"}`}
+                  className={introRunning && introState === "idle" ? "w-full" : `h-[96px] ${onDark ? "" : "[filter:invert(1)]"}`}
+                  autoplay={introRunning && introState === "idle"}
+                  onComplete={introRunning && introState === "idle" ? () => advance() : undefined}
                 />
               </TransitionLink>
             </motion.div>

@@ -81,10 +81,7 @@ export default function FAQPage() {
   };
 
   return (
-    <>
-      <Header theme="light" />
-
-      <main className="min-h-screen bg-[#FDFBF7] px-6 pb-24 pt-32 sm:px-12 md:pb-32 md:pt-40 lg:px-24">
+    <><main className="min-h-screen bg-[#FDFBF7] px-6 pb-24 pt-32 sm:px-12 md:pb-32 md:pt-40 lg:px-24">
         <div className="mx-auto max-w-3xl flex flex-col items-center">
           {/* HEADER */}
           <div className="mb-12 text-center">
@@ -135,9 +132,6 @@ export default function FAQPage() {
             })}
           </div>
         </div>
-      </main>
-
-      <Footer />
-    </>
+      </main></>
   );
 }

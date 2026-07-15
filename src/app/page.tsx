@@ -2,7 +2,6 @@
 
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
-import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import DiscoverPanel from "@/components/DiscoverPanel";
 import BorgoResort from "@/components/BorgoResort";
@@ -10,7 +9,6 @@ import WineEstates from "@/components/WineEstates";
 import WineMaking from "@/components/WineMaking";
 import FoodExperience from "@/components/FoodExperience";
 import NewsEvents from "@/components/NewsEvents";
-import Footer from "@/components/Footer";
 import IntroOverlay from "@/components/IntroOverlay";
 import { smoothScrollToId } from "@/lib/scroll";
 
@@ -38,7 +36,6 @@ export default function Home() {
   return (
     <>
       <IntroOverlay />
-      <Header />
       <main className="relative w-full">
         <HeroSection />
         <DiscoverPanel />
@@ -48,7 +45,6 @@ export default function Home() {
         <FoodExperience />
         <NewsEvents />
       </main>
-      <Footer />
     </>
   );
 }
