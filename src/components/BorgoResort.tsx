@@ -40,7 +40,7 @@ export default function BorgoResort() {
       go(1);
     }, 3000);
     return () => clearInterval(timer);
-  }, [go]);
+  }, [i, go]);
 
   useEffect(() => {
     const checkSize = () => setIsDesktop(window.innerWidth >= 1024);

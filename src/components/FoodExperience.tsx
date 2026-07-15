@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import CtaButton from "./CtaButton";
-import { RevealText, ImageReveal, ButtonReveal, FadeUp } from "./anim";
+import { ImageReveal, ButtonReveal, FadeUp } from "./anim";
 import { motion } from "framer-motion";
 import { easeJ } from "@/lib/motion";
 
@@ -29,7 +29,7 @@ export default function FoodExperience() {
       handleNext();
     }, 3000);
     return () => clearInterval(timer);
-  }, [handleNext]);
+  }, [currentIndex, handleNext]);
 
 
   return (
@@ -113,7 +113,7 @@ export default function FoodExperience() {
 
             {/* PARAGRAPH */}
             <p className="mt-10 sm:mt-14 lg:mt-16 max-w-[540px] text-center font-serif text-base leading-relaxed text-dark-text font-light">
-              Welcome to Velora Inani, the first of its kind &apos;Lifestyle Hotel&apos;
+              Welcome to Velora Emporio, the first of its kind &apos;Lifestyle Hotel&apos;
               in Cox&apos;s Bazar with world-class features and amenities for International &amp;
               Local tourists. Designed by HuaDu Architecture &amp; Urban Design,
               a Shanghai-based architecture firm that operates across three continents

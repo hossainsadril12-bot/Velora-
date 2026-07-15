@@ -69,17 +69,17 @@ export default function PeoplePage() {
   const renderPersonCard = (person: Person) => (
     <article
       key={person.name}
-      className="group flex flex-col w-[226px] text-left"
+      className="group flex flex-col w-[267px] text-left"
     >
       {/* Image Container */}
-      <div className="relative w-[226px] h-[226px] overflow-hidden bg-[#F2EDE4]">
+      <div className="relative w-[267px] h-[324px] overflow-hidden bg-[#F2EDE4]">
         <Image
           src={person.image}
           alt={person.name.replace("\n", " ")}
-          width={500}
-          height={500}
+          width={534}
+          height={648}
           className="w-full h-full object-cover transition-all duration-500 ease-out group-hover:scale-105"
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 267px"
         />
       </div>
 
@@ -119,23 +119,23 @@ export default function PeoplePage() {
           </p>
 
           {/* Staggered Desktop Layout */}
-          <div className="hidden lg:flex lg:justify-center lg:gap-[112px] items-start mt-16">
-            <div className="flex flex-col gap-[226px] pt-[260px]">
+          <div className="hidden lg:flex lg:justify-center lg:gap-[64px] items-start mt-16">
+            <div className="flex flex-col gap-[224px] pt-[486px]">
               {col0.map(renderPersonCard)}
             </div>
-            <div className="flex flex-col gap-[226px] pt-[80px]">
+            <div className="flex flex-col gap-[224px] pt-[162px]">
               {col1.map(renderPersonCard)}
             </div>
-            <div className="flex flex-col gap-[226px] pt-[180px]">
+            <div className="flex flex-col gap-[224px] pt-[324px]">
               {col2.map(renderPersonCard)}
             </div>
-            <div className="flex flex-col gap-[226px] pt-0">
+            <div className="flex flex-col gap-[224px] pt-0">
               {col3.map(renderPersonCard)}
             </div>
           </div>
 
           {/* Responsive Mobile/Tablet Layout (Flat grid) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-[112px] gap-y-[146px] justify-items-center lg:hidden mt-12 sm:mt-16 mb-[24px]">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-[64px] gap-y-[120px] justify-items-center lg:hidden mt-12 sm:mt-16 mb-[24px]">
             {PEOPLE.map(renderPersonCard)}
           </div>
         </div>
