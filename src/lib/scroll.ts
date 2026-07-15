@@ -9,7 +9,25 @@ function easeInOutCubic(t: number): number {
 }
 
 /**
- * Lock or unlock page scroll. MUST be used instead of toggling
+ * Set of owners currently requesting a scroll lock. Scroll is locked while any
+ * owner holds a lock and released only when the last one lets go.
+ *
+ * Why owner-scoped instead of a single boolean: multiple components lock scroll
+ * independently (the intro in HeroSection, the nav menu in Header, the booking
+ * modal). A shared boolean is last-writer-wins, so a component mounting with its
+ * own lock closed (e.g. BookingModal calling lockScroll(false) on mount) would
+ * clobber an unrelated active lock like the intro's. Ref-counting by owner keeps
+ * each owner's intent isolated.
+ */
+const lockOwners = new Set<string>();
+
+/** Whether scroll is currently meant to be locked (survives Lenis mount timing). */
+export function isScrollLocked(): boolean {
+  return lockOwners.size > 0;
+}
+
+/**
+ * Lock or unlock page scroll for a named owner. MUST be used instead of toggling
  * `document.body.style.overflow` directly.
  *
  * Scroll is driven by Lenis (see SmoothScroll.tsx). Setting body
@@ -18,12 +36,20 @@ function easeInOutCubic(t: number): number {
  * height and goes on preventing wheel/touch — leaving the whole page frozen
  * until the next resize. So we stop/start Lenis alongside the overflow flag and
  * force a dimension recalc on unlock.
+ *
+ * @param owner distinct key per lock source ("intro", "menu", "booking", ...).
+ *   Each source must pass the same key to lock and unlock so releases don't
+ *   affect other owners.
  */
-export function lockScroll(locked: boolean): void {
+export function lockScroll(locked: boolean, owner: string = "default"): void {
   if (typeof document === "undefined") return;
+
+  if (locked) lockOwners.add(owner);
+  else lockOwners.delete(owner);
+
   const lenis = typeof window !== "undefined" ? window.__lenis : undefined;
 
-  if (locked) {
+  if (lockOwners.size > 0) {
     document.body.style.overflow = "hidden";
     lenis?.stop();
   } else {

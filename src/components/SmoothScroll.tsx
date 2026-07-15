@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import Lenis from "lenis";
+import { isScrollLocked } from "@/lib/scroll";
 
 // Expose Lenis globally so the scroll utility can use lenis.scrollTo()
 declare global {
@@ -29,6 +30,11 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
 
     // Expose globally so scroll utility can use lenis.scrollTo()
     window.__lenis = lenis;
+
+    // Honor a lock that was requested before Lenis existed (e.g. HeroSection
+    // locks scroll for the intro at mount, which runs before this effect).
+    // Without this, that earlier lenis?.stop() no-op'd and scroll stayed live.
+    if (isScrollLocked()) lenis.stop();
 
     let rafId = 0;
     const raf = (time: number) => {

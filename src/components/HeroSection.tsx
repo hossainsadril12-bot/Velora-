@@ -43,8 +43,8 @@ export default function HeroSection() {
 
   // Lock body scroll until intro completes (Lenis-aware)
   useEffect(() => {
-    lockScroll(!introDone);
-    return () => lockScroll(false);
+    lockScroll(!introDone, "intro");
+    return () => lockScroll(false, "intro");
   }, [introDone]);
 
   // ── Parallax (active after intro) ────────────────────────────────────────

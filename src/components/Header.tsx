@@ -247,7 +247,7 @@ export default function Header() {
   useEffect(() => {
     if (introRunning) return;
 
-    lockScroll(menuOpen);
+    lockScroll(menuOpen, "menu");
 
     if (menuOpen) {
       panelRef.current?.focus();
@@ -261,7 +261,7 @@ export default function Header() {
 
     return () => {
       if (!introRunning) {
-        lockScroll(false);
+        lockScroll(false, "menu");
       }
       window.removeEventListener("keydown", onKey);
     };

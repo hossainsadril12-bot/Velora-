@@ -39,8 +39,8 @@ export default function BookingModal() {
 
   // Lock body scroll when modal is open (Lenis-aware)
   useEffect(() => {
-    lockScroll(isOpen);
-    return () => lockScroll(false);
+    lockScroll(isOpen, "booking");
+    return () => lockScroll(false, "booking");
   }, [isOpen]);
 
   const validate = () => {
