@@ -118,8 +118,8 @@ export default function PeoplePage() {
             this journey of investment partnership.
           </p>
 
-          {/* Staggered Desktop Layout */}
-          <div className="hidden lg:flex lg:justify-center lg:gap-[64px] items-start mt-16">
+          {/* Staggered Desktop Layout — only where 4×267px columns fit (≥1280px) */}
+          <div className="hidden xl:flex xl:justify-center xl:gap-[40px] 2xl:gap-[64px] items-start mt-16">
             <div className="flex flex-col gap-[224px] pt-[486px]">
               {col0.map(renderPersonCard)}
             </div>
@@ -134,8 +134,8 @@ export default function PeoplePage() {
             </div>
           </div>
 
-          {/* Responsive Mobile/Tablet Layout (Flat grid) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-[64px] gap-y-[120px] justify-items-center lg:hidden mt-12 sm:mt-16 mb-[24px]">
+          {/* Responsive Mobile/Tablet Layout (Flat grid): 1col → 2col → 3col up to xl */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-[48px] gap-y-[120px] justify-items-center xl:hidden mt-12 sm:mt-16 mb-[24px]">
             {PEOPLE.map(renderPersonCard)}
           </div>
         </div>

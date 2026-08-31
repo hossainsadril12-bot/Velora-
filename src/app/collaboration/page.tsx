@@ -62,7 +62,7 @@ export default function CollaborationPage() {
             
             {/* Header Section */}
             <div className="flex flex-col items-center text-center w-full mb-12">
-              <h1 className="font-serif text-6xl md:text-7xl lg:text-[84px] font-thin text-dark-text tracking-wide leading-none">
+              <h1 className="font-serif text-4xl sm:text-6xl md:text-7xl lg:text-[84px] font-thin text-dark-text tracking-wide leading-none">
                 Collaboration
               </h1>
             </div>

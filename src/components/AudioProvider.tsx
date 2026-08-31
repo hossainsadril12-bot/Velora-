@@ -116,6 +116,9 @@ export default function AudioProvider({ children }: { children: ReactNode }) {
     const startOpening = () => {
       const el = openRef.current;
       if (!el) return Promise.resolve(false);
+      // Already audibly playing — do NOT restart/reset (a second call would
+      // reset volume to 0 and re-run the fade, causing an audible dip).
+      if (!el.paused && el.volume > 0.01) return Promise.resolve(true);
       // Best-effort sync to the video's current time.
       const v = videoRef.current;
       if (v && Number.isFinite(v.currentTime)) {

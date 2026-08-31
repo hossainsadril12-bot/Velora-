@@ -36,6 +36,7 @@ export default function HeroSection() {
   const openingVid = useRef<HTMLVideoElement>(null);
   const loopingVid = useRef<HTMLVideoElement>(null);
   const transitionedRef = useRef(false);
+  const openingNotifiedRef = useRef(false); // fire phase-1 audio start exactly once
   const [phase, setPhase] = useState<"opening" | "looping">("opening");
   const [darkDip, setDarkDip] = useState(false);
 
@@ -61,8 +62,13 @@ export default function HeroSection() {
     v.muted = true;
     const play = () => v.play().catch(() => {});
     play();
-    // Phase 1: first video's own music starts (audible when permitted / on gesture).
-    notifyOpeningPlaying();
+    // Phase 1: first video's own music starts (audible when permitted / on
+    // gesture). introState changes twice (transitioning → completed), so guard
+    // to fire exactly once — otherwise the fade restarts mid-ramp (volume dip).
+    if (!openingNotifiedRef.current) {
+      openingNotifiedRef.current = true;
+      notifyOpeningPlaying();
+    }
     const onPause = () => {
       if (!transitionedRef.current && v.currentTime < (v.duration || Infinity) - 0.15) play();
     };
@@ -132,7 +138,7 @@ export default function HeroSection() {
   return (
     <section
       ref={ref}
-      className="relative h-screen w-full overflow-hidden bg-cream"
+      className="relative h-[100svh] w-full overflow-hidden bg-cream"
     >
       {/* ──────────────────────────────────────────────────────────────────
           VIDEO BACKGROUND — always full screen.
@@ -191,7 +197,7 @@ export default function HeroSection() {
       <div className="relative z-10 flex h-full w-full flex-col items-center justify-center text-cream pointer-events-none">
         <motion.div
           style={{ y: topY }}
-          className="flex flex-row items-baseline justify-center gap-[1.5em] text-center"
+          className="flex flex-row items-baseline justify-center gap-[0.4em] sm:gap-[1em] lg:gap-[1.5em] text-center"
         >
           <span className="block overflow-hidden">
             <motion.h1
@@ -200,7 +206,7 @@ export default function HeroSection() {
               animate={introDone ? "visible" : "hidden"}
               variants={wordMask}
               style={{ transformOrigin: "center bottom", display: "block" }}
-              className="font-serif normal-case leading-none text-[64px] font-thin"
+              className="font-serif normal-case leading-none text-[clamp(2rem,10vw,64px)] font-thin"
             >
               Own
             </motion.h1>
@@ -213,7 +219,7 @@ export default function HeroSection() {
               animate={introDone ? "visible" : "hidden"}
               variants={wordMask}
               style={{ transformOrigin: "center bottom", display: "block" }}
-              className="font-serif normal-case leading-none text-[64px] font-thin"
+              className="font-serif normal-case leading-none text-[clamp(2rem,10vw,64px)] font-thin"
             >
               What
             </motion.h1>
@@ -226,7 +232,7 @@ export default function HeroSection() {
               animate={introDone ? "visible" : "hidden"}
               variants={wordMask}
               style={{ transformOrigin: "center bottom", display: "block" }}
-              className="font-serif normal-case leading-none text-[64px] font-thin"
+              className="font-serif normal-case leading-none text-[clamp(2rem,10vw,64px)] font-thin"
             >
               Matters.
             </motion.h1>
