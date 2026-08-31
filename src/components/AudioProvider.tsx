@@ -9,23 +9,26 @@ import {
   useCallback,
   ReactNode,
 } from "react";
+import { usePathname } from "next/navigation";
 
 const STORAGE_KEY = "velora-music-off";
 const OPENING_SRC = "/hero-opening-audio.mp3"; // phase 1 — first video's own music
 const LOOP_SRC = "/hero-loop.mp3"; // phase 2 — ambient loop for the second video
 const OPENING_VOLUME = 0.6;
-const LOOP_VOLUME = 0.4;
-const FADE = 1200; // ms crossfade
-const LOOP_START_DELAY = 1500; // matches the black hold before the 2nd video reveals
+const LOOP_VOLUME = 0.20; // decreased 50% from 0.40
+const FADE = 1000; // ms crossfade
+const LOOP_START_DELAY = 1200; // matches the black hold before the 2nd video reveals
 
-// Only activation events truly unlock audio. scroll / wheel / touchstart do NOT
-// grant user activation — listened best-effort (fire only if activation exists).
-const ACTIVATION_EVENTS = ["pointerdown", "pointerup", "click", "keydown", "touchend"] as const;
-const BEST_EFFORT_EVENTS = ["scroll", "wheel", "touchstart"] as const;
-const ALL_EVENTS = [...ACTIVATION_EVENTS, ...BEST_EFFORT_EVENTS];
+const ACTIVATION_EVENTS = [
+  "pointerdown",
+  "pointerup",
+  "click",
+  "keydown",
+  "touchend",
+] as const;
 
 function fadeVolume(el: HTMLMediaElement, target: number, ms: number, onDone?: () => void) {
-  const steps = 48;
+  const steps = 30;
   const interval = ms / steps;
   const start = el.volume;
   let step = 0;
@@ -80,11 +83,12 @@ export function useAudio() {
  */
 export default function AudioProvider({ children }: { children: ReactNode }) {
   const [isPlaying, setIsPlaying] = useState(false);
+  const pathname = usePathname();
 
   const videoRef = useRef<HTMLVideoElement | null>(null); // read-only, for time sync
   const openRef = useRef<HTMLAudioElement | null>(null);
   const loopRef = useRef<HTMLAudioElement | null>(null);
-  const phaseRef = useRef<Phase>("opening");
+  const phaseRef = useRef<Phase>(pathname === "/" ? "opening" : "looping");
   const disarmRef = useRef<(() => void) | null>(null);
   const fadeOpen = useRef<(() => void) | null>(null);
   const fadeLoop = useRef<(() => void) | null>(null);
@@ -111,23 +115,34 @@ export default function AudioProvider({ children }: { children: ReactNode }) {
       loop.addEventListener(e, sync);
     });
 
-    const isOff = () => localStorage.getItem(STORAGE_KEY) === "true";
+    // Auto-transition to loop when opening audio finishes naturally
+    const onOpenEnded = () => {
+      phaseRef.current = "looping";
+      startLoop();
+    };
+    open.addEventListener("ended", onOpenEnded);
+
+    const isOff = () => {
+      try {
+        return localStorage.getItem(STORAGE_KEY) === "true";
+      } catch {
+        return false;
+      }
+    };
 
     const startOpening = () => {
       const el = openRef.current;
       if (!el) return Promise.resolve(false);
-      // Already audibly playing — do NOT restart/reset (a second call would
-      // reset volume to 0 and re-run the fade, causing an audible dip).
       if (!el.paused && el.volume > 0.01) return Promise.resolve(true);
-      // Best-effort sync to the video's current time.
+
       const v = videoRef.current;
-      if (v && Number.isFinite(v.currentTime)) {
+      if (v && Number.isFinite(v.currentTime) && v.currentTime > 0) {
         try {
           el.currentTime = v.currentTime;
         } catch {}
       }
       fadeOpen.current?.();
-      el.volume = 0;
+      el.volume = 0.05;
       return el
         .play()
         .then(() => {
@@ -140,8 +155,10 @@ export default function AudioProvider({ children }: { children: ReactNode }) {
     const startLoop = () => {
       const el = loopRef.current;
       if (!el) return Promise.resolve(false);
+      if (!el.paused && el.volume > 0.01) return Promise.resolve(true);
+
       fadeLoop.current?.();
-      el.volume = 0;
+      el.volume = 0.05;
       return el
         .play()
         .then(() => {
@@ -166,10 +183,12 @@ export default function AudioProvider({ children }: { children: ReactNode }) {
         });
       };
       const disarm = () => {
-        ALL_EVENTS.forEach((e) => window.removeEventListener(e, handler, { capture: true }));
+        ACTIVATION_EVENTS.forEach((e) =>
+          window.removeEventListener(e, handler, { capture: true }),
+        );
         disarmRef.current = null;
       };
-      ALL_EVENTS.forEach((e) =>
+      ACTIVATION_EVENTS.forEach((e) =>
         window.addEventListener(e, handler, { capture: true, passive: true }),
       );
       disarmRef.current = disarm;
@@ -177,11 +196,23 @@ export default function AudioProvider({ children }: { children: ReactNode }) {
 
     impl.current = { startOpening, startLoop, applyForPhase, arm, isOff };
 
+    // ── Auto-start audio immediately when the website opens ──
+    if (!isOff()) {
+      applyForPhase().then((ok) => {
+        if (!ok) {
+          arm();
+        }
+      });
+      // Also arm immediately so that the first user interaction starts it instantly if cold-blocked
+      arm();
+    }
+
     return () => {
       ["play", "playing", "pause", "ended"].forEach((e) => {
         open.removeEventListener(e, sync);
         loop.removeEventListener(e, sync);
       });
+      open.removeEventListener("ended", onOpenEnded);
       fadeOpen.current?.();
       fadeLoop.current?.();
       disarmRef.current?.();
@@ -192,6 +223,28 @@ export default function AudioProvider({ children }: { children: ReactNode }) {
       loop.src = "";
     };
   }, []);
+
+  // Update phase when navigating between homepage and subpages
+  useEffect(() => {
+    if (pathname !== "/") {
+      phaseRef.current = "looping";
+      const m = impl.current;
+      if (m && !m.isOff()) {
+        const open = openRef.current;
+        if (open && !open.paused) {
+          fadeOpen.current?.();
+          fadeOpen.current = fadeVolume(open, 0, FADE / 2, () => {
+            open.pause();
+            m.startLoop();
+          });
+        } else {
+          m.startLoop().then((ok) => {
+            if (!ok) m.arm();
+          });
+        }
+      }
+    }
+  }, [pathname]);
 
   const registerOpeningVideo = useCallback((el: HTMLVideoElement | null) => {
     videoRef.current = el;
@@ -205,7 +258,6 @@ export default function AudioProvider({ children }: { children: ReactNode }) {
       setIsPlaying(false);
       return;
     }
-    // Audible now for permitted/returning users; otherwise arm a gesture unlock.
     m.startOpening().then((ok) => {
       if (!ok) m.arm();
     });
@@ -239,7 +291,9 @@ export default function AudioProvider({ children }: { children: ReactNode }) {
     if (!m) return;
     if (isPlaying) {
       // Mute both — persist so it stays off across visits.
-      localStorage.setItem(STORAGE_KEY, "true");
+      try {
+        localStorage.setItem(STORAGE_KEY, "true");
+      } catch {}
       disarmRef.current?.();
       const open = openRef.current;
       const loop = loopRef.current;
@@ -254,7 +308,9 @@ export default function AudioProvider({ children }: { children: ReactNode }) {
       setIsPlaying(false);
     } else {
       // Turn on — this click is a valid gesture, so the current phase will play.
-      localStorage.removeItem(STORAGE_KEY);
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+      } catch {}
       m.applyForPhase();
     }
   }, [isPlaying]);
