@@ -37,10 +37,6 @@ export default function HeroSection() {
   const loopingVid = useRef<HTMLVideoElement>(null);
   const transitionedRef = useRef(false);
   const openingNotifiedRef = useRef(false); // fire phase-1 audio start exactly once
-  // Power management: don't decode the hero video when the tab is backgrounded
-  // or the hero is scrolled out of view (saves CPU/GPU with many tabs open).
-  const heroInViewRef = useRef(true);
-  const heroVisibleRef = useRef(true);
   const [phase, setPhase] = useState<"opening" | "looping">("opening");
   const [darkDip, setDarkDip] = useState(false);
 
@@ -74,55 +70,12 @@ export default function HeroSection() {
       notifyOpeningPlaying();
     }
     const onPause = () => {
-      // Only self-heal while the hero should actually be playing — never fight an
-      // intentional pause from the power-management effect below.
-      if (
-        heroInViewRef.current &&
-        heroVisibleRef.current &&
-        !transitionedRef.current &&
-        v.currentTime < (v.duration || Infinity) - 0.15
-      )
-        play();
+      if (!transitionedRef.current && v.currentTime < (v.duration || Infinity) - 0.15) play();
     };
     v.addEventListener("pause", onPause);
     return () => v.removeEventListener("pause", onPause);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [introState]);
-
-  // ── Pause the hero video when tab is hidden or hero is off-screen ──────────
-  // Stops continuous video decode (the biggest CPU/GPU cost) whenever the user
-  // is on another tab or has scrolled past the hero — keeps the site smooth even
-  // with many tabs open. The ambient music is intentionally left running.
-  useEffect(() => {
-    const applyPower = () => {
-      const v = phase === "looping" ? loopingVid.current : openingVid.current;
-      if (!v) return;
-      if (heroInViewRef.current && heroVisibleRef.current) {
-        v.play().catch(() => {});
-      } else if (!v.paused) {
-        v.pause();
-      }
-    };
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        heroInViewRef.current = entry.isIntersecting;
-        applyPower();
-      },
-      { threshold: 0.01 },
-    );
-    const section = ref.current;
-    if (section) io.observe(section);
-    const onVisibility = () => {
-      heroVisibleRef.current = !document.hidden;
-      applyPower();
-    };
-    document.addEventListener("visibilitychange", onVisibility);
-    return () => {
-      io.disconnect();
-      document.removeEventListener("visibilitychange", onVisibility);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [phase]);
 
   const startTransition = () => {
     if (transitionedRef.current) return;
