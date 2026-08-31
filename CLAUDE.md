@@ -223,3 +223,24 @@ Use `next/image` with `fill` + `sizes` for full-bleed images. Use `width`/`heigh
 
 - `src/middleware.ts` — Supabase auth scaffold (deprecated `middleware` → should be `proxy`; fix separately)
 - `src/utils/` — Supabase client utilities; unrelated to homepage
+
+---
+
+## Background music (`src/components/MusicToggle.tsx`)
+
+Ambient sea-waves loop (`/audio/mixkit-sea-waves-loop-1196.wav`), target volume `0.35`, fades in/out over `1800ms`. Rendered via `FloatingControls` (bottom-right).
+
+### Autoplay constraint — DO NOT re-litigate
+
+**Audible autoplay with zero user interaction is impossible** on a cold first visit. This is browser autoplay policy (Chrome 66+, WebKit/Safari, Firefox 66+, Edge, all mobile), enforced at engine level — no code, config, or header bypasses it. `audio.play()` rejects with `NotAllowedError`; Web Audio `AudioContext` stays `suspended` until user activation.
+
+Exceptions (high Media Engagement Index, prior domain interaction, installed PWA) are per-user and browser-internal — not guaranteeable for a first-time visitor. Muted autoplay is allowed but silent, so it doesn't satisfy "background music."
+
+### Implemented behavior (the compliant ceiling)
+
+1. On load, attempt immediate `play()` → succeeds silently for eligible users (seamless, no interaction).
+2. Otherwise arm a one-time unlock on the first **activation-triggering** event, then start + fade in.
+3. `GESTURE_EVENTS` MUST only contain activation events: `pointerdown`, `pointerup`, `click`, `keydown`, `touchend`. **Never** add `scroll`, `wheel`, or `touchstart` — they do NOT grant user activation, so `play()` rejects and music never starts for scroll-first users.
+4. Mute persists via `localStorage["velora-music-off"]`. A stuck `"true"` value keeps music off across all visits — clear it when debugging "music won't play".
+
+Do not replace this with an "Enable Sound" button, splash, or modal. Play-on-first-interaction is the standards-compliant best practice already in place.

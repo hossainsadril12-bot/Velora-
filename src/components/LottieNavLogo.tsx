@@ -24,39 +24,51 @@ export default function LottieNavLogo({ className = "", autoplay = false, onComp
     let fallback: NodeJS.Timeout;
     let anim: any;
 
-    import("lottie-web").then((mod) => {
-      if (destroyed || !containerRef.current) return;
+    // If the animation never loads (import fails, json 404s, decode error), the
+    // intro must NOT hang — fire onComplete so the parent still advances and the
+    // hero video + audio can start.
+    const failSafe = () => {
+      if (!destroyed && autoplay && onCompleteRef.current) onCompleteRef.current();
+    };
 
-      anim = mod.default.loadAnimation({
-        container: containerRef.current,
-        renderer: "svg",
-        loop: false,
-        autoplay,
-        path: "/lottie/eiman-estates.json",
-        rendererSettings: { preserveAspectRatio: "xMidYMid meet" },
-      });
+    import("lottie-web")
+      .then((mod) => {
+        if (destroyed || !containerRef.current) return;
 
-      if (autoplay) {
-        anim.addEventListener("DOMLoaded", () => {
-          if (!destroyed) {
-            const originalDuration = anim.totalFrames / anim.frameRate;
-            anim.setSpeed(originalDuration / 4); // 4s playback
-            setReady(true);
-
-            // Force journey to start exactly at 2 seconds
-            fallback = setTimeout(() => {
-              if (!destroyed && onCompleteRef.current) onCompleteRef.current();
-            }, 2000);
-          }
+        anim = mod.default.loadAnimation({
+          container: containerRef.current,
+          renderer: "svg",
+          loop: false,
+          autoplay,
+          path: "/lottie/eiman-estates.json",
+          rendererSettings: { preserveAspectRatio: "xMidYMid meet" },
         });
-      } else {
-        anim.addEventListener("DOMLoaded", () => {
-          // Freeze on final frame
-          anim.goToAndStop(anim.totalFrames - 1, true);
-          if (!destroyed) setReady(true);
-        });
-      }
-    });
+
+        // Lottie emits data_failed if the json can't be fetched/parsed.
+        anim.addEventListener("data_failed", failSafe);
+
+        if (autoplay) {
+          anim.addEventListener("DOMLoaded", () => {
+            if (!destroyed) {
+              const originalDuration = anim.totalFrames / anim.frameRate;
+              anim.setSpeed(originalDuration / 4); // 4s playback
+              setReady(true);
+
+              // Force journey to start exactly at 2 seconds
+              fallback = setTimeout(() => {
+                if (!destroyed && onCompleteRef.current) onCompleteRef.current();
+              }, 2000);
+            }
+          });
+        } else {
+          anim.addEventListener("DOMLoaded", () => {
+            // Freeze on final frame
+            anim.goToAndStop(anim.totalFrames - 1, true);
+            if (!destroyed) setReady(true);
+          });
+        }
+      })
+      .catch(failSafe);
 
     return () => {
       destroyed = true;

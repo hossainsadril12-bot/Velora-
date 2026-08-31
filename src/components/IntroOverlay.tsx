@@ -27,9 +27,7 @@ export default function IntroOverlay() {
         transition={{ duration: 1.0, ease: "easeInOut", delay: isExiting ? 0.1 : 0 }}
         onAnimationComplete={isExiting ? () => advance() : undefined}
         style={{
-          backdropFilter: "blur(4px)",
-          WebkitBackdropFilter: "blur(4px)",
-          backgroundColor: "rgba(0, 0, 0, 0.35)",
+          backgroundColor: "#000000",
         }}
       />
     </div>

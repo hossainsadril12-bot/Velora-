@@ -54,3 +54,7 @@ Velora--main/
 /playwright-report/
 /test-results/
 /tests/screenshots/
+
+# raw design assets & loose copy docs (not needed for the build/deploy)
+/Asset/
+/*.txt

@@ -1,13 +1,21 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { easeJ } from "@/lib/motion";
 import { useIntro } from "./IntroProvider";
+import { useAudio } from "./AudioProvider";
 import { lockScroll } from "@/lib/scroll";
 import TransitionLink from "./TransitionLink";
 
-const HERO_VIDEO = "/hero.webm";
+// Each hero clip ships as VP9 webm (Chrome/Edge/Firefox — smaller) with an
+// H.264 mp4 fallback (Safari/iOS + any browser/GPU without VP9). Poster shows a
+// real still instantly so the hero is never black while the video buffers.
+const HERO_OPENING_WEBM = "/hero-opening.webm";
+const HERO_OPENING_MP4 = "/hero-opening.mp4";
+const HERO_LOOPING_WEBM = "/hero-looping.webm";
+const HERO_LOOPING_MP4 = "/hero-looping.mp4";
+const HERO_POSTER = "/hero-poster.jpg";
 
 const wordMask = {
   hidden: { y: "115%", rotate: 2 },
@@ -20,12 +28,69 @@ const wordMask = {
 
 export default function HeroSection() {
   const { introState, introDone } = useIntro();
+  const { registerOpeningVideo, notifyOpeningPlaying, enterLooping } = useAudio();
 
-  const vidA = useRef<HTMLVideoElement>(null);
+  // ── Two-phase hero video ─────────────────────────────────────────────────
+  // Phase "opening": OPENING HERO plays once. On end → dip through black →
+  // Phase "looping": LOOPING HERO plays forever.
+  const openingVid = useRef<HTMLVideoElement>(null);
+  const loopingVid = useRef<HTMLVideoElement>(null);
+  const transitionedRef = useRef(false);
+  const [phase, setPhase] = useState<"opening" | "looping">("opening");
+  const [darkDip, setDarkDip] = useState(false);
 
+  // Begin the black dip this many seconds BEFORE the opening actually ends.
+  const LEAD = 2.0;
+
+  // Register the opening <video> so the audio controller can time-sync phase-1
+  // music to it (read-only — the controller never plays/pauses/mutes the video).
   useEffect(() => {
-    vidA.current?.play().catch(() => {});
-  }, []);
+    registerOpeningVideo(openingVid.current);
+    return () => registerOpeningVideo(null);
+  }, [registerOpeningVideo]);
+
+  // Start the opening video the moment the intro begins revealing it. The video
+  // is PURELY VISUAL and always muted — it is never coupled to the music. Muted
+  // autoplay is allowed everywhere, so it never waits for a click. Self-heal: if
+  // the browser ever pauses it before the planned transition, resume it so the
+  // hero can never get stuck on a frozen frame.
+  useEffect(() => {
+    if (introState === "idle") return;
+    const v = openingVid.current;
+    if (!v) return;
+    v.muted = true;
+    const play = () => v.play().catch(() => {});
+    play();
+    // Phase 1: first video's own music starts (audible when permitted / on gesture).
+    notifyOpeningPlaying();
+    const onPause = () => {
+      if (!transitionedRef.current && v.currentTime < (v.duration || Infinity) - 0.15) play();
+    };
+    v.addEventListener("pause", onPause);
+    return () => v.removeEventListener("pause", onPause);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [introState]);
+
+  const startTransition = () => {
+    if (transitionedRef.current) return;
+    transitionedRef.current = true;
+    // Audio handoff: fade phase-1 music out, then start Loop.mp3 (phase 2) as the
+    // 2nd video reveals. Touches only the <audio> elements, never the video.
+    enterLooping();
+    setDarkDip(true); // fade in to full black over 1.5s
+    setTimeout(() => {
+      loopingVid.current?.play().catch(() => {});
+      setPhase("looping"); // swap while fully black
+    }, 1500);
+    setTimeout(() => setDarkDip(false), 3000); // hold 1.5s at black, then fade out over 1.5s
+  };
+
+  // Trigger the dip a bit before the opening finishes.
+  const handleOpeningTime = () => {
+    const v = openingVid.current;
+    if (!v || !v.duration) return;
+    if (v.duration - v.currentTime <= LEAD) startTransition();
+  };
 
   // ── Reset to top on every full page load ─────────────────────────────────
   useEffect(() => {
@@ -75,53 +140,69 @@ export default function HeroSection() {
           Two <video> elements crossfade for a seamless loop.
           ────────────────────────────────────────────────────────────────── */}
       <motion.div
-        className="absolute inset-0 z-0 pointer-events-none overflow-hidden"
+        className="absolute inset-0 z-0 pointer-events-none overflow-hidden bg-black"
         style={{ y: introDone ? bgY : "0%" }}
       >
+        {/* Looping hero — underneath, revealed after opening ends */}
         <video
-          ref={vidA}
-          src={HERO_VIDEO}
-          autoPlay
+          ref={loopingVid}
           loop
           muted
           playsInline
           preload="auto"
-          className="absolute inset-0 h-full w-full object-cover"
+          poster={HERO_POSTER}
+          className="absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ease-out"
+          style={{ opacity: phase === "looping" ? 1 : 0 }}
+        >
+          <source src={HERO_LOOPING_WEBM} type="video/webm" />
+          <source src={HERO_LOOPING_MP4} type="video/mp4" />
+        </video>
+
+        {/* Opening hero — plays once on top, fades out through black.
+            Always muted: purely visual, decoupled from the music. */}
+        <video
+          ref={openingVid}
+          muted
+          playsInline
+          preload="auto"
+          poster={HERO_POSTER}
+          onTimeUpdate={handleOpeningTime}
+          onEnded={startTransition}
+          className="absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ease-out"
+          style={{ opacity: phase === "opening" ? 1 : 0, zIndex: 1 }}
+        >
+          <source src={HERO_OPENING_WEBM} type="video/webm" />
+          <source src={HERO_OPENING_MP4} type="video/mp4" />
+        </video>
+
+        {/* Dark dip — slow cross-through-black between opening and looping */}
+        <div
+          className="absolute inset-0 bg-black transition-opacity duration-[1500ms] ease-in-out"
+          style={{ opacity: darkDip ? 1 : 0, zIndex: 2 }}
         />
-        <div className="absolute inset-0 bg-[rgba(24,48,41,0.3)]" style={{ zIndex: 2 }} />
+
+        {/* Permanent green tint (design system) */}
+        <div className="absolute inset-0 bg-[rgba(24,48,41,0.3)]" style={{ zIndex: 3 }} />
       </motion.div>
 
       {/* ──────────────────────────────────────────────────────────────────
           HERO CONTENT — fades + slides up after intro completes
           ────────────────────────────────────────────────────────────────── */}
-      <div className="relative z-10 flex h-full w-full flex-col items-start justify-center px-4 text-cream pointer-events-none">
+      <div className="relative z-10 flex h-full w-full flex-col items-center justify-center text-cream pointer-events-none">
         <motion.div
           style={{ y: topY }}
-          className="flex flex-col items-start text-left ml-2 sm:ml-12 md:ml-24 lg:ml-[400px]"
+          className="flex flex-row items-baseline justify-center gap-[1.5em] text-center"
         >
           <span className="block overflow-hidden">
             <motion.h1
-              custom={0}
+              custom={2}
               initial="hidden"
               animate={introDone ? "visible" : "hidden"}
               variants={wordMask}
-              style={{ transformOrigin: "left bottom", display: "block" }}
-              className="font-serif uppercase leading-[0.86] text-[14vw] sm:text-[15vw] lg:text-[128px] font-thin"
+              style={{ transformOrigin: "center bottom", display: "block" }}
+              className="font-serif normal-case leading-none text-[64px] font-thin"
             >
-              OWN
-            </motion.h1>
-          </span>
-
-          <span className="block overflow-hidden">
-            <motion.h1
-              custom={1}
-              initial="hidden"
-              animate={introDone ? "visible" : "hidden"}
-              variants={wordMask}
-              style={{ transformOrigin: "left bottom", display: "block" }}
-              className="font-serif uppercase leading-[0.86] text-[16vw] sm:text-[18vw] lg:text-[150px] font-thin"
-            >
-              WHAT
+              Own
             </motion.h1>
           </span>
 
@@ -131,10 +212,23 @@ export default function HeroSection() {
               initial="hidden"
               animate={introDone ? "visible" : "hidden"}
               variants={wordMask}
-              style={{ transformOrigin: "left bottom", display: "block" }}
-              className="font-serif uppercase leading-[0.86] text-[16vw] sm:text-[18vw] lg:text-[150px] font-thin"
+              style={{ transformOrigin: "center bottom", display: "block" }}
+              className="font-serif normal-case leading-none text-[64px] font-thin"
             >
-              MATTERS
+              What
+            </motion.h1>
+          </span>
+
+          <span className="block overflow-hidden">
+            <motion.h1
+              custom={2}
+              initial="hidden"
+              animate={introDone ? "visible" : "hidden"}
+              variants={wordMask}
+              style={{ transformOrigin: "center bottom", display: "block" }}
+              className="font-serif normal-case leading-none text-[64px] font-thin"
+            >
+              Matters.
             </motion.h1>
           </span>
         </motion.div>

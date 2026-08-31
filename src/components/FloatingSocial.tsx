@@ -39,7 +39,6 @@ export default function FloatingSocial() {
   return (
     <div
       className="flex flex-col items-center gap-3"
-      onMouseEnter={() => setIsOpen(true)}
       onMouseLeave={() => setIsOpen(false)}
     >
       <AnimatePresence>
@@ -78,7 +77,8 @@ export default function FloatingSocial() {
 
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative flex h-14 w-14 items-center justify-center rounded-full bg-white/50 backdrop-blur-xl border border-white/60 shadow-[0_8px_32px_0_rgba(1,86,63,0.2)] text-dark-green transition-transform hover:scale-105 focus:outline-none"
+        onMouseEnter={() => setIsOpen(true)}
+        className="relative flex h-12 w-12 items-center justify-center rounded-full bg-white/50 backdrop-blur-xl border border-white/60 shadow-[0_8px_32px_0_rgba(1,86,63,0.2)] text-dark-green transition-transform hover:scale-105 focus:outline-none cursor-pointer"
         aria-label="Social media menu"
       >
         <span className="pointer-events-none absolute inset-0 rounded-full border border-white/60 animate-[ping_3s_cubic-bezier(0,0,0.2,1)_infinite] opacity-50"></span>

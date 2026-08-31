@@ -11,7 +11,7 @@ export default function DiscoverPanel() {
         <RevealText
           as="h2"
           dir="fromBottom"
-          className="font-serif tracking-wide text-white text-[15px] sm:text-[22px] md:text-[28px] lg:text-[36px] leading-tight whitespace-nowrap max-w-none"
+          className="font-serif font-thin tracking-wide text-white text-[15px] sm:text-[22px] md:text-[28px] lg:text-[36px] leading-tight whitespace-nowrap max-w-none"
         >
           Where design excellence meets trusted leadership
         </RevealText>

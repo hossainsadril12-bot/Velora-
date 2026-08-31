@@ -287,7 +287,20 @@ export default function Header() {
   }, [langDropdownOpen]);
 
 
-  // Fallback to ensure transitioning state completes even if framer-motion doesn't fire
+  // Safety net #1: force idle → transitioning even if the Lottie intro never
+  // fires its completion (failed lottie-web import, missing/oversized json,
+  // DOMLoaded never emitted). Without this the whole hero is hostage to the
+  // logo animation: introState stays "idle", the video never plays, and phase-1
+  // audio / the loop.mp3 handoff never start (black hero, no music). The effect
+  // deps include introState, so the moment the Lottie path advances normally
+  // this timer is cleared — no double-advance, no collision.
+  useEffect(() => {
+    if (introState !== "idle" || !introRunning) return;
+    const t = setTimeout(() => advance(), 4000);
+    return () => clearTimeout(t);
+  }, [introState, introRunning, advance]);
+
+  // Safety net #2: ensure transitioning state completes even if framer-motion doesn't fire
   useEffect(() => {
     if (introState === "transitioning") {
       const t = setTimeout(() => {

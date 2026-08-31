@@ -6,6 +6,7 @@ import FloatingControls from "@/components/FloatingControls";
 import TransitionProvider from "@/components/TransitionProvider";
 import BookingProvider from "@/components/BookingProvider";
 import IntroProvider from "@/components/IntroProvider";
+import AudioProvider from "@/components/AudioProvider";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -71,16 +72,18 @@ export default function RootLayout({
       </head>
       <body className="min-h-full bg-cream text-dark-green">
         <IntroProvider>
-          <TransitionProvider>
-            <BookingProvider>
-              <SmoothScroll>
-                <Header />
-                {children}
-                <Footer />
-              </SmoothScroll>
-              <FloatingControls />
-            </BookingProvider>
-          </TransitionProvider>
+          <AudioProvider>
+            <TransitionProvider>
+              <BookingProvider>
+                <SmoothScroll>
+                  <Header />
+                  {children}
+                  <Footer />
+                </SmoothScroll>
+                <FloatingControls />
+              </BookingProvider>
+            </TransitionProvider>
+          </AudioProvider>
         </IntroProvider>
       </body>
     </html>
