@@ -9,6 +9,7 @@ import IntroProvider from "@/components/IntroProvider";
 import AudioProvider from "@/components/AudioProvider";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { Agentation } from "agentation";
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
@@ -81,6 +82,7 @@ export default function RootLayout({
                   <Footer />
                 </SmoothScroll>
                 <FloatingControls />
+                {process.env.NODE_ENV === "development" && <Agentation />}
               </BookingProvider>
             </TransitionProvider>
           </AudioProvider>
