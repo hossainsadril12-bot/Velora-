@@ -125,3 +125,27 @@ test.describe("brochure viewer — responsive", () => {
     await expect(page.getByTestId("page-counter")).toHaveText("2–3 / 24");
   });
 });
+
+test("hovering a page corner curls it at the library's quick pace", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/brochure");
+  await expect(page.locator("section[data-ready]")).toBeVisible({ timeout: 20_000 });
+  await page.keyboard.press("ArrowRight");
+  await expect(page.getByTestId("page-counter")).toHaveText("2–3 / 24");
+  await page.waitForTimeout(1500);
+
+  const box = (await page.locator(".brochure-book").boundingBox())!;
+  const corner = { x: box.x + box.width - 30, y: box.y + box.height - 30 };
+  await page.mouse.move(corner.x - 300, corner.y - 300);
+  await page.mouse.move(corner.x, corner.y);
+
+  // Once the curl has settled, the folded page's clip-path stops changing.
+  const clip = () =>
+    page.evaluate(() =>
+      [...document.querySelectorAll<HTMLElement>(".stf__item")].map((el) => el.style.clipPath).join("|"),
+    );
+  await page.waitForTimeout(150);
+  const early = await clip();
+  await page.waitForTimeout(400);
+  expect(await clip()).toBe(early);
+});

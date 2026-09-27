@@ -19,6 +19,7 @@ type FlipInternals = {
   animateFlippingTo(start: Point, dest: Point, isTurned: boolean, needReset?: boolean): void;
   do(p: Point): void;
   getCalculation(): { getDirection(): number } | null;
+  getState(): string;
 };
 
 type RenderInternals = {
@@ -75,6 +76,7 @@ export function installFlipMotion(book: PageFlip, options: FlipMotionOptions): v
     !render ||
     typeof flip.animateFlippingTo !== "function" ||
     typeof flip.do !== "function" ||
+    typeof flip.getState !== "function" ||
     typeof render.startAnimation !== "function" ||
     typeof render.getRect !== "function"
   ) {
@@ -100,7 +102,13 @@ export function installFlipMotion(book: PageFlip, options: FlipMotionOptions): v
   const startAnimation = render.startAnimation.bind(render);
   render.startAnimation = (frames, duration, onEnd) => {
     const move = pending;
-    if (!move) return startAnimation(frames, duration, onEnd);
+    // Only restyle real turns and drag releases. Hover-corner curls (state
+    // "fold_corner", or "read" as the curl drops back) must stay quick: the
+    // pointer drives the corner directly between frames, and a slow animation
+    // fights it, so the corner lags and flickers.
+    if (!move || !(move.isTurned || flip.getState() === "user_fold")) {
+      return startAnimation(frames, duration, onEnd);
+    }
 
     const rect = render.getRect();
     // A button/key turn starts from the library's fixed corner point; anything
