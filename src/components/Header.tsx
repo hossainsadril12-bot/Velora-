@@ -204,6 +204,26 @@ function BurgerIcon() {
   );
 }
 
+/** Tablet-only cue beside the shortened "Appointment" label. */
+function CalendarGlyph() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      aria-hidden="true"
+      className="lg:hidden"
+    >
+      <rect x="4" y="5.5" width="16" height="14.5" rx="1.5" />
+      <path d="M4 10h16M8.5 3.5v4M15.5 3.5v4" />
+    </svg>
+  );
+}
+
 function CloseIcon() {
   return (
     <span className="relative flex h-[54px] w-[54px] items-center justify-center">
@@ -835,9 +855,9 @@ export default function Header() {
             <motion.div
               variants={fadeSlide}
               animate={introRunning ? "hidden" : "show"}
-              className="flex flex-1 items-center justify-end gap-6"
+              className="flex flex-1 items-center justify-end gap-3 lg:gap-6"
             >
-              <nav className={`hidden items-center gap-6 lg:flex ${navColor}`}>
+              <nav className={`hidden items-center gap-5 md:flex lg:gap-6 ${navColor}`}>
                 <TransitionLink
                   href="/brochure"
                   className="group relative cursor-pointer font-sans text-[15px] font-bold focus:outline-none"
@@ -847,9 +867,11 @@ export default function Header() {
                 </TransitionLink>
                 <button
                   onClick={openBooking}
-                  className="group relative cursor-pointer font-sans text-[15px] font-bold focus:outline-none"
+                  className="group relative flex cursor-pointer items-center gap-1.5 font-sans text-[15px] font-bold focus:outline-none"
                 >
-                  Book an Appointment
+                  <CalendarGlyph />
+                  <span className="lg:hidden">Appointment</span>
+                  <span className="hidden lg:inline">Book an Appointment</span>
                   <span className="absolute -bottom-1 left-0 h-[1.5px] w-full origin-left scale-x-0 bg-current transition-transform duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:scale-x-100" />
                 </button>
               </nav>

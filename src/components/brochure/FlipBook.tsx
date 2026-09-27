@@ -10,6 +10,8 @@ export type FlipBookHandle = {
   next(): void;
   prev(): void;
   goTo(index: number): void;
+  /** Drop a touch page-flip has started tracking (a pinch took over). */
+  cancelTouch(): void;
 };
 
 export type FlipBookProps = {
@@ -18,6 +20,8 @@ export type FlipBookProps = {
   width: number;
   height: number;
   reducedMotion: boolean;
+  /** Force one page at a time even when the box is wide enough for a spread. */
+  singlePage?: boolean;
   onFlip(index: number): void;
   onOrientation?(orientation: Orientation): void;
   onReady?(): void;
@@ -28,6 +32,16 @@ export type FlipBookProps = {
 };
 
 const PRELOAD_RADIUS = 4;
+/** Below twice this box width page-flip shows one page (matches MIN_SPREAD_WIDTH). */
+const SPREAD_MIN_PAGE = 320;
+/** Large enough that page-flip always chooses portrait. */
+const FORCE_PORTRAIT = 100_000;
+
+/** page-flip re-reads its live settings object on every layout pass (untyped in its d.ts). */
+function setMinWidth(book: PageFlip, px: number) {
+  const settings = (book as unknown as { getSettings?(): { minWidth: number } }).getSettings?.();
+  if (settings) settings.minWidth = px;
+}
 /** One full page turn, arrow or key press. */
 export const TURN_MS = 1100;
 
@@ -37,12 +51,13 @@ export const TURN_MS = 1100;
  * must never see.
  */
 const FlipBook = forwardRef<FlipBookHandle, FlipBookProps>(function FlipBook(
-  { pages, width, height, reducedMotion, onFlip, onOrientation, onReady, onTurnStart, onJump },
+  { pages, width, height, reducedMotion, singlePage = false, onFlip, onOrientation, onReady, onTurnStart, onJump },
   ref,
 ) {
   const containerRef = useRef<HTMLDivElement>(null);
   const flipRef = useRef<PageFlip | null>(null);
   const loaded = useRef(new Set<number>());
+  const singleRef = useRef(singlePage);
 
   // Keep latest callbacks without re-initialising the book.
   const callbacks = useRef({ onFlip, onOrientation, onReady, onTurnStart, onJump });
@@ -68,6 +83,12 @@ const FlipBook = forwardRef<FlipBookHandle, FlipBookProps>(function FlipBook(
         if (reducedMotion || !callbacks.current.onJump) swap();
         else callbacks.current.onJump(swap);
       }
+    },
+    cancelTouch: () => {
+      // page-flip keeps the pending touch in a private field; clearing it
+      // stops the delayed drag start and the swipe check on touchend.
+      const ui = (flipRef.current as unknown as { getUI?(): { touchPoint?: unknown } } | null)?.getUI?.();
+      if (ui && "touchPoint" in ui) ui.touchPoint = null;
     },
   }));
 
@@ -118,7 +139,7 @@ const FlipBook = forwardRef<FlipBookHandle, FlipBookProps>(function FlipBook(
         height: 800,
         size: "stretch",
         // Portrait (single page) below a 640px box — matches MIN_SPREAD_WIDTH in the viewer.
-        minWidth: 320,
+        minWidth: SPREAD_MIN_PAGE,
         maxWidth: 2000,
         minHeight: 160,
         maxHeight: 2000,
@@ -146,6 +167,12 @@ const FlipBook = forwardRef<FlipBookHandle, FlipBookProps>(function FlipBook(
       });
 
       book.loadFromHTML(nodes);
+      // Orientation is decided from minWidth on every layout pass. Set it only
+      // after loading: the UI copies minWidth into the host's CSS once, there.
+      if (singleRef.current) {
+        setMinWidth(book, FORCE_PORTRAIT);
+        book.update();
+      }
       // The render and flip controller only exist once pages are loaded.
       if (!reducedMotion) {
         installFlipMotion(book, {
@@ -167,8 +194,12 @@ const FlipBook = forwardRef<FlipBookHandle, FlipBookProps>(function FlipBook(
 
   // The library only listens to window resize; re-measure when our box changes.
   useEffect(() => {
-    flipRef.current?.update();
-  }, [width, height]);
+    singleRef.current = singlePage;
+    const book = flipRef.current;
+    if (!book) return;
+    setMinWidth(book, singlePage ? FORCE_PORTRAIT : SPREAD_MIN_PAGE);
+    book.update();
+  }, [width, height, singlePage]);
 
   return <div ref={containerRef} className="relative" style={{ width, height }} />;
 });

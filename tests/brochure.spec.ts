@@ -70,3 +70,58 @@ test.describe("brochure viewer", () => {
     await expect(page.getByTestId("page-counter")).toHaveText("2 / 24");
   });
 });
+
+test.describe("brochure viewer — responsive", () => {
+  const open = async (page: import("@playwright/test").Page, width: number, height: number) => {
+    await page.setViewportSize({ width, height });
+    await page.goto("/brochure");
+    await expect(page.locator("section[data-ready]")).toBeVisible({ timeout: 20_000 });
+  };
+
+  test("phone: floating bar navigates, download lives in the menu", async ({ page }) => {
+    await open(page, 375, 812);
+    const bar = page.getByRole("toolbar", { name: "Brochure controls" });
+    await expect(bar).toBeVisible();
+    await bar.getByRole("button", { name: "Next page" }).click();
+    await expect(page.getByTestId("page-counter")).toHaveText("2 / 24");
+    await expect(page.locator("section[data-ready] > div a[download]")).toHaveCount(0);
+    await page.getByRole("button", { name: "More actions" }).click();
+    const menu = page.getByRole("menu", { name: "Brochure actions" });
+    await expect(menu.getByRole("menuitem", { name: "Download PDF" })).toHaveAttribute(
+      "href",
+      "/brochure/velora-brochure.pdf",
+    );
+    await page.keyboard.press("Escape");
+    await expect(menu).toBeHidden();
+    await expect(page.getByRole("button", { name: "Book Appointment" })).toBeVisible();
+  });
+
+  test("phone: thumbnails open as a bottom sheet", async ({ page }) => {
+    await open(page, 375, 812);
+    await page.getByRole("button", { name: "Show all pages" }).click();
+    const sheet = page.getByRole("dialog", { name: "All pages" });
+    await expect(sheet).toBeVisible();
+    await sheet.getByRole("button", { name: "Go to page 7" }).click();
+    await expect(sheet).toBeHidden();
+    await expect(page.getByTestId("page-counter")).toHaveText("7 / 24");
+  });
+
+  test("phone: double-tap zooms in and out", async ({ page }) => {
+    await open(page, 375, 812);
+    const out = page.getByRole("button", { name: "Zoom out" });
+    await expect(out).toBeDisabled();
+    await page.locator(".brochure-book").dblclick();
+    await expect(out).toBeEnabled();
+    await page.locator(".brochure-book").dblclick({ force: true });
+    await expect(out).toBeDisabled();
+  });
+
+  test("tablet portrait reads one page, landscape a spread", async ({ page }) => {
+    await open(page, 768, 1024);
+    await page.getByRole("button", { name: "Next page" }).click();
+    await expect(page.getByTestId("page-counter")).toHaveText("2 / 24");
+    await open(page, 1024, 768);
+    await page.getByRole("button", { name: "Next page" }).click();
+    await expect(page.getByTestId("page-counter")).toHaveText("2–3 / 24");
+  });
+});

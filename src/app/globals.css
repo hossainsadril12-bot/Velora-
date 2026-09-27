@@ -183,6 +183,13 @@ body {
   display: none;
 }
 
+/* page-flip pins an inline min-width/height on its host; the viewer already
+   sizes the box, and small phones need it narrower than 320px. */
+.brochure-book {
+  min-width: 0 !important;
+  min-height: 0 !important;
+}
+
 /* Scrub slider: 1px track, filled part dark, round thumb */
 .brochure-range {
   -webkit-appearance: none;
