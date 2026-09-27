@@ -38,6 +38,7 @@ const SECONDARY_NAV = [
   { label: "Environment", href: "/environment" },
   { label: "Collaboration", href: "/collaboration" },
   { label: "Projects", href: "/?scroll=projects", scrollId: "projects" },
+  { label: "Brochure", href: "/brochure" },
   { label: "News & Events", href: "/?scroll=news", scrollId: "news" },
   { label: "Contact Us", href: "/?scroll=footer", scrollId: "footer" },
 ];
@@ -837,6 +838,13 @@ export default function Header() {
               className="flex flex-1 items-center justify-end gap-6"
             >
               <nav className={`hidden items-center gap-6 lg:flex ${navColor}`}>
+                <TransitionLink
+                  href="/brochure"
+                  className="group relative cursor-pointer font-sans text-[15px] font-bold focus:outline-none"
+                >
+                  Brochure
+                  <span className="absolute -bottom-1 left-0 h-[1.5px] w-full origin-left scale-x-0 bg-current transition-transform duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:scale-x-100" />
+                </TransitionLink>
                 <button
                   onClick={openBooking}
                   className="group relative cursor-pointer font-sans text-[15px] font-bold focus:outline-none"
