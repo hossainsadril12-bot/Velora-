@@ -282,7 +282,7 @@ export default function BrochureViewer() {
           <a
             href={BROCHURE_PDF}
             download="Velora-Inani-Brochure.pdf"
-            className="inline-flex h-11 items-center gap-2 rounded-lg bg-tan px-4 font-sans text-[15px] font-medium text-dark-text transition-[filter,transform] duration-300 hover:brightness-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-dark-text active:scale-[0.98]"
+            className="inline-flex h-11 items-center gap-2 rounded-lg bg-tan px-4 font-sans text-[15px] font-medium text-white transition-[filter,transform] duration-300 hover:brightness-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-tan active:scale-[0.98]"
           >
             <DownloadIcon size={18} />
             <span className="whitespace-nowrap">
@@ -369,7 +369,7 @@ export default function BrochureViewer() {
               <button
                 type="button"
                 onClick={openBooking}
-                className="inline-flex h-11 cursor-pointer items-center gap-2 rounded-full bg-tan px-6 font-sans text-[15px] font-medium text-dark-text shadow-[0_4px_8px_rgb(0_0_0/0.08)] transition-[filter,transform] duration-300 [touch-action:manipulation] active:scale-[0.97] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-dark-text"
+                className="inline-flex h-11 cursor-pointer items-center gap-2 rounded-full bg-tan px-6 font-sans text-[15px] font-medium text-white shadow-[0_4px_8px_rgb(0_0_0/0.08)] transition-[filter,transform] duration-300 [touch-action:manipulation] active:scale-[0.97] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-dark-text"
               >
                 <CalendarIcon size={18} />
                 Book Appointment
