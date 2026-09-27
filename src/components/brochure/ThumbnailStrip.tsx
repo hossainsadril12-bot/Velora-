@@ -31,7 +31,7 @@ export default function ThumbnailStrip({ pages, activeIndices, reducedMotion, on
     <nav aria-label="Brochure pages" className="relative">
       <ol
         ref={listRef}
-        className="brochure-thumbs flex gap-4 overflow-x-auto px-1 pb-2 pt-3 [perspective:900px] sm:gap-6"
+        className="brochure-thumbs flex gap-3 overflow-x-auto px-1 pb-1.5 pt-2 [perspective:900px] sm:gap-4"
       >
         {pages.map((page, i) => {
           const active = i >= first && i <= last;
@@ -45,17 +45,17 @@ export default function ThumbnailStrip({ pages, activeIndices, reducedMotion, on
                 aria-label={`Go to page ${page.n}`}
                 aria-current={active ? "page" : undefined}
                 onClick={() => onSelect(i)}
-                className="group flex cursor-pointer flex-col items-center gap-2.5 focus-visible:outline-none"
+                className="group flex cursor-pointer flex-col items-center gap-1 focus-visible:outline-none"
               >
                 <motion.span
                   initial={false}
                   animate={{
-                    y: active && !reducedMotion ? -5 : 0,
+                    y: active && !reducedMotion ? -3 : 0,
                     scale: active && !reducedMotion ? 1.04 : 1,
                     rotateY: tilt,
                   }}
                   transition={{ duration: reducedMotion ? 0 : 0.5, ease: EASE }}
-                  className={`relative block size-[88px] overflow-hidden rounded-[3px] bg-dark-text/5 shadow-[0_2px_6px_rgb(0_0_0/0.08)] outline-offset-[3px] transition-[outline-color,box-shadow] duration-300 sm:size-[112px] ${
+                  className={`relative block size-[52px] overflow-hidden rounded-[3px] bg-dark-text/5 shadow-[0_2px_6px_rgb(0_0_0/0.08)] outline-offset-2 transition-[outline-color,box-shadow] duration-300 sm:size-[60px] ${
                     active
                       ? "shadow-[0_6px_14px_rgb(0_0_0/0.14)] outline-[1.5px] outline-solid outline-dark-text"
                       : "outline-[1.5px] outline-solid outline-transparent group-hover:shadow-[0_4px_10px_rgb(0_0_0/0.12)] group-focus-visible:outline-dark-text/60"
@@ -74,7 +74,7 @@ export default function ThumbnailStrip({ pages, activeIndices, reducedMotion, on
                   />
                 </motion.span>
                 <span
-                  className={`font-sans text-[13px] tabular-nums transition-colors duration-300 ${
+                  className={`font-sans text-[12px] leading-4 tabular-nums transition-colors duration-300 ${
                     active ? "font-bold text-dark-text" : "text-dark-text/70"
                   }`}
                 >

@@ -71,7 +71,7 @@ export default function BrochureViewer() {
   }, []);
 
   // Desktop arrows sit beside the book; on small screens they overlay it.
-  const book = fitBook(stage, isDesktop ? 2 * (64 + 40) : 0);
+  const book = fitBook(stage, isDesktop ? 2 * (56 + 24) : 0);
   const pageW = orientation === "landscape" ? book.width / 2 : book.width;
 
   // Centre the closed book: a cover occupies one half of the spread box.
@@ -186,7 +186,7 @@ export default function BrochureViewer() {
   const panLimitY = ((zoom - 1) * book.height) / 2;
 
   const arrowClass =
-    "absolute top-1/2 z-10 flex -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-white text-dark-text shadow-[0_4px_14px_rgb(0_0_0/0.10)] transition-[transform,box-shadow,opacity] duration-300 hover:scale-105 hover:shadow-[0_6px_20px_rgb(0_0_0/0.14)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-dark-text active:scale-95 disabled:pointer-events-none disabled:opacity-0 size-11 lg:size-16";
+    "absolute top-1/2 z-10 flex -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-white text-dark-text shadow-[0_4px_14px_rgb(0_0_0/0.10)] transition-[transform,box-shadow,opacity] duration-300 hover:scale-105 hover:shadow-[0_6px_20px_rgb(0_0_0/0.14)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-dark-text active:scale-95 disabled:pointer-events-none disabled:opacity-0 size-11 lg:size-14";
 
   return (
     <section
@@ -199,7 +199,7 @@ export default function BrochureViewer() {
           ? "fixed inset-0 z-[1100] h-dvh"
           : isFullscreen
             ? "h-dvh"
-            : "h-dvh min-h-[680px] pt-[70px] lg:min-h-[760px] lg:pt-[100px]"
+            : "h-dvh min-h-[620px] pt-[70px] lg:min-h-[700px] lg:pt-[100px]"
       }`}
     >
       <h1 className="sr-only">Velora Inani brochure</h1>
@@ -210,7 +210,7 @@ export default function BrochureViewer() {
       </p>
 
       {/* Top row */}
-      <div className="mx-auto flex w-full max-w-[1520px] items-center justify-between gap-4 px-4 pt-4 sm:px-8 lg:px-[60px] lg:pt-5">
+      <div className="flex w-full items-center justify-between gap-4 px-6 pt-3 lg:px-10 lg:pt-2">
         {fullscreen ? (
           <span />
         ) : (
@@ -230,7 +230,7 @@ export default function BrochureViewer() {
         <a
           href={BROCHURE_PDF}
           download="Velora-Inani-Brochure.pdf"
-          className="inline-flex h-12 items-center gap-3 rounded-lg bg-tan px-5 font-sans text-[15px] font-medium text-white transition-[filter,transform] duration-300 hover:brightness-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-tan active:scale-[0.98] sm:h-[50px] sm:px-6"
+          className="inline-flex h-11 items-center gap-2.5 rounded-lg bg-tan px-5 font-sans text-[15px] font-medium text-white transition-[filter,transform] duration-300 hover:brightness-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-tan active:scale-[0.98] sm:px-6"
         >
           <DownloadIcon size={20} />
           <span className="whitespace-nowrap">
@@ -240,15 +240,15 @@ export default function BrochureViewer() {
       </div>
 
       {/* Stage */}
-      <div className="relative mx-auto min-h-0 w-full max-w-[1520px] flex-1 px-4 py-4 sm:px-8 lg:px-[60px] lg:py-5">
+      <div className="relative min-h-0 w-full flex-1 px-4 py-3 sm:px-6 lg:px-10 lg:py-3">
         <button
           type="button"
           aria-label="Previous page"
           onClick={prev}
           disabled={atStart || !ready}
-          className={`${arrowClass} left-2 sm:left-4 lg:left-[60px]`}
+          className={`${arrowClass} left-2 sm:left-4 lg:left-10`}
         >
-          <ArrowLeftIcon size={isDesktop ? 26 : 20} />
+          <ArrowLeftIcon size={isDesktop ? 24 : 20} />
         </button>
 
         <div ref={stageRef} className="flex h-full w-full items-center justify-center overflow-hidden">
@@ -300,14 +300,14 @@ export default function BrochureViewer() {
           aria-label="Next page"
           onClick={next}
           disabled={atEnd || !ready}
-          className={`${arrowClass} right-2 sm:right-4 lg:right-[60px]`}
+          className={`${arrowClass} right-2 sm:right-4 lg:right-10`}
         >
-          <ArrowRightIcon size={isDesktop ? 26 : 20} />
+          <ArrowRightIcon size={isDesktop ? 24 : 20} />
         </button>
       </div>
 
       {/* Controls + thumbnails */}
-      <div className="mx-auto w-full max-w-[1520px] px-4 pb-4 sm:px-8 lg:px-[60px] lg:pb-6">
+      <div className="w-full px-6 pb-3 lg:px-10 lg:pb-4">
         <ViewerControls
           index={index}
           total={TOTAL}
@@ -322,7 +322,7 @@ export default function BrochureViewer() {
           onOpenGrid={() => setGridOpen(true)}
           gridTriggerRef={gridTriggerRef}
         />
-        <div className="mt-2 pr-14 sm:pr-20 lg:mt-3">
+        <div className="mt-1 pr-14 sm:pr-20">
           <ThumbnailStrip pages={PAGES} activeIndices={indices} reducedMotion={reducedMotion} onSelect={goTo} />
         </div>
       </div>

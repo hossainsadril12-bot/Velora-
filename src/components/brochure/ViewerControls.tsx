@@ -69,7 +69,7 @@ export default function ViewerControls({
     <div className="flex flex-wrap items-center gap-x-4 sm:flex-nowrap sm:gap-x-6">
       <span
         data-testid="page-counter"
-        className="min-w-[4.75rem] font-sans text-[15px] tabular-nums text-dark-text sm:text-base"
+        className="min-w-[4.5rem] font-sans text-[14px] tabular-nums text-dark-text"
       >
         {label}
       </span>
