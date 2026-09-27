@@ -35,6 +35,8 @@
   --dark-text: #050505;
   --secondary-background: #A4926E;
   /* Black */
+  --brochure-stage: #EEEAE4;
+  /* Brochure viewer stage (warm grey behind the book) */
 
   --background: var(--cream);
   --foreground: var(--dark-green);
@@ -52,6 +54,7 @@
   --color-blush-pink: var(--blush-pink);
   --color-dark-text: var(--dark-text);
   --color-secondary-background: var(--secondary-background);
+  --color-brochure-stage: var(--brochure-stage);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
@@ -136,4 +139,116 @@ body {
 
 .fe-right-image {
   @apply relative h-[300px] w-full self-start lg:-mt-[9px] lg:ml-auto lg:w-[279px];
+}
+/* ── Brochure flip-book (/brochure) ───────────────────────────────────── */
+/* Page nodes are created imperatively for page-flip, so they are styled here. */
+.brochure-page {
+  background: #f3efe6;
+  overflow: hidden;
+  box-shadow: 0 22px 44px -22px rgb(0 0 0 / 0.38), 0 2px 6px rgb(0 0 0 / 0.06);
+}
+
+.brochure-page img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+/* Gutter shading where the pages meet the spine */
+.brochure-page[data-side="left"]::after,
+.brochure-page[data-side="right"]::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 9%;
+  pointer-events: none;
+}
+
+.brochure-page[data-side="left"]::after {
+  right: 0;
+  background: linear-gradient(to left, rgb(0 0 0 / 0.16), rgb(0 0 0 / 0.04) 45%, transparent);
+}
+
+.brochure-page[data-side="right"]::after {
+  left: 0;
+  background: linear-gradient(to right, rgb(0 0 0 / 0.14), rgb(0 0 0 / 0.03) 45%, transparent);
+}
+
+.brochure-book .stf__wrapper.--portrait .brochure-page::after {
+  display: none;
+}
+
+/* Scrub slider: 1px track, filled part dark, round thumb */
+.brochure-range {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 44px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.brochure-range::-webkit-slider-runnable-track {
+  height: 2px;
+  background: linear-gradient(to right, var(--dark-text) var(--progress), rgb(5 5 5 / 0.14) var(--progress));
+}
+
+.brochure-range::-moz-range-track {
+  height: 2px;
+  background: rgb(5 5 5 / 0.14);
+}
+
+.brochure-range::-moz-range-progress {
+  height: 2px;
+  background: var(--dark-text);
+}
+
+.brochure-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  margin-top: -6px;
+  border-radius: 9999px;
+  background: var(--dark-text);
+  transition: transform 0.2s ease;
+}
+
+.brochure-range::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border: 0;
+  border-radius: 9999px;
+  background: var(--dark-text);
+}
+
+.brochure-range:hover::-webkit-slider-thumb,
+.brochure-range:active::-webkit-slider-thumb {
+  transform: scale(1.25);
+}
+
+.brochure-range:focus-visible {
+  outline: 2px solid var(--dark-text);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.brochure-thumbs {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(5 5 5 / 0.25) transparent;
+}
+
+.brochure-thumbs::-webkit-scrollbar {
+  height: 4px;
+}
+
+.brochure-thumbs::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.brochure-thumbs::-webkit-scrollbar-thumb {
+  background: rgb(5 5 5 / 0.25);
 }
