@@ -232,7 +232,17 @@ export default function AudioProvider({ children }: { children: ReactNode }) {
   // (it remounts and calls notifyOpeningPlaying / enterLooping again).
   useEffect(() => {
     onHomeRef.current = pathname === "/";
-    if (pathname === "/") return;
+    if (pathname === "/") {
+      // Coming straight back: cancel any fade-out still running, or it would
+      // pause the track the hero is about to resume.
+      fadeOpen.current?.();
+      fadeLoop.current?.();
+      const open = openRef.current;
+      const loop = loopRef.current;
+      if (open && !open.paused) fadeOpen.current = fadeVolume(open, OPENING_VOLUME, FADE / 2);
+      if (loop && !loop.paused) fadeLoop.current = fadeVolume(loop, LOOP_VOLUME, FADE / 2);
+      return;
+    }
     if (loopTimer.current) clearTimeout(loopTimer.current);
     const open = openRef.current;
     const loop = loopRef.current;
