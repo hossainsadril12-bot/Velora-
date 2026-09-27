@@ -3,6 +3,7 @@ import { DM_Sans, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import FloatingControls from "@/components/FloatingControls";
+import BackToHome from "@/components/BackToHome";
 import TransitionProvider from "@/components/TransitionProvider";
 import BookingProvider from "@/components/BookingProvider";
 import IntroProvider from "@/components/IntroProvider";
@@ -78,6 +79,7 @@ export default function RootLayout({
               <BookingProvider>
                 <SmoothScroll>
                   <Header />
+                  <BackToHome />
                   {children}
                   <Footer />
                 </SmoothScroll>

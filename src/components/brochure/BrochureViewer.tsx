@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { motion, useAnimationControls, useReducedMotion } from "framer-motion";
-import TransitionLink from "@/components/TransitionLink";
+import { BackToHomeLink } from "@/components/BackToHome";
 import { BROCHURE_PAGES, BROCHURE_PDF } from "@/lib/brochure";
 import FlipBook, { TURN_MS, type FlipBookHandle } from "./FlipBook";
 import ViewerControls from "./ViewerControls";
@@ -214,18 +214,7 @@ export default function BrochureViewer() {
         {fullscreen ? (
           <span />
         ) : (
-          <TransitionLink
-            href="/"
-            direction="backward"
-            className="group inline-flex min-h-11 items-center gap-2 font-sans text-[15px] text-dark-text focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-dark-text"
-          >
-            <ArrowLeftIcon size={18} className="transition-transform duration-300 group-hover:-translate-x-1" />
-            <span className="relative whitespace-nowrap">
-              <span className="sm:hidden">Back</span>
-              <span className="hidden sm:inline">Back to Home</span>
-              <span className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-current transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-x-100" />
-            </span>
-          </TransitionLink>
+          <BackToHomeLink />
         )}
         <a
           href={BROCHURE_PDF}
