@@ -32,6 +32,17 @@ test.describe("brochure viewer", () => {
     await expect(page.getByTestId("page-counter")).toHaveText("24 / 24");
   });
 
+  test("scrub slider arrow keys step through spreads", async ({ page }) => {
+    const slider = page.getByRole("slider", { name: "Page" });
+    await slider.focus();
+    await page.keyboard.press("ArrowRight");
+    await expect(page.getByTestId("page-counter")).toHaveText("2–3 / 24");
+    await page.keyboard.press("ArrowRight");
+    await expect(page.getByTestId("page-counter")).toHaveText("4–5 / 24");
+    await page.keyboard.press("ArrowLeft");
+    await expect(page.getByTestId("page-counter")).toHaveText("2–3 / 24");
+  });
+
   test("grid overlay opens, jumps, closes", async ({ page }) => {
     await page.getByRole("button", { name: "Show all pages" }).click();
     const dialog = page.getByRole("dialog", { name: "All pages" });

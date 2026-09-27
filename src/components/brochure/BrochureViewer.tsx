@@ -174,6 +174,26 @@ export default function BrochureViewer() {
     jumpDir.current = target >= indexRef.current ? 1 : -1;
     bookRef.current?.goTo(target);
   }, []);
+
+  // The slider reports a spread by its left page, so stepping it by one can
+  // land on the right page of the spread already open, which page-flip treats
+  // as "already here". Step past the open spread in the direction of travel.
+  const orientationRef = useRef(orientation);
+  useEffect(() => {
+    orientationRef.current = orientation;
+  }, [orientation]);
+  const seek = useCallback(
+    (i: number) => {
+      const current = indexRef.current;
+      const open = visibleIndices(current, TOTAL, orientationRef.current);
+      if (i !== current && open.includes(i)) {
+        goTo(i > current ? open[open.length - 1] + 1 : open[0] - 1);
+      } else {
+        goTo(i);
+      }
+    },
+    [goTo],
+  );
   const next = useCallback(() => bookRef.current?.next(), []);
   const prev = useCallback(() => bookRef.current?.prev(), []);
 
@@ -398,7 +418,7 @@ export default function BrochureViewer() {
             index={index}
             total={TOTAL}
             label={label}
-            onSeek={goTo}
+            onSeek={seek}
             canZoomIn={zoomState.canZoomIn}
             canZoomOut={zoomState.canZoomOut}
             onZoomIn={zoomIn}
@@ -423,7 +443,7 @@ export default function BrochureViewer() {
         reducedMotion={reducedMotion}
         variant={isMobile ? "sheet" : "full"}
         onSelect={(i) => {
-          setGridOpen(false);
+          closeGrid();
           goTo(i);
         }}
         onClose={closeGrid}

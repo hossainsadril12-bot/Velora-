@@ -37,6 +37,39 @@ const SPREAD_MIN_PAGE = 320;
 /** Large enough that page-flip always chooses portrait. */
 const FORCE_PORTRAIT = 100_000;
 
+/**
+ * page-flip's render loop re-arms itself with requestAnimationFrame forever and
+ * destroy() never cancels it, so every unmounted book would keep drawing into
+ * detached nodes and stay in memory. We capture the loop callback while the
+ * book starts, then refuse to schedule it again once the book is gone.
+ */
+const stoppedLoops = new WeakSet<FrameRequestCallback>();
+let rafFilterInstalled = false;
+
+function captureFrameLoops(start: () => void): FrameRequestCallback[] {
+  const captured: FrameRequestCallback[] = [];
+  const raf = window.requestAnimationFrame;
+  window.requestAnimationFrame = (cb) => {
+    captured.push(cb);
+    return raf.call(window, cb);
+  };
+  try {
+    start();
+  } finally {
+    window.requestAnimationFrame = raf;
+  }
+  return captured;
+}
+
+function stopFrameLoops(loops: FrameRequestCallback[]) {
+  if (!loops.length) return;
+  loops.forEach((cb) => stoppedLoops.add(cb));
+  if (rafFilterInstalled) return;
+  rafFilterInstalled = true;
+  const raf = window.requestAnimationFrame;
+  window.requestAnimationFrame = (cb) => (stoppedLoops.has(cb) ? 0 : raf.call(window, cb));
+}
+
 /** page-flip re-reads its live settings object on every layout pass (untyped in its d.ts). */
 function setMinWidth(book: PageFlip, px: number) {
   const settings = (book as unknown as { getSettings?(): { minWidth: number } }).getSettings?.();
@@ -85,10 +118,22 @@ const FlipBook = forwardRef<FlipBookHandle, FlipBookProps>(function FlipBook(
       }
     },
     cancelTouch: () => {
-      // page-flip keeps the pending touch in a private field; clearing it
-      // stops the delayed drag start and the swipe check on touchend.
-      const ui = (flipRef.current as unknown as { getUI?(): { touchPoint?: unknown } } | null)?.getUI?.();
+      // page-flip keeps the pending touch in private fields. Clearing them
+      // stops the delayed drag start and the swipe check on touchend; if the
+      // drag had already begun (finger held > 250ms), drop the fold as well,
+      // because the pinch swallows the touchend that would normally end it.
+      const book = flipRef.current as unknown as {
+        getUI?(): { touchPoint?: unknown };
+        getFlipController?(): { stopMove?(): void };
+        isUserTouch?: boolean;
+      } | null;
+      if (!book) return;
+      const ui = book.getUI?.();
       if (ui && "touchPoint" in ui) ui.touchPoint = null;
+      if (book.isUserTouch) {
+        book.isUserTouch = false;
+        book.getFlipController?.()?.stopMove?.();
+      }
     },
   }));
 
@@ -96,6 +141,7 @@ const FlipBook = forwardRef<FlipBookHandle, FlipBookProps>(function FlipBook(
     const container = containerRef.current;
     if (!container) return;
     let disposed = false;
+    let frameLoops: FrameRequestCallback[] = [];
     const loadedSet = loaded.current;
 
     // page-flip removes the element it is given on destroy(), so hand it a
@@ -166,7 +212,7 @@ const FlipBook = forwardRef<FlipBookHandle, FlipBookProps>(function FlipBook(
         callbacks.current.onReady?.();
       });
 
-      book.loadFromHTML(nodes);
+      frameLoops = captureFrameLoops(() => book.loadFromHTML(nodes));
       // Orientation is decided from minWidth on every layout pass. Set it only
       // after loading: the UI copies minWidth into the host's CSS once, there.
       if (singleRef.current) {
@@ -185,6 +231,7 @@ const FlipBook = forwardRef<FlipBookHandle, FlipBookProps>(function FlipBook(
 
     return () => {
       disposed = true;
+      stopFrameLoops(frameLoops);
       flipRef.current?.destroy();
       flipRef.current = null;
       loadedSet.clear();

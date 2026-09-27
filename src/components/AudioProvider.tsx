@@ -94,6 +94,8 @@ export default function AudioProvider({ children }: { children: ReactNode }) {
   const fadeLoop = useRef<(() => void) | null>(null);
   const loopTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const impl = useRef<Impl | null>(null);
+  // Music belongs to the homepage only (its toggle lives there too).
+  const onHomeRef = useRef(pathname === "/");
 
   useEffect(() => {
     const open = new Audio(OPENING_SRC);
@@ -118,7 +120,7 @@ export default function AudioProvider({ children }: { children: ReactNode }) {
     // Auto-transition to loop when opening audio finishes naturally
     const onOpenEnded = () => {
       phaseRef.current = "looping";
-      startLoop();
+      if (onHomeRef.current) startLoop();
     };
     open.addEventListener("ended", onOpenEnded);
 
@@ -174,6 +176,8 @@ export default function AudioProvider({ children }: { children: ReactNode }) {
     const arm = () => {
       if (disarmRef.current) return;
       const handler = () => {
+        // Stay armed off the homepage so the first gesture back home starts it.
+        if (!onHomeRef.current) return;
         if (isOff()) {
           disarm();
           return;
@@ -196,8 +200,8 @@ export default function AudioProvider({ children }: { children: ReactNode }) {
 
     impl.current = { startOpening, startLoop, applyForPhase, arm, isOff };
 
-    // ── Auto-start audio immediately when the website opens ──
-    if (!isOff()) {
+    // ── Auto-start audio immediately when the website opens (homepage only) ──
+    if (!isOff() && onHomeRef.current) {
       applyForPhase().then((ok) => {
         if (!ok) {
           arm();
@@ -224,25 +228,21 @@ export default function AudioProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  // Update phase when navigating between homepage and subpages
+  // Leaving the homepage fades the music out; the hero restarts it on return
+  // (it remounts and calls notifyOpeningPlaying / enterLooping again).
   useEffect(() => {
-    if (pathname !== "/") {
-      phaseRef.current = "looping";
-      const m = impl.current;
-      if (m && !m.isOff()) {
-        const open = openRef.current;
-        if (open && !open.paused) {
-          fadeOpen.current?.();
-          fadeOpen.current = fadeVolume(open, 0, FADE / 2, () => {
-            open.pause();
-            m.startLoop();
-          });
-        } else {
-          m.startLoop().then((ok) => {
-            if (!ok) m.arm();
-          });
-        }
-      }
+    onHomeRef.current = pathname === "/";
+    if (pathname === "/") return;
+    if (loopTimer.current) clearTimeout(loopTimer.current);
+    const open = openRef.current;
+    const loop = loopRef.current;
+    if (open && !open.paused) {
+      fadeOpen.current?.();
+      fadeOpen.current = fadeVolume(open, 0, FADE, () => open.pause());
+    }
+    if (loop && !loop.paused) {
+      fadeLoop.current?.();
+      fadeLoop.current = fadeVolume(loop, 0, FADE, () => loop.pause());
     }
   }, [pathname]);
 
@@ -275,7 +275,7 @@ export default function AudioProvider({ children }: { children: ReactNode }) {
     loopTimer.current = setTimeout(() => {
       phaseRef.current = "looping";
       const m = impl.current;
-      if (!m) return;
+      if (!m || !onHomeRef.current) return;
       if (m.isOff()) {
         setIsPlaying(false);
         return;
