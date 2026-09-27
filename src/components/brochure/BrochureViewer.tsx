@@ -230,9 +230,9 @@ export default function BrochureViewer() {
         <a
           href={BROCHURE_PDF}
           download="Velora-Inani-Brochure.pdf"
-          className="inline-flex h-11 items-center gap-2.5 rounded-lg bg-tan px-5 font-sans text-[15px] font-medium text-white transition-[filter,transform] duration-300 hover:brightness-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-tan active:scale-[0.98] sm:px-6"
+          className="inline-flex h-11 items-center gap-2 rounded-lg bg-tan px-4 font-sans text-[15px] font-medium text-white transition-[filter,transform] duration-300 hover:brightness-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-tan active:scale-[0.98]"
         >
-          <DownloadIcon size={20} />
+          <DownloadIcon size={18} />
           <span className="whitespace-nowrap">
             Download<span className="max-sm:sr-only"> Brochure</span>
           </span>
@@ -322,7 +322,7 @@ export default function BrochureViewer() {
           onOpenGrid={() => setGridOpen(true)}
           gridTriggerRef={gridTriggerRef}
         />
-        <div className="mt-1 pr-14 sm:pr-20">
+        <div className="mt-1">
           <ThumbnailStrip pages={PAGES} activeIndices={indices} reducedMotion={reducedMotion} onSelect={goTo} />
         </div>
       </div>
