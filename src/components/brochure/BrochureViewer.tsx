@@ -206,7 +206,7 @@ export default function BrochureViewer() {
             <ArrowLeftIcon size={18} className="transition-transform duration-300 group-hover:-translate-x-1" />
             <span className="relative whitespace-nowrap">
               <span className="sm:hidden">Back</span>
-              <span className="hidden sm:inline">Back to Brochures</span>
+              <span className="hidden sm:inline">Back to Home</span>
               <span className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-current transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-x-100" />
             </span>
           </TransitionLink>
@@ -214,7 +214,7 @@ export default function BrochureViewer() {
         <a
           href={BROCHURE_PDF}
           download="Velora-Inani-Brochure.pdf"
-          className="inline-flex h-12 items-center gap-3 rounded-lg bg-dark-text px-5 font-sans text-[15px] font-medium text-white transition-[background-color,transform] duration-300 hover:bg-dark-text/85 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-dark-text active:scale-[0.98] sm:h-[50px] sm:px-6"
+          className="inline-flex h-12 items-center gap-3 rounded-lg bg-tan px-5 font-sans text-[15px] font-medium text-white transition-[filter,transform] duration-300 hover:brightness-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-tan active:scale-[0.98] sm:h-[50px] sm:px-6"
         >
           <DownloadIcon size={20} />
           <span className="whitespace-nowrap">
