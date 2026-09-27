@@ -210,7 +210,7 @@ export default function BrochureViewer() {
       </p>
 
       {/* Top row */}
-      <div className="flex w-full items-center justify-between gap-4 px-6 pt-3 lg:px-10 lg:pt-2">
+      <div className="flex w-full items-center justify-between gap-4 px-6 pt-9 lg:px-10">
         {fullscreen ? (
           <span />
         ) : (

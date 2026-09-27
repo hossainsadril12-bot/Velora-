@@ -57,7 +57,7 @@ export default function BackToHome() {
 
   return (
     <div className="relative z-40 -mb-[70px] px-6 pt-[70px] lg:-mb-[100px] lg:px-10 lg:pt-[100px]">
-      <div className="pt-3 lg:pt-2">
+      <div className="pt-9">
         <BackToHomeLink />
       </div>
     </div>
