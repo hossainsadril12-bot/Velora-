@@ -4,6 +4,7 @@ import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 import type { PageFlip } from "page-flip";
 import type { BrochurePage } from "@/lib/brochure";
 import type { Orientation } from "./pageMath";
+import { installFlipMotion, type TurnStart } from "./flipMotion";
 
 export type FlipBookHandle = {
   next(): void;
@@ -20,9 +21,15 @@ export type FlipBookProps = {
   onFlip(index: number): void;
   onOrientation?(orientation: Orientation): void;
   onReady?(): void;
+  /** Fires as an animated turn begins (not when it lands). */
+  onTurnStart?(turn: TurnStart): void;
+  /** Long jumps skip the curl; the viewer hides the swap behind a fade. */
+  onJump?(swap: () => void): void;
 };
 
 const PRELOAD_RADIUS = 4;
+/** One full page turn, arrow or key press. */
+export const TURN_MS = 1100;
 
 /**
  * Wraps the vanilla `page-flip` library. Page nodes are created imperatively
@@ -30,7 +37,7 @@ const PRELOAD_RADIUS = 4;
  * must never see.
  */
 const FlipBook = forwardRef<FlipBookHandle, FlipBookProps>(function FlipBook(
-  { pages, width, height, reducedMotion, onFlip, onOrientation, onReady },
+  { pages, width, height, reducedMotion, onFlip, onOrientation, onReady, onTurnStart, onJump },
   ref,
 ) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -38,9 +45,9 @@ const FlipBook = forwardRef<FlipBookHandle, FlipBookProps>(function FlipBook(
   const loaded = useRef(new Set<number>());
 
   // Keep latest callbacks without re-initialising the book.
-  const callbacks = useRef({ onFlip, onOrientation, onReady });
+  const callbacks = useRef({ onFlip, onOrientation, onReady, onTurnStart, onJump });
   useEffect(() => {
-    callbacks.current = { onFlip, onOrientation, onReady };
+    callbacks.current = { onFlip, onOrientation, onReady, onTurnStart, onJump };
   });
 
   useImperativeHandle(ref, () => ({
@@ -54,8 +61,12 @@ const FlipBook = forwardRef<FlipBookHandle, FlipBookProps>(function FlipBook(
       // Neighbouring pages get the curl; long jumps turn instantly.
       if (Math.abs(index - current) <= 2 && !reducedMotion) book.flip(index, "bottom");
       else {
-        book.turnToPage(index);
-        callbacks.current.onFlip(index);
+        const swap = () => {
+          book.turnToPage(index);
+          callbacks.current.onFlip(index);
+        };
+        if (reducedMotion || !callbacks.current.onJump) swap();
+        else callbacks.current.onJump(swap);
       }
     },
   }));
@@ -115,8 +126,8 @@ const FlipBook = forwardRef<FlipBookHandle, FlipBookProps>(function FlipBook(
         usePortrait: true,
         autoSize: true,
         drawShadow: true,
-        maxShadowOpacity: 0.35,
-        flippingTime: reducedMotion ? 1 : 900,
+        maxShadowOpacity: 0.5,
+        flippingTime: reducedMotion ? 1 : TURN_MS,
         mobileScrollSupport: false,
         swipeDistance: 30,
         disableFlipByClick: true,
@@ -135,6 +146,13 @@ const FlipBook = forwardRef<FlipBookHandle, FlipBookProps>(function FlipBook(
       });
 
       book.loadFromHTML(nodes);
+      // The render and flip controller only exist once pages are loaded.
+      if (!reducedMotion) {
+        installFlipMotion(book, {
+          turnMs: TURN_MS,
+          onTurnStart: (turn) => callbacks.current.onTurnStart?.(turn),
+        });
+      }
       load(0);
     });
 

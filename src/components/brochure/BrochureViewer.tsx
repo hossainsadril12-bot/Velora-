@@ -4,7 +4,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react
 import { motion, useAnimationControls, useReducedMotion } from "framer-motion";
 import TransitionLink from "@/components/TransitionLink";
 import { BROCHURE_PAGES, BROCHURE_PDF } from "@/lib/brochure";
-import FlipBook, { type FlipBookHandle } from "./FlipBook";
+import FlipBook, { TURN_MS, type FlipBookHandle } from "./FlipBook";
 import ViewerControls from "./ViewerControls";
 import ThumbnailStrip from "./ThumbnailStrip";
 import GridOverlay from "./GridOverlay";
@@ -15,6 +15,8 @@ const PAGES = BROCHURE_PAGES;
 const TOTAL = PAGES.length;
 const ZOOM_STEPS = [1, 1.5, 2, 3];
 const EASE = [0.16, 1, 0.3, 1] as const;
+/** Matches the page-turn curve in flipMotion so the book glides with the sheet. */
+const TURN_EASE = [0.45, 0.05, 0.2, 1] as const;
 /** A spread narrower than this switches the book to single-page mode. */
 const MIN_SPREAD_WIDTH = 640;
 
@@ -38,6 +40,8 @@ export default function BrochureViewer() {
   const settle = useAnimationControls();
 
   const [index, setIndex] = useState(0);
+  // Where an in-flight turn will land, so the book re-centres during the turn.
+  const [turnTarget, setTurnTarget] = useState<number | null>(null);
   const [orientation, setOrientation] = useState<Orientation>("landscape");
   const [ready, setReady] = useState(false);
   const [stage, setStage] = useState<Size>({ width: 0, height: 0 });
@@ -71,26 +75,38 @@ export default function BrochureViewer() {
   const pageW = orientation === "landscape" ? book.width / 2 : book.width;
 
   // Centre the closed book: a cover occupies one half of the spread box.
+  const shiftIndices = turnTarget === null ? indices : visibleIndices(turnTarget, TOTAL, orientation);
   const coverShift =
-    orientation === "landscape" && indices.length === 1
-      ? indices[0] === 0
+    orientation === "landscape" && shiftIndices.length === 1
+      ? shiftIndices[0] === 0
         ? -pageW / 2
         : pageW / 2
       : 0;
 
-  const handleFlip = useCallback(
-    (i: number) => {
-      setIndex(i);
-      setZoomStep(0);
-      if (!reducedMotion) {
-        settle.start({
-          opacity: [0.9, 1],
-          filter: ["blur(1.2px)", "blur(0px)"],
-          transition: { duration: 0.55, ease: EASE },
-        });
-      }
+  const handleFlip = useCallback((i: number) => {
+    setIndex(i);
+    setTurnTarget(null);
+    setZoomStep(0);
+  }, []);
+
+  const handleTurnStart = useCallback(
+    ({ direction }: { direction: "forward" | "back" }) => {
+      const step = orientation === "landscape" ? 2 : 1;
+      const target = index + (direction === "forward" ? step : -step);
+      setTurnTarget(Math.min(Math.max(target, 0), TOTAL - 1));
     },
-    [reducedMotion, settle],
+    [index, orientation],
+  );
+
+  // Long jumps (thumbnails, slider, grid) dip the book out and back in
+  // rather than snapping to a new spread.
+  const handleJump = useCallback(
+    async (swap: () => void) => {
+      await settle.start({ opacity: 0, scale: 0.985, transition: { duration: 0.18, ease: [0.4, 0, 1, 1] } });
+      swap();
+      await settle.start({ opacity: 1, scale: 1, transition: { duration: 0.45, ease: EASE } });
+    },
+    [settle],
   );
 
   const goTo = useCallback((i: number) => bookRef.current?.goTo(Math.min(Math.max(i, 0), TOTAL - 1)), []);
@@ -249,7 +265,7 @@ export default function BrochureViewer() {
             <motion.div
               initial={false}
               animate={{ x: coverShift }}
-              transition={{ duration: reducedMotion ? 0 : 0.7, ease: EASE }}
+              transition={{ duration: reducedMotion ? 0 : TURN_MS / 1000, ease: TURN_EASE }}
             >
               <motion.div
                 animate={settle}
@@ -266,6 +282,8 @@ export default function BrochureViewer() {
                     reducedMotion={reducedMotion}
                     onFlip={handleFlip}
                     onOrientation={setOrientation}
+                    onTurnStart={handleTurnStart}
+                    onJump={handleJump}
                     onReady={() => {
                       setReady(true);
                       settle.start({ opacity: 1, transition: { duration: reducedMotion ? 0 : 0.8, ease: EASE } });
