@@ -104,7 +104,9 @@ test.describe("brochure viewer — responsive", () => {
     );
     await page.keyboard.press("Escape");
     await expect(menu).toBeHidden();
-    await expect(page.getByRole("button", { name: "Book Appointment" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Book Appointment" })).toHaveCount(0);
+    await page.getByRole("button", { name: "More actions" }).click();
+    await expect(menu.getByRole("menuitem", { name: "Book Appointment" })).toBeVisible();
   });
 
   test("phone: thumbnails open as a bottom sheet", async ({ page }) => {

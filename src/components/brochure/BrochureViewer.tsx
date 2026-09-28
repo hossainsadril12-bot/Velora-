@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { motion, useAnimationControls, useReducedMotion } from "framer-motion";
 import { BackToHomeLink } from "@/components/BackToHome";
-import { useBooking } from "@/components/BookingProvider";
 import { BROCHURE_PAGES, BROCHURE_PDF } from "@/lib/brochure";
 import FlipBook, { TURN_MS, type FlipBookHandle } from "./FlipBook";
 import ViewerControls from "./ViewerControls";
@@ -13,7 +12,7 @@ import MobileControls from "./MobileControls";
 import BrochureActions from "./BrochureActions";
 import BrochureLoader from "./BrochureLoader";
 import { useZoomGestures } from "./useZoomGestures";
-import { ArrowLeftIcon, ArrowRightIcon, CalendarIcon, DownloadIcon } from "./icons";
+import { ArrowLeftIcon, ArrowRightIcon, DownloadIcon } from "./icons";
 import { pageLabel, visibleIndices, type Orientation } from "./pageMath";
 
 const PAGES = BROCHURE_PAGES;
@@ -58,7 +57,6 @@ export default function BrochureViewer() {
   const bookRef = useRef<FlipBookHandle>(null);
   const gridTriggerRef = useRef<HTMLButtonElement>(null);
   const settle = useAnimationControls();
-  const { openBooking } = useBooking();
 
   const [index, setIndex] = useState(0);
   // Where an in-flight turn will land, so the book re-centres during the turn.
@@ -385,16 +383,6 @@ export default function BrochureViewer() {
       {isMobile ? (
         <div className="w-full px-4 pb-[max(12px,env(safe-area-inset-bottom))]">
           <div className="mx-auto flex max-w-sm flex-col items-center gap-2.5">
-            {!fullscreen && (
-              <button
-                type="button"
-                onClick={openBooking}
-                className="inline-flex h-11 cursor-pointer items-center gap-2 rounded-full bg-tan px-6 font-sans text-[15px] font-medium text-white shadow-[0_4px_8px_rgb(0_0_0/0.08)] transition-[filter,transform] duration-300 [touch-action:manipulation] active:scale-[0.97] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-dark-text"
-              >
-                <CalendarIcon size={18} />
-                Book Appointment
-              </button>
-            )}
             <MobileControls
               label={label}
               atStart={atStart || !ready}
