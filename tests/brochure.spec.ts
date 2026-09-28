@@ -160,3 +160,45 @@ test("hovering a page corner curls it at the library's quick pace", async ({ pag
   await page.waitForTimeout(400);
   expect(await clip()).toBe(early);
 });
+
+for (const [width, height] of [
+  [436, 858],
+  [375, 812],
+  [768, 1024],
+] as const) {
+  test.describe(`brochure viewer — single page at ${width}x${height}`, () => {
+    test.use({ viewport: { width, height }, hasTouch: true, isMobile: true });
+
+    test.beforeEach(async ({ page }) => {
+      await page.goto("/brochure");
+      await expect(page.locator("section[data-ready]")).toBeVisible({ timeout: 20_000 });
+      const counter = page.getByTestId("page-counter");
+      await expect(counter).toHaveText("1 / 24");
+      await page.getByRole("button", { name: "Next page" }).tap();
+      await expect(counter).toHaveText("2 / 24");
+      await page.getByRole("button", { name: "Next page" }).tap();
+      await expect(counter).toHaveText("3 / 24");
+    });
+
+    test("previous button turns back one page", async ({ page }) => {
+      await page.getByRole("button", { name: "Previous page" }).tap();
+      await expect(page.getByTestId("page-counter")).toHaveText("2 / 24");
+      await page.getByRole("button", { name: "Previous page" }).tap();
+      await expect(page.getByTestId("page-counter")).toHaveText("1 / 24");
+    });
+
+    test("ArrowLeft turns back one page", async ({ page }) => {
+      await page.keyboard.press("ArrowLeft");
+      await expect(page.getByTestId("page-counter")).toHaveText("2 / 24");
+    });
+
+    test("grid jump back one page", async ({ page }) => {
+      await page.getByRole("button", { name: "Show all pages" }).tap();
+      const grid = page.getByRole("dialog", { name: "All pages" });
+      await expect(grid).toBeVisible();
+      await grid.getByRole("button", { name: "Go to page 2", exact: true }).tap();
+      await expect(grid).toBeHidden();
+      await expect(page.getByTestId("page-counter")).toHaveText("2 / 24");
+    });
+  });
+}

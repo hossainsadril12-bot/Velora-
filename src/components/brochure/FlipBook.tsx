@@ -75,6 +75,27 @@ function setMinWidth(book: PageFlip, px: number) {
   const settings = (book as unknown as { getSettings?(): { minWidth: number } }).getSettings?.();
   if (settings) settings.minWidth = px;
 }
+
+/**
+ * page-flip drops programmatic backward turns in portrait mode: flipPrev()
+ * aims at x=10, but the portrait rect starts one page-width to the left, so
+ * the point lands mid-book and fails the corner check that disableFlipByClick
+ * adds. That check only exists to filter clicks, so lift it for our own turns.
+ */
+function withProgrammaticFlip(book: PageFlip, turn: () => void) {
+  const settings = (book as unknown as { getSettings?(): { disableFlipByClick: boolean } }).getSettings?.();
+  if (!settings) {
+    turn();
+    return;
+  }
+  const disabled = settings.disableFlipByClick;
+  settings.disableFlipByClick = false;
+  try {
+    turn();
+  } finally {
+    settings.disableFlipByClick = disabled;
+  }
+}
 /** One full page turn, arrow or key press. */
 export const TURN_MS = 1100;
 
@@ -100,14 +121,17 @@ const FlipBook = forwardRef<FlipBookHandle, FlipBookProps>(function FlipBook(
 
   useImperativeHandle(ref, () => ({
     next: () => flipRef.current?.flipNext("bottom"),
-    prev: () => flipRef.current?.flipPrev("bottom"),
+    prev: () => {
+      const book = flipRef.current;
+      if (book) withProgrammaticFlip(book, () => book.flipPrev("bottom"));
+    },
     goTo: (index: number) => {
       const book = flipRef.current;
       if (!book) return;
       const current = book.getCurrentPageIndex();
       if (index === current) return;
       // Neighbouring pages get the curl; long jumps turn instantly.
-      if (Math.abs(index - current) <= 2 && !reducedMotion) book.flip(index, "bottom");
+      if (Math.abs(index - current) <= 2 && !reducedMotion) withProgrammaticFlip(book, () => book.flip(index, "bottom"));
       else {
         const swap = () => {
           book.turnToPage(index);
