@@ -6,8 +6,8 @@ Date: 2026-09-28 · Branch: `fix/brochure-back-curl` · Status: approved
 
 In single-page (portrait) mode — phones and tablet portrait — Next shows a smooth corner curl that
 starts at the visible page's right edge. Previous shows nothing for roughly the first half of the
-1100ms turn, then a flat page snaps in from the left. Measured at 436×858: the previous page first
-covers the visible page's bottom-left corner about 540ms into the turn.
+1100ms turn, then a flat page snaps in from the left. Measured at 436×858 with a single probe 20px
+inside the bottom-left corner: the previous page first covers that corner about 540ms into the turn.
 
 ## Root cause
 
@@ -34,10 +34,13 @@ reduced motion (flipMotion is not installed there).
 ## Tests
 
 New Playwright test in the existing single-page describe loop (436×858, 375×812, 768×1024):
-from page 3, trigger Previous and measure (in-page, with `requestAnimationFrame`) how long until the
-topmost `.stf__item` under a point 20px inside the book's bottom-left corner shows a different page than
-before. Expect under 300ms. Pre-fix this is ~540ms, so the test fails before the fix. Existing
-`tests/brochure.spec.ts` must stay green.
+from page 3, trigger Previous and measure (in-page, with `requestAnimationFrame`) how long until any
+point in a column of 17 probes — 10px inside the book's left edge, y from 10% to 90% of its height in
+5% steps — has a topmost `.stf__item` showing a different page than before. A single bottom-left corner
+probe isn't enough: the uncurling page is a triangle whose lowest point is the moving corner, which
+starts at y = H − H/10 and arcs upward, so a point below it stays uncovered until the turn is nearly
+done. The column catches the curl as soon as it crosses any height. Expect under 250ms. Pre-fix this
+measures 376–392ms; fixed, 89–118ms. Existing `tests/brochure.spec.ts` must stay green.
 
 ## Out of scope
 

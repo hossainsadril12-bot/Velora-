@@ -27,6 +27,8 @@ Spec: `docs/spine/specs/2026-09-28-brochure-back-curl-design.md`
 
 ### Task 1: Backward portrait turn starts at the spine
 
+> Superseded in fix round 1: the test probes a column at the left edge (threshold 250ms) instead of one corner point; see the spec's Tests section.
+
 **Files:**
 - Modify: `src/components/brochure/flipMotion.ts` (`RenderInternals` type ~lines 25-28; `render.startAnimation` override ~lines 102-142)
 - Test: `tests/brochure.spec.ts` (inside the single-page describe loop, after its existing tests)

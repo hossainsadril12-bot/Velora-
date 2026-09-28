@@ -232,5 +232,39 @@ for (const [width, height] of [
 
       await expect(page.getByTestId("page-counter")).toHaveText("2 / 24");
     });
+
+    test("previous turn curls in from the visible left edge", async ({ page }) => {
+      const ms = await page.evaluate(
+        () =>
+          new Promise<number>((resolve) => {
+            const box = document.querySelector(".brochure-book")!.getBoundingClientRect();
+            // A column of probes just inside the left edge: the uncurling page
+            // is a triangle that arcs upward, so a single corner probe misses it.
+            const ys: number[] = [];
+            for (let k = 10; k <= 90; k += 5) ys.push(box.top + (box.height * k) / 100);
+            const shown = () =>
+              ys.map(
+                (y) =>
+                  document
+                    .elementsFromPoint(box.left + 10, y)
+                    .find((el) => el.classList.contains("stf__item"))
+                    ?.querySelector("img")?.dataset.src,
+              );
+            const before = shown();
+            const button = document.querySelector<HTMLButtonElement>('button[aria-label="Previous page"]')!;
+            const t0 = performance.now();
+            button.click();
+            const tick = () => {
+              const elapsed = performance.now() - t0;
+              const now = shown();
+              if (now.some((src, i) => src !== before[i]) || elapsed > 1500) resolve(elapsed);
+              else requestAnimationFrame(tick);
+            };
+            requestAnimationFrame(tick);
+          }),
+      );
+      expect(ms).toBeLessThan(250);
+      await expect(page.getByTestId("page-counter")).toHaveText("2 / 24");
+    });
   });
 }

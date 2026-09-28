@@ -25,6 +25,7 @@ type FlipInternals = {
 type RenderInternals = {
   startAnimation(frames: Frame[], duration: number, onEnd: () => void): void;
   getRect(): PageRect;
+  getOrientation?(): string;
 };
 
 export type TurnStart = { direction: "forward" | "back" };
@@ -119,12 +120,24 @@ export function installFlipMotion(book: PageFlip, options: FlipMotionOptions): v
     const ms = programmatic ? options.turnMs : Math.max(duration, 320) * 1.15;
     const ease = programmatic ? easeTurn : easeRelease;
 
+    // A portrait book's left half lies off the visible page, and page-flip
+    // mirrors backward turns around the spine, so the library's back turn
+    // starts a full page to the left of what the reader sees and spends the
+    // first half of the turn off screen. Start it at the spine instead (the
+    // visible page's left edge): the incoming page then curls in from that
+    // edge and sweeps across, the forward curl played in reverse.
+    const fromSpine =
+      programmatic &&
+      flip.getCalculation()?.getDirection() === 1 &&
+      render.getOrientation?.() === "portrait";
+    const start = fromSpine ? { x: 1, y: move.start.y } : move.start;
+
     // Arc toward the vertical centre so the sheet bows up as it crosses.
     const lift = programmatic ? rect.height * 0.2 : rect.height * 0.06;
     const sign = move.start.y > rect.height / 2 ? -1 : 1;
     const control = {
-      x: (move.start.x + move.dest.x) / 2,
-      y: (move.start.y + move.dest.y) / 2 + sign * lift,
+      x: (start.x + move.dest.x) / 2,
+      y: (start.y + move.dest.y) / 2 + sign * lift,
     };
 
     const count = Math.max(24, Math.round((ms / 1000) * FRAMES_PER_SECOND));
@@ -133,8 +146,8 @@ export function installFlipMotion(book: PageFlip, options: FlipMotionOptions): v
       const t = ease(i / count);
       const u = 1 - t;
       const p = {
-        x: u * u * move.start.x + 2 * u * t * control.x + t * t * move.dest.x,
-        y: u * u * move.start.y + 2 * u * t * control.y + t * t * move.dest.y,
+        x: u * u * start.x + 2 * u * t * control.x + t * t * move.dest.x,
+        y: u * u * start.y + 2 * u * t * control.y + t * t * move.dest.y,
       };
       eased.push(() => flip.do(p));
     }
