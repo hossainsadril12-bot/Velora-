@@ -202,5 +202,35 @@ for (const [width, height] of [
       await expect(grid).toBeHidden();
       await expect(page.getByTestId("page-counter")).toHaveText("2 / 24");
     });
+
+    test("two-page backward jump animates back", async ({ page }) => {
+      await page.getByRole("button", { name: "Show all pages" }).tap();
+      const grid = page.getByRole("dialog", { name: "All pages" });
+      await expect(grid).toBeVisible();
+      await grid.getByRole("button", { name: "Go to page 1", exact: true }).tap();
+      await expect(grid).toBeHidden();
+      await expect(page.getByTestId("page-counter")).toHaveText("1 / 24");
+    });
+
+    test("swipe right turns back one page", async ({ page }) => {
+      const box = (await page.locator(".brochure-book").boundingBox())!;
+      const y = box.y + box.height / 2;
+      const startX = box.x + box.width * 0.3;
+      const endX = startX + 130;
+
+      const cdp = await page.context().newCDPSession(page);
+      const touch = (type: "touchStart" | "touchMove" | "touchEnd", x: number) =>
+        cdp.send("Input.dispatchTouchEvent", {
+          type,
+          touchPoints: type === "touchEnd" ? [] : [{ x, y }],
+        });
+
+      await touch("touchStart", startX);
+      await touch("touchMove", startX + 65);
+      await touch("touchMove", endX);
+      await touch("touchEnd", endX);
+
+      await expect(page.getByTestId("page-counter")).toHaveText("2 / 24");
+    });
   });
 }

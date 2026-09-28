@@ -96,6 +96,25 @@ function withProgrammaticFlip(book: PageFlip, turn: () => void) {
     settings.disableFlipByClick = disabled;
   }
 }
+
+/**
+ * page-flip's own UI (Previous button, arrow keys, thumbnail jumps, and the
+ * swipe gesture it detects on touchend) all end up calling the flip
+ * controller's flipPrev directly, not PageFlip.flipPrev. Wrapping it once,
+ * right after the controller exists, routes every one of those callers
+ * through withProgrammaticFlip instead of only the ones this file calls
+ * itself — swipes included. This is not a motion effect, so install it for
+ * reduced motion too.
+ */
+function installFlipPrevGuard(book: PageFlip) {
+  const controller = (
+    book as unknown as { getFlipController?(): { flipPrev?: (corner?: string) => void } }
+  ).getFlipController?.();
+  if (!controller || typeof controller.flipPrev !== "function") return;
+  const flipPrev = controller.flipPrev.bind(controller);
+  controller.flipPrev = (corner) => withProgrammaticFlip(book, () => flipPrev(corner));
+}
+
 /** One full page turn, arrow or key press. */
 export const TURN_MS = 1100;
 
@@ -121,17 +140,14 @@ const FlipBook = forwardRef<FlipBookHandle, FlipBookProps>(function FlipBook(
 
   useImperativeHandle(ref, () => ({
     next: () => flipRef.current?.flipNext("bottom"),
-    prev: () => {
-      const book = flipRef.current;
-      if (book) withProgrammaticFlip(book, () => book.flipPrev("bottom"));
-    },
+    prev: () => flipRef.current?.flipPrev("bottom"),
     goTo: (index: number) => {
       const book = flipRef.current;
       if (!book) return;
       const current = book.getCurrentPageIndex();
       if (index === current) return;
       // Neighbouring pages get the curl; long jumps turn instantly.
-      if (Math.abs(index - current) <= 2 && !reducedMotion) withProgrammaticFlip(book, () => book.flip(index, "bottom"));
+      if (Math.abs(index - current) <= 2 && !reducedMotion) book.flip(index, "bottom");
       else {
         const swap = () => {
           book.turnToPage(index);
@@ -244,6 +260,7 @@ const FlipBook = forwardRef<FlipBookHandle, FlipBookProps>(function FlipBook(
         book.update();
       }
       // The render and flip controller only exist once pages are loaded.
+      installFlipPrevGuard(book);
       if (!reducedMotion) {
         installFlipMotion(book, {
           turnMs: TURN_MS,
